@@ -1,0 +1,2 @@
+# Ignore Vagrant virtual machine data.
+.vagrant
