@@ -1,6 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Some features used in this configuration file require specific version of
+# Vagrant.
+Vagrant.require_version ">= 1.5.0"
+
 # Vagrant API version.
 VAGRANTFILE_API_VERSION = "2"
 
