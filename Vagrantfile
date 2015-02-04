@@ -36,6 +36,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Enable SSH agent forwarding
   config.ssh.forward_agent = true
 
+  # VirtualBox configuration
+  #
+  # VirtualBox allows for some additional virtual machine tuning. List of
+  # available options can be found here: http://www.virtualbox.org/manual/ch08.html
+  # See https://docs.vagrantup.com/v2/virtualbox/configuration.html
+
+  # Tune VirtualBox powered machine.
+  config.vm.provider :virtualbox do |v|
+    # Set CPUs count.
+    v.customize ["modifyvm", :id, "--cpus", 2]
+    # Set memory limit (in MB).
+    v.customize ["modifyvm", :id, "--memory", 1024]
+    # Set CPU execution cap (in %).
+    v.customize ["modifyvm", :id, "--cpuexecutioncap", 100]
+    # Use host's resolver mechanisms to handle DNS requests.
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+  end
+
   # Synced Folders
   #
   # See https://docs.vagrantup.com/v2/synced-folders/index.html
