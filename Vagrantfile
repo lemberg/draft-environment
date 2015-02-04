@@ -36,6 +36,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Enable SSH agent forwarding
   config.ssh.forward_agent = true
 
+  # Fix annoying "stdin: is not a tty" error.
+  # See https://github.com/mitchellh/vagrant/issues/1673#issuecomment-40278692
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
+
   # VirtualBox configuration
   #
   # VirtualBox allows for some additional virtual machine tuning. List of
@@ -58,9 +62,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # See https://docs.vagrantup.com/v2/synced-folders/index.html
 
-  # Disable the default "/vagrant" share.
-  config.vm.synced_folder ".", "/vagrant", disabled: true
-
   # NFS sync method is much faster than others. It's not supported on Windows
   # hosts by Vagrant itself, but there is a Vagrant plugin entitled "Vagrant
   # WinNFSd" aimed to resolve this issue. However, at the moment of writing this
@@ -70,6 +71,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # enforced on Windows hosts. Without WinNFSd plugin Vagrant will fall back to
   # the default VirtualBox folder sync.
   # See https://docs.vagrantup.com/v2/synced-folders/nfs.html
+
+  # Configure synched folders.
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
   config.vm.synced_folder ".", "/var/www/vhosts/default", type: "nfs"
+
+  # Provisioning
+  #
+  # See https://docs.vagrantup.com/v2/provisioning/index.html
+
+  # IMPORTANT. Vagrant has an issue with Shell provisioner (described here
+  # https://github.com/mitchellh/vagrant/issues/1673). To avoid annoying
+  # "stdin: is not a tty" and/or "dpkg-reconfigure: unable to re-open stdin: No
+  # file or directory" error messages, stdout and sterr have been redirected
+  # to /dev/null. See provisioning/windows.sh
+
+  require "rbconfig"
+
+  if (RbConfig::CONFIG["host_os"] =~ /mswin|mingw|cygwin/)
+    # Run Shell provisioner for Windows hosts.
+    config.vm.provision "shell" do |shell|
+      shell.path = "provisioning/windows.sh"
+      shell.args = "provisioning/playbook.yml"
+    end
+  else
+    # Run Ansible provisioner for Mac/Linux hosts.
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "provisioning/playbook.yml"
+    end
+  end
 
 end
