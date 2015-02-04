@@ -29,6 +29,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See http://docs.vagrantup.com/v2/synced-folders/nfs.html
   config.vm.network "private_network", ip: "192.168.192.168"
 
+  # SSH settings
+  #
+  # See https://docs.vagrantup.com/v2/vagrantfile/ssh_settings.html
+
+  # Enable SSH agent forwarding
+  config.ssh.forward_agent = true
+
   # Synced Folders
   #
   # See https://docs.vagrantup.com/v2/synced-folders/index.html
