@@ -96,12 +96,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Run Shell provisioner for Windows hosts.
     config.vm.provision "shell" do |shell|
       shell.path = "provisioning/windows.sh"
-      shell.args = "provisioning/playbook.yml"
+      shell.args = "provisioning/playbooks/main.yml"
     end
   else
     # Run Ansible provisioner for Mac/Linux hosts.
     config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "provisioning/playbook.yml"
+      ansible.playbook = "provisioning/playbooks/main.yml"
     end
   end
 
