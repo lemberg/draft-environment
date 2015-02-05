@@ -8,6 +8,30 @@ Vagrant.require_version ">= 1.5.0"
 # Vagrant API version.
 VAGRANTFILE_API_VERSION = "2"
 
+# Configuration
+#
+# Load configuration settings from YAML file(s).
+#
+# Default configuration is stored in provisioning/default.settings.yml.
+# Project specific overrides should be placed in provisioning/settings.yml.
+#
+# Settings are being merged recursively. Values from project settings file
+# overwrites ones from default settings; missing values are not being touch;
+# new values will be added to the resulting settings hash.
+
+require 'yaml'
+
+default_settings = YAML::load_file("provisioning/default.settings.yml")
+if File.exist?("provisioning/settings.yml")
+  require_relative 'ruby/utility'
+  project_settings = YAML::load_file("provisioning/settings.yml")
+  unless project_settings.nil?
+    settings = merge_recursively(default_settings, project_settings)
+  else
+    settings = default_settings
+  end
+end
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Boxes
@@ -28,10 +52,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # various situations this action is mandatory.
   # See https://docs.vagrantup.com/v2/networking/index.html
 
+  # Set machine's hostname.
+  config.vm.hostname = settings["box"]["name"]
+
   # Network File System (NFS) requires private network to be specified when
   # VirtualBox is used (due to a limitation of VirtualBox's built-in networking)
   # See http://docs.vagrantup.com/v2/synced-folders/nfs.html
-  config.vm.network "private_network", ip: "192.168.192.168"
+  config.vm.network "private_network", ip: settings["box"]["ip_address"]
 
   # SSH settings
   #
@@ -53,13 +80,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Tune VirtualBox powered machine.
   config.vm.provider :virtualbox do |v|
     # Set CPUs count.
-    v.customize ["modifyvm", :id, "--cpus", 2]
+    v.customize ["modifyvm", :id, "--cpus", settings["virtualbox"]["cpus"]]
     # Set memory limit (in MB).
-    v.customize ["modifyvm", :id, "--memory", 1024]
+    v.customize ["modifyvm", :id, "--memory", settings["virtualbox"]["memory"]]
     # Set CPU execution cap (in %).
-    v.customize ["modifyvm", :id, "--cpuexecutioncap", 100]
+    v.customize ["modifyvm", :id, "--cpuexecutioncap", settings["virtualbox"]["cpuexecutioncap"]]
     # Use host's resolver mechanisms to handle DNS requests.
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    # Set VM name.
+    v.name = settings["box"]["name"]
   end
 
   # Synced Folders
