@@ -1,2 +1,5 @@
 # Ignore Vagrant virtual machine data.
 .vagrant
+
+# Ignore documents root folder.
+docroot/**
