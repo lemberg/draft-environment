@@ -1,0 +1,26 @@
+---
+- name: Install Apache2 web server
+  apt:
+    name: apache2
+    state: latest
+    update_cache: yes
+
+- name: Enable Apache2 modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - rewrite
+  notify:
+    - Restart Apache2 web server
+
+- name: Remove default vhost, created on Debian/Ubuntu upon installation.
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+  file:
+    path: /etc/apache2/sites-available/000-default.conf
+    state: absent
+  file:
+    path: /etc/apache2/sites-available/default-ssl.conf
+    state: absent
