@@ -107,7 +107,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Configure synched folders.
   config.vm.synced_folder ".", "/vagrant"
-  config.vm.synced_folder "docroot", "/var/www/html/default", create: true
+  config.vm.synced_folder "docroot", "/var/www/default.localhost", create: true
 
   # Provisioning
   #
