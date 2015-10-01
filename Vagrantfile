@@ -3,7 +3,7 @@
 
 # Some features used in this configuration file require specific version of
 # Vagrant.
-Vagrant.require_version ">= 1.5.0"
+Vagrant.require_version ">= 1.6.0"
 
 # Vagrant API version.
 VAGRANTFILE_API_VERSION = "2"
@@ -133,5 +133,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ansible.playbook = "provisioning/playbooks/main.yml"
     end
   end
+
+  # Display an informational message to the user.
+  config.vm.post_up_message = "The app is running at IP " + settings["box"]["ip_address"]
 
 end
