@@ -4,6 +4,7 @@
     name: apache2
     state: latest
     update_cache: yes
+    cache_valid_time: 86400
 
 - name: Enable Apache2 modules
   apache2_module:
