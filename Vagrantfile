@@ -21,14 +21,12 @@ VAGRANTFILE_API_VERSION = "2"
 
 require 'yaml'
 
-default_settings = YAML::load_file("provisioning/default.settings.yml")
-if File.exist?("provisioning/settings.yml")
+settings = YAML::load_file("settings.yml")
+if File.exist?("settings.local.yml")
   require_relative 'ruby/utility'
-  project_settings = YAML::load_file("provisioning/settings.yml")
-  unless project_settings.nil?
-    settings = merge_recursively(default_settings, project_settings)
-  else
-    settings = default_settings
+  local_settings = YAML::load_file("settings.local.yml")
+  unless local_settings.nil?
+    settings = merge_recursively(settings, local_settings)
   end
 end
 
@@ -53,12 +51,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See https://docs.vagrantup.com/v2/networking/index.html
 
   # Set machine's hostname.
-  config.vm.hostname = settings["box"]["name"]
+  config.vm.hostname = settings["vagrant"]["hostname"]
 
   # Network File System (NFS) requires private network to be specified when
   # VirtualBox is used (due to a limitation of VirtualBox's built-in networking)
   # See http://docs.vagrantup.com/v2/synced-folders/nfs.html
-  config.vm.network "private_network", ip: settings["box"]["ip_address"]
+  config.vm.network "private_network", ip: settings["vagrant"]["ip_address"]
 
   # SSH settings
   #
@@ -79,16 +77,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Tune VirtualBox powered machine.
   config.vm.provider :virtualbox do |v|
+    # Set VM name.
+    v.name = settings["virtualbox"]["name"]
     # Set CPUs count.
-    v.customize ["modifyvm", :id, "--cpus", settings["virtualbox"]["cpus"]]
+    v.cpus = settings["virtualbox"]["cpus"]
     # Set memory limit (in MB).
-    v.customize ["modifyvm", :id, "--memory", settings["virtualbox"]["memory"]]
+    v.memory = settings["virtualbox"]["memory"]
     # Set CPU execution cap (in %).
     v.customize ["modifyvm", :id, "--cpuexecutioncap", settings["virtualbox"]["cpuexecutioncap"]]
     # Use host's resolver mechanisms to handle DNS requests.
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    # Set VM name.
-    v.name = settings["box"]["name"]
   end
 
   # Synced Folders
@@ -135,6 +133,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Display an informational message to the user.
-  config.vm.post_up_message = "The app is running at IP " + settings["box"]["ip_address"]
+  config.vm.post_up_message = "The app is running at IP " + settings["vagrant"]["ip_address"]
 
 end

@@ -1,0 +1,25 @@
+---
+# This file contains Vagrant and VirtualBox configuration. 
+#
+# Settings in this file are project specific, not a local machine specific. 
+#
+# If there is a need to override any value, create file settings.local.yml
+# and put it there. Local settings should not be committed to the repository.
+
+# Vagrant configuration.
+vagrant:
+  # Host name.
+  hostname: "default"
+  # Virtual machine IP address.
+  ip_address: "192.168.192.168"
+
+# VirtualBox configuration.
+virtualbox:
+  # Machine name.
+  name: "default"
+  # Number of CPUs.
+  cpus: 2
+  # Memory limit (in MB).
+  memory: 1024
+  # CPU execution cap (in %).
+  cpuexecutioncap: 100

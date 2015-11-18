@@ -3,3 +3,6 @@
 
 # Ignore documents root folder.
 docroot/**
+
+# Ignore local settings.
+settings.local.yml
