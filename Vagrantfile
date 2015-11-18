@@ -48,6 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # By default Vagrant doesn't require explicit network setup. However, in
   # various situations this action is mandatory.
+  #
   # See https://docs.vagrantup.com/v2/networking/index.html
 
   # Set machine's hostname.
@@ -55,6 +56,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Network File System (NFS) requires private network to be specified when
   # VirtualBox is used (due to a limitation of VirtualBox's built-in networking)
+  #
   # See http://docs.vagrantup.com/v2/synced-folders/nfs.html
   config.vm.network "private_network", ip: settings["vagrant"]["ip_address"]
 
@@ -66,6 +68,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.forward_agent = true
 
   # Fix annoying "stdin: is not a tty" error.
+  #
   # See https://github.com/mitchellh/vagrant/issues/1673#issuecomment-40278692
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 
@@ -73,6 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # VirtualBox allows for some additional virtual machine tuning. List of
   # available options can be found here: http://www.virtualbox.org/manual/ch08.html
+  #
   # See https://docs.vagrantup.com/v2/virtualbox/configuration.html
 
   # Tune VirtualBox powered machine.
@@ -101,6 +105,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # aforementioned issue will be resolved, installation of the plugin would be
   # enforced on Windows hosts. Without WinNFSd plugin Vagrant will fall back to
   # the default VirtualBox folder sync.
+  #
   # See https://docs.vagrantup.com/v2/synced-folders/nfs.html
 
   # Configure synched folders.
