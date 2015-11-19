@@ -1,0 +1,15 @@
+---
+# Install MySQL server.
+- name: Install MySQL server.
+  apt:
+    name: mysql-server
+    state: latest
+    update_cache: yes
+    cache_valid_time: 86400
+
+# Ensure that MySQL daemon starts with the system.
+- name: Ensure MySQL is started and enabled on boot.
+  service:
+    name: mysql
+    state: started
+    enabled: yes
