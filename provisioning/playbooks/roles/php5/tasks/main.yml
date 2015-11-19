@@ -1,0 +1,22 @@
+---
+# Install PHP5.
+- name: Install PHP5
+  apt:
+    name: php5
+    state: latest
+    update_cache: yes
+    cache_valid_time: 86400
+  notify:
+    - Restart Apache2 web server
+
+# Install PHP5 extensions.
+- name: Install PHP5 extensions
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+      - php5-gd
+      - php5-json
+      - php5-mysql
+  notify:
+    - Restart Apache2 web server
