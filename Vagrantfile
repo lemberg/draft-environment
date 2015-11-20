@@ -8,27 +8,23 @@ Vagrant.require_version ">= 1.6.0"
 # Vagrant API version.
 VAGRANTFILE_API_VERSION = "2"
 
-# Configuration
+# Set base path.
+VAGRANTFILE_BASE_PATH = File.dirname(__FILE__)
+
+# Include configuration.
+require "#{VAGRANTFILE_BASE_PATH}/helpers/configuration"
+
+# Initialize configuration.
 #
-# Load configuration settings from YAML file(s).
+# Configuration settings are being loaded from YAML file(s).
 #
-# Default configuration is stored in provisioning/default.settings.yml.
-# Project specific overrides should be placed in provisioning/settings.yml.
+# Default configuration is being stored in settings.yml.
+# Local overrides should be placed in settings.local.yml.
 #
-# Settings are being merged recursively. Values from project settings file
-# overwrites ones from default settings; missing values are not being touch;
+# Settings are being merged recursively. Values from local settings file
+# overwrites ones from the default settings; missing values are not being touch;
 # new values will be added to the resulting settings hash.
-
-require 'yaml'
-
-settings = YAML::load_file("settings.yml")
-if File.exist?("settings.local.yml")
-  require_relative 'ruby/utility'
-  local_settings = YAML::load_file("settings.local.yml")
-  unless local_settings.nil?
-    settings = merge_recursively(settings, local_settings)
-  end
-end
+configuration = Configuration.new(VAGRANTFILE_BASE_PATH)
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -40,9 +36,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # HashiCorp provides publicly available list of Vagrant boxes at
   # https://atlas.hashicorp.com/boxes/search
 
-  # Official Ubuntu Server 14.04 LTS (Trusty Tahr).
-  config.vm.box = "ubuntu/trusty64"
-  config.vm.box_version = "14.04"
+  # Set box and box version.
+  config.vm.box = configuration.get("vagrant.box")
+  config.vm.box_version = configuration.get("vagrant.box_version")
 
   # Networking
   #
@@ -52,13 +48,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See https://docs.vagrantup.com/v2/networking/index.html
 
   # Set machine's hostname.
-  config.vm.hostname = settings["vagrant"]["hostname"]
+  config.vm.hostname = configuration.get("vagrant.hostname")
 
   # Network File System (NFS) requires private network to be specified when
   # VirtualBox is used (due to a limitation of VirtualBox's built-in networking)
   #
   # See http://docs.vagrantup.com/v2/synced-folders/nfs.html
-  config.vm.network "private_network", ip: settings["vagrant"]["ip_address"]
+  config.vm.network "private_network", ip: configuration.get("vagrant.ip_address")
 
   # SSH settings
   #
@@ -82,13 +78,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Tune VirtualBox powered machine.
   config.vm.provider :virtualbox do |v|
     # Set VM name.
-    v.name = settings["virtualbox"]["name"]
+    v.name = configuration.get("virtualbox.name")
     # Set CPUs count.
-    v.cpus = settings["virtualbox"]["cpus"]
+    v.cpus = configuration.get("virtualbox.cpus")
     # Set memory limit (in MB).
-    v.memory = settings["virtualbox"]["memory"]
+    v.memory = configuration.get("virtualbox.memory")
     # Set CPU execution cap (in %).
-    v.customize ["modifyvm", :id, "--cpuexecutioncap", settings["virtualbox"]["cpuexecutioncap"]]
+    v.customize ["modifyvm", :id, "--cpuexecutioncap", configuration.get("virtualbox.cpuexecutioncap")]
     # Use host's resolver mechanisms to handle DNS requests.
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
@@ -138,6 +134,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Display an informational message to the user.
-  config.vm.post_up_message = "The app is running at IP " + settings["vagrant"]["ip_address"]
+  config.vm.post_up_message = "The app is running at IP " + configuration.get("vagrant.ip_address")
 
 end
