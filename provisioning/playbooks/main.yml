@@ -22,3 +22,5 @@
     - php5
     - T2L.composer
     - T2L.composer-global-packages
+  vars_files:
+    - vars/composer-global-packages.yml
