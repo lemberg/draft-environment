@@ -11,3 +11,5 @@
     - apache2
     - mysql
     - php5
+    - T2L.composer
+    - T2L.composer-global-packages

@@ -26,6 +26,9 @@ if [ ! -f /usr/bin/ansible ]; then
   apt-get -y install ansible > /dev/null 2>&1
 fi
 
+# Install playbook requirements.
+ansible-galaxy install --ignore-errors -r /vagrant/provisioning/playbooks/requirements.yml
+
 # Run the playbook.
 echo "Running Ansible provisioner defined in the Vagrantfile."
 echo ""
