@@ -1,0 +1,5 @@
+---
+- src: T2L.composer
+  version: v1.0.0
+- src: T2L.composer-global-packages
+  version: v1.0.0

@@ -1,0 +1,9 @@
+---
+
+# Install globally-required Composer packages for "vagrant" user.
+composer_username: "vagrant"
+
+# Install Drush.
+composer_global_packages:
+  - name: drush/drush
+    version: "8.0.x"

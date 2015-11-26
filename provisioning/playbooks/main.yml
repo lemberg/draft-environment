@@ -3,11 +3,24 @@
   user: vagrant
   sudo: true
   pre_tasks:
-    name: Update apt cache if needed.
-    apt:
-      update_cache: yes
-      cache_valid_time: 86400
+    - name: Update apt cache if needed.
+      apt:
+        update_cache: yes
+        cache_valid_time: 86400
+    - name: Ensure base packages are installed.
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - curl
+        - git
+        - unzip
+        - wget
   roles:
     - apache2
     - mysql
     - php5
+    - T2L.composer
+    - T2L.composer-global-packages
+  vars_files:
+    - vars/composer-global-packages.yml
