@@ -27,7 +27,7 @@ if [ ! -f /usr/bin/ansible ]; then
 fi
 
 # Install playbook requirements.
-ansible-galaxy install --ignore-errors -r /vagrant/provisioning/playbooks/requirements.yml
+ansible-galaxy install --force -r /vagrant/provisioning/playbooks/requirements.yml
 
 # Run the playbook.
 echo "Running Ansible provisioner defined in the Vagrantfile."
