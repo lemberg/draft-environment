@@ -18,5 +18,6 @@
       - php5-gd
       - php5-json
       - php5-mysql
+      - php5-curl
   notify:
     - Restart Apache2 web server
