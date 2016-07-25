@@ -105,8 +105,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See https://docs.vagrantup.com/v2/synced-folders/nfs.html
 
   # Configure synched folders.
-  config.vm.synced_folder ".", "/vagrant"
-  config.vm.synced_folder "docroot", "/var/www/default.localhost", create: true
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
+  config.vm.synced_folder "docroot", "/var/www/default.localhost", create: true, type: "nfs"
 
   # Provisioning
   #
