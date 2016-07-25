@@ -118,19 +118,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # file or directory" error messages, stdout and sterr have been redirected
   # to /dev/null. See provisioning/windows.sh
 
-  require "rbconfig"
-
-  if (RbConfig::CONFIG["host_os"] =~ /mswin|mingw|cygwin/)
-    # Run Shell provisioner for Windows hosts.
-    config.vm.provision "shell" do |shell|
-      shell.path = "provisioning/windows.sh"
-      shell.args = "provisioning/playbooks/main.yml"
-    end
-  else
-    # Run Ansible provisioner for Mac/Linux hosts.
-    config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "provisioning/playbooks/main.yml"
-    end
+  # Run Ansible provisioner from within the virtual machine using proxy shell 
+  # script so the developer experience is the same on all platforms (this means
+  # there is no need to install Ansible and playbook's dependencies on the host
+  # operating system).
+  config.vm.provision "shell" do |shell|
+    shell.path = "provisioning/windows.sh"
+    shell.args = "provisioning/playbooks/main.yml"
   end
 
   # Display an informational message to the user.
