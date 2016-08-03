@@ -1,23 +1,61 @@
 ---
-# Install PHP5.
-- name: Install PHP5
+# Add the main PPA for PHP. See https://launchpad.net/~ondrej/+archive/ubuntu/php
+- name: Add the main PPA for PHP
+  apt_repository:
+    repo: ppa:ondrej/php
+    state: present
+    update_cache: yes
+
+# Install PHP5.6. Other versions that be installed: 5.5 and 7.0
+- name: Install PHP5.6
   apt:
-    name: php5
+    name: php5.6
     state: latest
     update_cache: yes
     cache_valid_time: 86400
   notify:
     - Restart Apache2 web server
 
-# Install PHP5 extensions.
+# Install PHP5.6 extensions
 - name: Install PHP5 extensions
   apt:
     name: "{{ item }}"
     state: latest
   with_items:
-      - php5-gd
-      - php5-json
-      - php5-mysql
-      - php5-curl
+      - php5.6-gd
+      - php5.6-json
+      - php5.6-mysql
+      - php5.6-curl
+      - php5.6-xml
+  notify:
+    - Restart Apache2 web server
+
+# Configure PHP5.6
+- name: Configure PHP5.6
+  ini_file:
+    dest: /etc/php/5.6/apache2/php.ini
+    section: "{{ item.section}}"
+    option: "{{ item.option}}"
+    value: "{{ item.value}}"
+    state: present
+  with_items:
+      - section: PHP
+        option: error_reporting
+        value: "E_ALL"
+      - section: PHP
+        option: display_errors
+        value: "On"
+      - section: PHP
+        option: display_startup_errors
+        value: "On"
+      - section: PHP
+        option: memory_limit
+        value: "192M"
+      - section: PHP
+        option: upload_max_filesize
+        value: "16M"
+      - section: PHP
+        option: post_max_size
+        value: "256M"
   notify:
     - Restart Apache2 web server
