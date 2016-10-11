@@ -1,0 +1,4 @@
+---
+
+# Set swap file size.
+swapfile_size: "2GB"

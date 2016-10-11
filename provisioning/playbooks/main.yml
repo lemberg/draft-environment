@@ -17,10 +17,12 @@
         - unzip
         - wget
   roles:
+    - kamaln7.swapfile
     - apache2
     - mysql
     - php5
     - T2L.composer
     - T2L.composer-global-packages
   vars_files:
+    - vars/swapfile.yml
     - vars/composer-global-packages.yml
