@@ -4,6 +4,8 @@
 # JJG-Ansible-Windows https://github.com/geerlingguy/JJG-Ansible-Windows
 
 ANSIBLE_PLAYBOOK=$1
+GIT_USER_EMAIL=$2
+GIT_USER_NAME=$3
 
 # Make sure Ansible playbook exists.
 if [ ! -f /vagrant/$ANSIBLE_PLAYBOOK ]; then
@@ -32,4 +34,4 @@ ansible-galaxy install --force -r /vagrant/provisioning/playbooks/requirements.y
 # Run the playbook.
 echo "Running Ansible provisioner defined in the Vagrantfile."
 echo ""
-ansible-playbook -i "localhost," /vagrant/${ANSIBLE_PLAYBOOK} --connection=local
+ansible-playbook -i "localhost," /vagrant/${ANSIBLE_PLAYBOOK} --connection=local -e "git_user_email=${GIT_USER_EMAIL}" -e "git_user_name=${GIT_USER_NAME}"

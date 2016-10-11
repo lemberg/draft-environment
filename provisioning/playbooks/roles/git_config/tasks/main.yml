@@ -1,0 +1,13 @@
+---
+
+# Configure GIT.
+- name: Set GIT user name and email
+  git_config:
+    scope: global
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { name: "user.email", value: "{{ git_user_email }}" }
+    - { name: "user.name", value: "{{ git_user_name }}" }
+  become: yes
+  become_user: vagrant
