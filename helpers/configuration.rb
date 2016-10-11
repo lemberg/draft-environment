@@ -122,7 +122,7 @@ class Configuration
     part_3 = [[sum >> 8, 1].max, 255].min
     part_4 = [[sum % 256, 1].max, 255].min
 
-    self.set("vagrant.ip_address", "192.168.#{part_3}.#{part_4}")
+    self.set("vagrant.ip_address", "10.10.#{part_3}.#{part_4}")
   end
 
 end
