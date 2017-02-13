@@ -6,8 +6,17 @@ cache:
   apt: true
 
 before_install:
+  # Download and register Oracle VirtualBox keys
+  - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+  - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+  # Add Oracle VirtualBox repository
+  - sudo add-apt-repository "deb http://download.virtualbox.org/virtualbox/debian trusty contrib"
   # Update apt-get
   - sudo apt-get update -qq
+  # Install Linux headers
+  - sudo apt-get -y --force-yes install linux-headers-`uname -r`
+  # Install VirtualBox 5.1
+  - sudo apt-get install virtualbox-5.1
   # Install Vagrant 1.9.1
   # Todo: install from a package repository, not from a hardcoded URL.
   - curl -O https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb
