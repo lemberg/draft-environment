@@ -12,5 +12,9 @@ before_install:
   - curl -O https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb
   - sudo dpkg -i vagrant_1.9.1_x86_64.deb
 
+install:
+  - cp settings.yml settings.local.yml
+  - "sed 's/hostname: \"\"/hostname: \"travis\"/g' -i ./settings.local.yml"
+
 script:
   - vagrant up
