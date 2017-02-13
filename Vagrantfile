@@ -95,12 +95,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # NFS sync method is much faster than others. It's not supported on Windows
   # hosts by Vagrant itself, but there is a Vagrant plugin entitled "Vagrant
-  # WinNFSd" aimed to resolve this issue. However, at the moment of writing this
-  # comment (27.01.2015), plugin has significant issue with some VM OS (like
-  # Ubuntu). See https://github.com/GM-Alex/vagrant-winnfsd/issues/27. When the
-  # aforementioned issue will be resolved, installation of the plugin would be
-  # enforced on Windows hosts. Without WinNFSd plugin Vagrant will fall back to
-  # the default VirtualBox folder sync.
+  # WinNFSd" aimed to resolve this issue.
+  #
+  # Windows users are encouraged to install vagrant-winnfsd plugin by running:
+  #
+  # vagrant plugin install vagrant-winnfsd
   #
   # See https://docs.vagrantup.com/v2/synced-folders/nfs.html
 
