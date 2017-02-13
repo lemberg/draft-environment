@@ -13,6 +13,8 @@ before_install:
   - sudo add-apt-repository "deb http://download.virtualbox.org/virtualbox/debian trusty contrib"
   # Update apt-get
   - sudo apt-get update -qq
+  # Install Linux headers
+  - sudo apt-get install linux-headers-generic
   # Install VirtualBox 5.1
   - sudo apt-get install virtualbox-5.1
   # Install Vagrant 1.9.1
