@@ -1,7 +1,7 @@
 {
     "name": "lemberg/draft-environment",
     "description": "Development environment for Draft Drupal.",
-    "type": "project",
+    "type": "vm",
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
     "prefer-stable": true
