@@ -8,7 +8,9 @@ cache:
 before_install:
   - sudo apt-get install virtualbox
   - sudo apt-get install virtualbox-dkms
-  - sudo apt-get install vagrant
+  # Todo: install from a package repository, not from a hardcoded URL.
+  - curl -O https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb
+  - sudo dpkg -i vagrant_1.9.1_x86_64.deb
 
 script:
   - vagrant up
