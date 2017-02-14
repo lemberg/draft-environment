@@ -50,6 +50,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Set machine's hostname.
   config.vm.hostname = configuration.get("vagrant.hostname")
 
+  # Hosts records
+  #
+  # Configure entries in a hosts file. All users are encouraged to install
+  # vagrant-hostmanager plugin by running:
+  #
+  # vagrant plugin install vagrant-hostmanager
+
+  # Record HOSTNAME.test will be created.
+  if Vagrant.has_plugin?("vagrant-hostmanager")
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+  end
+
   # Network File System (NFS) requires private network to be specified when
   # VirtualBox is used (due to a limitation of VirtualBox's built-in networking)
   #
@@ -131,6 +144,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Display an informational message to the user.
-  config.vm.post_up_message = "The app is running at IP " + configuration.get("vagrant.ip_address")
+  config.vm.post_up_message = "The app is running at http://" + configuration.get("vagrant.ip_address") + " and http://" + configuration.get("vagrant.hostname")
 
 end
