@@ -1,7 +1,7 @@
 ---
 # This file contains Vagrant and VirtualBox configuration.
 #
-# Settings in this file are project specific, not a local machine specific. 
+# Settings in this file are project specific, not a local machine specific.
 #
 # If there is a need to override any value, create file settings.local.yml
 # and put it there. Local settings should not be committed to the repository.
