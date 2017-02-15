@@ -1,8 +1,8 @@
 <VirtualHost *:80>
   ServerName default.localhost
-  DocumentRoot /var/www/default.localhost
+  DocumentRoot /var/www/default.localhost/docroot
 
-  <Directory /var/www/default.localhost>
+  <Directory /var/www/default.localhost/docroot>
     AllowOverride All
     Options -Indexes +FollowSymLinks
     Require all granted
