@@ -9,10 +9,13 @@ Vagrant.require_version ">= 1.6.0"
 VAGRANTFILE_API_VERSION = "2"
 
 # Set base path.
-VAGRANTFILE_BASE_PATH = File.dirname(__FILE__)
+VM_BASE_PATH = File.dirname(__FILE__)
+
+# Project base path.
+PROJECT_BASE_PATH = File.dirname(__FILE__) unless defined? PROJECT_BASE_PATH
 
 # Include configuration.
-require "#{VAGRANTFILE_BASE_PATH}/helpers/configuration"
+require "#{VM_BASE_PATH}/helpers/configuration"
 
 # Initialize configuration.
 #
@@ -24,7 +27,7 @@ require "#{VAGRANTFILE_BASE_PATH}/helpers/configuration"
 # Settings are being merged recursively. Values from local settings file
 # overwrites ones from the default settings; missing values are not being touch;
 # new values will be added to the resulting settings hash.
-configuration = Configuration.new(VAGRANTFILE_BASE_PATH)
+configuration = Configuration.new(PROJECT_BASE_PATH)
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -136,13 +139,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   git_user_email = `git config --get user.email`.strip
   git_user_name = `git config --get user.name`.strip
 
+  # Get correct path to the Ansible playbook.
+  require 'pathname'
+  project_pathname = Pathname.new PROJECT_BASE_PATH
+  vm_pathname = Pathname.new VM_BASE_PATH
+
   # Run Ansible provisioner from within the virtual machine using proxy shell
   # script so the developer experience is the same on all platforms (this means
   # there is no need to install Ansible and playbook's dependencies on the host
   # operating system).
   config.vm.provision "shell" do |shell|
-    shell.path = "provisioning/windows.sh"
-    shell.args = ["provisioning/playbooks/main.yml", %Q["#{git_user_email}"], %Q["#{git_user_name}"]]
+    shell.path = "#{VM_BASE_PATH}/provisioning/ansible.sh"
+    shell.args = ["#{vm_pathname.relative_path_from project_pathname}/provisioning/playbooks", %Q["#{git_user_email}"], %Q["#{git_user_name}"]]
   end
 
   # Display an informational message to the user.
