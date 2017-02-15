@@ -55,9 +55,12 @@ class Configuration
   # Returns nothing.
   protected
   def load_settings(base_path)
-    @settings = YAML::load_file("#{base_path}/settings.yml")
-    if File.exist?("#{base_path}/settings.local.yml")
-      local_settings = YAML::load_file("#{base_path}/settings.local.yml")
+    if not File.exist?("#{base_path}/vm-settings.yml")
+      abort("Settings file is missing. Start using this VM by copying default.vm-settings.yml into vm-settings.yml");
+    end
+    @settings = YAML::load_file("#{base_path}/vm-settings.yml")
+    if File.exist?("#{base_path}/vm-settings.local.yml")
+      local_settings = YAML::load_file("#{base_path}/vm-settings.local.yml")
       unless local_settings.nil?
         @settings = self.merge_recursively(@settings, local_settings)
       end
@@ -89,7 +92,7 @@ class Configuration
   def verify_settings
     # Vagrant machine host name is required.
     if self.get("vagrant.hostname").length == 0
-      abort("Vagrant machine host name is required. Please specify it in the settings.yml file.")
+      abort("Vagrant machine host name is required. Please specify it in the vm-settings.yml file.")
     end
   end
 

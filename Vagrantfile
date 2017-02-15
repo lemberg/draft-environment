@@ -18,8 +18,8 @@ require "#{VAGRANTFILE_BASE_PATH}/helpers/configuration"
 #
 # Configuration settings are being loaded from YAML file(s).
 #
-# Default configuration is being stored in settings.yml.
-# Local overrides should be placed in settings.local.yml.
+# Default configuration is being stored in vm-settings.yml.
+# Local overrides should be placed in vm-settings.local.yml.
 #
 # Settings are being merged recursively. Values from local settings file
 # overwrites ones from the default settings; missing values are not being touch;

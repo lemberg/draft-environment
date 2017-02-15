@@ -7,5 +7,6 @@ docroot/**
 # Ignore vendor folder.
 vendor/**
 
-# Ignore local settings.
-settings.local.yml
+# Ignore project and local settings.
+vm-settings.yml
+vm-settings.local.yml
