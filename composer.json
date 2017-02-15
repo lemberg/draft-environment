@@ -4,8 +4,5 @@
     "type": "vm",
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "require": {
-        "composer/installers": "^1.2.0"
-    }
+    "prefer-stable": true
 }
