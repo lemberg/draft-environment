@@ -9,6 +9,7 @@ cache:
 
 before_install:
   # Update composer
+  - phpenv config-rm xdebug.ini
   - composer self-update
   # Download and register Oracle VirtualBox keys
   - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -

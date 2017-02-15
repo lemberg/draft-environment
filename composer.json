@@ -6,22 +6,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "symfony/yaml": "~2.8"
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "Draft\\Environment\\ScriptHandler::setUpProject"
-        ],
-        "post-update-cmd": [
-            "Draft\\Environment\\ScriptHandler::setUpProject"
-        ]
-    },
-    "config": {
-        "bin-dir": "bin/"
-    },
-    "autoload": {
-        "classmap": [
-          "scripts/ScriptHandler.php"
-        ]
+        "composer/installers": "^1.2.0"
     }
 }
