@@ -4,5 +4,8 @@
 # Ignore documents root folder.
 docroot/**
 
+# Ignore vendor folder.
+vendor/**
+
 # Ignore local settings.
 settings.local.yml

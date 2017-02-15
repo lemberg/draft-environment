@@ -4,8 +4,12 @@ sudo: true
 
 cache:
   apt: true
+  directories:
+    - "$HOME/.composer/cache"
 
 before_install:
+  # Update composer
+  - composer self-update
   # Download and register Oracle VirtualBox keys
   - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
   - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
@@ -23,8 +27,8 @@ before_install:
   - sudo dpkg -i vagrant_1.9.1_x86_64.deb
 
 install:
-  - cp settings.yml settings.local.yml
-  - "sed 's/hostname: \"\"/hostname: \"travis\"/g' -i ./settings.local.yml"
+  - composer install --no-interaction
 
 script:
+  - composer validate --no-check-all --ansi
   - vagrant status
