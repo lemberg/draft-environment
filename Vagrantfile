@@ -49,6 +49,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Set machine's hostname.
   config.vm.hostname = configuration.get("vagrant.hostname")
+  # Set VM name.
+  config.vm.define configuration.get("virtualbox.name")
 
   # Hosts records
   #
