@@ -15,14 +15,22 @@ class ScriptHandler {
    *   The script event.
    */
   public static function setUpProject(Event $event) {
-    if (!file_exists('./settings.yml')) {
+    $package = $event
+        ->getOperation()
+        ->getPackage();
+    $installPath = $event
+        ->getComposer()
+        ->getInstallationManager()
+        ->getInstallPath($package);
+
+    if (!file_exists("$installPath/settings.yml")) {
       $parser = new Parser();
-      $config = $parser->parse(file_get_contents('./default.settings.yml'));
+      $config = $parser->parse(file_get_contents("$installPath/default.settings.yml"));
       $config['vagrant']['hostname'] = $event->getIO()->ask('Please specify project name (lowercase letters, numbers, and underscores): ', 'default');
 
       $yaml = new Dumper();
       $yaml->setIndentation(2);
-      file_put_contents('./settings.yml', $yaml->dump($config, PHP_INT_MAX));
+      file_put_contents("$installPath/settings.yml", $yaml->dump($config, PHP_INT_MAX));
     }
   }
 }
