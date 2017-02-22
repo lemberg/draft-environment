@@ -29,8 +29,6 @@ before_install:
 
 install:
   - composer install --no-interaction
-  - cp default.vm-settings.yml vm-settings.yml
-  - "sed 's/hostname: \"\"/hostname: \"travis\"/g' -i ./vm-settings.yml"
 
 script:
   - composer validate --no-check-all --ansi

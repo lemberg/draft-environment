@@ -4,5 +4,24 @@
     "type": "vm",
     "license": "GPL-2.0+",
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require": {
+        "symfony/yaml": "~2.8"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Lemberg\\Draft\\Environment\\ScriptHandler::setUp"
+        ],
+        "post-update-cmd": [
+            "Lemberg\\Draft\\Environment\\ScriptHandler::setUp"
+        ]
+    },
+    "autoload": {
+        "classmap": [
+          "scripts/ScriptHandler.php"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin/"
+    }
 }
