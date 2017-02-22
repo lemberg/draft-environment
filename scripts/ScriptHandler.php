@@ -25,6 +25,7 @@ class ScriptHandler {
       // Use Composer's local repository to find the path to Draft Environment.
       $packages = $composer
           ->getRepositoryManager()
+          ->getLocalRepository()
           ->findPackage('lemberg/draft-environment');
 
       if ($packages) {
