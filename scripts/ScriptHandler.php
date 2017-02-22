@@ -24,13 +24,13 @@ class ScriptHandler {
     else {
       // Use Composer's local repository to find the path to Draft Environment.
       $packages = $composer
-        ->getRepositoryManager()
-        ->findPackage('lemberg/draft-environment');
+          ->getRepositoryManager()
+          ->findPackage('lemberg/draft-environment');
 
       if ($packages) {
         $installPath = $composer
-          ->getInstallationManager()
-          ->getInstallPath($packages[0]);
+            ->getInstallationManager()
+            ->getInstallPath($packages[0]);
       }
       else {
         throw new \RuntimeException('lemberg/draft-environment package not found in local repository.');
@@ -62,4 +62,5 @@ class ScriptHandler {
       }
     }
   }
+
 }
