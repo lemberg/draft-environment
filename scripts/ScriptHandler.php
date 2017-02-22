@@ -2,6 +2,7 @@
 
 namespace Lemberg\Draft\Environment;
 
+use Composer\Config;
 use Composer\Script\Event;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
@@ -23,15 +24,15 @@ class ScriptHandler {
     }
     else {
       // Use Composer's local repository to find the path to Draft Environment.
-      $packages = $composer
+      $package = $composer
           ->getRepositoryManager()
           ->getLocalRepository()
-          ->findPackage('lemberg/draft-environment');
+          ->findPackage('lemberg/draft-environment', '*');
 
-      if ($packages) {
+      if ($package) {
         $installPath = $composer
             ->getInstallationManager()
-            ->getInstallPath($packages[0]);
+            ->getInstallPath($package);
       }
       else {
         throw new \RuntimeException('lemberg/draft-environment package not found in local repository.');
@@ -51,8 +52,7 @@ class ScriptHandler {
 
     // Assume Vagrantfile has already been configured.
     if (!file_exists("./Vagrantfile")) {
-      $vendor_dir = $composer->getConfig()->get('vendor-dir');
-
+      $vendor_dir = trim($composer->getConfig()->get('vendor-dir', Config::RELATIVE_PATHS), DIRECTORY_SEPARATOR);
       if ($vendor_dir !== 'vendor') {
         $vagrantfile = file_get_contents("$installPath/Vagrantfile.proxy");
         $vagrantfile = str_replace('/vendor/', "/$vendor_dir/", $vagrantfile);
