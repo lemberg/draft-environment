@@ -4,8 +4,7 @@
 # JJG-Ansible-Windows https://github.com/geerlingguy/JJG-Ansible-Windows
 
 ANSIBLE_BASE_PATH=$1
-GIT_USER_EMAIL=$2
-GIT_USER_NAME=$3
+ANSIBLE_EXTRA_VARS=$2
 
 # Make sure Ansible playbook exists.
 if [ ! -f /var/www/default.localhost/${ANSIBLE_BASE_PATH}/main.yml ]; then
@@ -31,7 +30,10 @@ fi
 # Install playbook requirements.
 ansible-galaxy install --force -r /var/www/default.localhost/${ANSIBLE_BASE_PATH}/requirements.yml
 
+# Export configuration to the temporary file to avoid issues with escaping.
+echo ${ANSIBLE_EXTRA_VARS} > /tmp/ansible-extra-vars.json
+
 # Run the playbook.
 echo "Running Ansible provisioner defined in the Vagrantfile."
 echo ""
-ansible-playbook -i "localhost," /var/www/default.localhost/${ANSIBLE_BASE_PATH}/main.yml --connection=local -e "git_user_email=${GIT_USER_EMAIL}" -e "git_user_name=${GIT_USER_NAME}"
+ansible-playbook -i 'localhost,' /var/www/default.localhost/${ANSIBLE_BASE_PATH}/main.yml --connection=local --extra-vars '@/tmp/ansible-extra-vars.json'

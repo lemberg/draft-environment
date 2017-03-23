@@ -28,6 +28,13 @@ class Configuration
     setting
   end
 
+  # Public: Get entire configuration.
+  #
+  # Returns configuration.
+  def getConfiguration()
+    @settings
+  end
+
   # Internal: Set configuration setting value by given key.
   #
   # key   - String setting key.
@@ -130,6 +137,15 @@ class Configuration
     part_4 = [[sum % 256, 1].max, 255].min
 
     self.set("vagrant.ip_address", "10.10.#{part_3}.#{part_4}")
+  end
+
+  # Internal: Get Git user name and email from the host system.
+  #
+  # Returns nothing.
+  protected
+  def get_git_credentials
+    self.set("git_user_name", `git config --get user.name`.strip)
+    self.set("git_user_email", `git config --get user.email`.strip)
   end
 
 end

@@ -134,14 +134,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # file or directory" error messages, stdout and sterr have been redirected
   # to /dev/null. See provisioning/windows.sh
 
-  # Get local GIT user name and email.
-  git_user_email = `git config --get user.email`.strip
-  git_user_name = `git config --get user.name`.strip
-
   # Get correct path to the Ansible playbook.
   require 'pathname'
   project_pathname = Pathname.new PROJECT_BASE_PATH
   vm_pathname = Pathname.new VM_BASE_PATH
+
+  # Pass configuration to Ansible.
+  require 'json'
+  settings = configuration.getConfiguration()
 
   # Run Ansible provisioner from within the virtual machine using proxy shell
   # script so the developer experience is the same on all platforms (this means
@@ -149,7 +149,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # operating system).
   config.vm.provision "shell" do |shell|
     shell.path = "#{VM_BASE_PATH}/provisioning/ansible.sh"
-    shell.args = ["#{vm_pathname.relative_path_from project_pathname}/provisioning/playbooks", %Q["#{git_user_email}"], %Q["#{git_user_name}"]]
+    shell.args = ["#{vm_pathname.relative_path_from project_pathname}/provisioning/playbooks", settings.to_json]
   end
 
   # Display an informational message to the user.
