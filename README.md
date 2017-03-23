@@ -24,7 +24,7 @@ $ vagrant plugin install vagrant-hostmanager
 
 ### Vagrant WinNFSd (WINDOWS only)
 
-Dramatically increased disk IO on Windows by adding NFS support.
+Dramatically increases disk IO on Windows by adding NFS support.
 
 Install plugin:
 
@@ -55,7 +55,7 @@ $ vagrant plugin install vagrant-winnfsd
    $ composer require --dev lemberg/draft-environment
    ```
 
-1. Configure guest machine by answering installer's questions. At the moment, project name (hostname) is the only setting that can be set interactively. More to come. Adjust other settings by manually editing `vm-settings.yml`
+1. Configure guest machine by answering installer's questions. At the moment, project name (hostname) is the only setting that can be set interactively. More to come. Adjust other settings by editing `vm-settings.yml` manually.
 
 1. Create and configure guest machine:
 

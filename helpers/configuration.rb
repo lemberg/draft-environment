@@ -107,11 +107,13 @@ class Configuration
     end
     # Generate virtual machine IP address.
     self.generate_ip_address
+    # Get active user name and email
+    self.get_git_credentials
     # Use *.test domain (RFC 2606).
     self.set("vagrant.hostname", self.get("vagrant.hostname") + '.test');
   end
 
-  # Internal: Generate IP addres based on a Vagrant hsot name value (in the most
+  # Internal: Generate IP addres based on a Vagrant host name value (in the most
   # cases it contains project name).
   #
   # Returns nothing.
