@@ -1,0 +1,21 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: provisioning/playbooks/requirements.yml
+ansible:
+  playbook: provisioning/playbooks/main.yml
+driver:
+  name: docker
+docker:
+  containers:
+    - name: draft-environment-14.04
+      image: ubuntu
+      image_version: '14.04'
+      privileged: true
+    - name: draft-environment-16.04
+      image: ubuntu
+      image_version: '16.04'
+      privileged: true
+
+verifier:
+  name: testinfra
