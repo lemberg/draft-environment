@@ -1,6 +1,6 @@
 # Draft Environment
 
-[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=1.x.x)](https://travis-ci.org/lemberg/draft-environment)
+[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=2.x.x)](https://travis-ci.org/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.
 
@@ -49,18 +49,34 @@ $ vagrant plugin install vagrant-winnfsd
     },
     ```
 
-1. Add Draft to the project (as a dev dependency): 
+1. Add Draft to the project (as a dev dependency):
 
-   ```
-   $ composer require --dev lemberg/draft-environment
-   ```
+    ```
+    $ composer require --dev lemberg/draft-environment
+    ```
 
-1. Configure guest machine by answering installer's questions. At the moment, project name (hostname) is the only setting that can be set interactively. More to come. Adjust other settings by editing `vm-settings.yml` manually.
+1. Configure guest machine by answering installer's questions. At the moment, project name (hostname) is the only setting that can be set interactively. More to come. Adjust other settings by editing `vm-settings.yml` manually
 
 1. Create and configure guest machine:
 
-   ```
-   $ vagrant up
-   ```
+    ```
+    $ vagrant up
+    ```
+
+1. Override any variable used in any Ansible role by including it in the `vm-settings.yml`. For details see [default.vm-settings.yml](default.vm-settings.yml)
+
+    Here's the list of used roles and available variables (and their default values):
+
+    - [kamaln7.swapfile](https://github.com/kamaln7/ansible-swapfile/blob/master/defaults/main.yml)
+    - git_config (internal)
+    - apache2 (internal)
+    - mysql (internal)
+    - [T2L.php](https://github.com/T2L/ansible-role-php/blob/1.0.0/defaults/main.yml)
+    - [T2L.composer](https://github.com/T2L/ansible-role-composer/blob/1.1.1/defaults/main.yml)
+    - [T2L.composer-global-packages](https://github.com/T2L/ansible-role-composer-global-packages/blob/1.0.3/defaults/main.yml)
+
+    Some of those variables are already overridden. Find them [here](https://github.com/lemberg/draft-environment/tree/2.x.x/provisioning/playbooks/vars).
 
 1. Commit `Vagrantfile` and `vm-settings.yml` to lock the VM state
+
+1. File `vm-settings.yml` is project-specific, not a machine specific. Configuration can be overridden in `vm-settings.local.yml` (and this file must not be committed)

@@ -21,9 +21,10 @@
     - git_config
     - apache2
     - mysql
-    - php5
+    - T2L.php
     - T2L.composer
     - T2L.composer-global-packages
   vars_files:
     - vars/swapfile.yml
+    - vars/php.yml
     - vars/composer-global-packages.yml

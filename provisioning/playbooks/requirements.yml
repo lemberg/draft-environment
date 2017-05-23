@@ -1,5 +1,7 @@
 ---
 - src: kamaln7.swapfile
+- src: T2L.php
+  version: 1.0.0
 - src: T2L.composer
   version: 1.1.1
 - src: T2L.composer-global-packages
