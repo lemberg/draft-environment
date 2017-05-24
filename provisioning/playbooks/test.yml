@@ -2,7 +2,7 @@
 # This is exact copy of main playbook, except kamaln7.swapfile is missing
 # because it's not possible to test it on Travis CI.
 - hosts: all
-  become: true
+  remote_user: root
 
   pre_tasks:
     - name: Update apt cache if needed.
