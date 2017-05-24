@@ -4,6 +4,8 @@ dependency:
   requirements_file: provisioning/playbooks/requirements.yml
 ansible:
   playbook: provisioning/playbooks/main.yml
+  extra_vars:
+    swapfile_size: 256M
 driver:
   name: docker
 docker:
