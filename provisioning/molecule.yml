@@ -1,9 +1,9 @@
 ---
 dependency:
   name: galaxy
-  requirements_file: provisioning/playbooks/requirements.yml
+  requirements_file: playbooks/requirements.yml
 ansible:
-  playbook: provisioning/playbooks/test.yml
+  playbook: playbooks/test.yml
   ansiblecfg_ssh_connection:
     pipelining: true
 driver:

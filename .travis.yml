@@ -41,4 +41,5 @@ install:
 script:
   - composer validate --no-check-all --ansi
   - vagrant status
+  - cd provisioning
   - molecule test
