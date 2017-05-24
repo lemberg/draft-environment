@@ -3,7 +3,7 @@
 - name: Install Apache2 web server
   apt:
     name: apache2
-    state: latest
+    state: present
     update_cache: yes
     cache_valid_time: 86400
 

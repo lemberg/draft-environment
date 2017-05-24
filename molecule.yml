@@ -14,11 +14,7 @@ docker:
       image: ubuntu
       image_version: '14.04'
       privileged: true
-      volume_mounts:
-        - /home/travis/build/lemberg/draft-environment:/var/www/default.localhost
     - name: draft-environment-16.04
       image: ubuntu
       image_version: '16.04'
       privileged: true
-      volume_mounts:
-        - /home/travis/build/lemberg/draft-environment:/var/www/default.localhost

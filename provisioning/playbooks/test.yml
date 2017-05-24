@@ -1,6 +1,7 @@
 ---
-# This is exact copy of main playbook, except kamaln7.swapfile is missing
-# because it's not possible to test it on Travis CI.
+# This is exact copy of main playbook, except kamaln7.swapfile is skipped
+# because it's not possible to test it on Travis CI. Also we manually add
+# vagrant user as it does not exist in Docker.
 - hosts: all
   remote_user: root
 
@@ -12,7 +13,7 @@
     - name: Ensure base packages are installed.
       apt:
         name: "{{ item }}"
-        state: latest
+        state: present
       with_items:
         - curl
         - git
