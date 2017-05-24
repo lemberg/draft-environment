@@ -18,7 +18,13 @@
         - git
         - unzip
         - wget
+    - name: Add vagrant user
+      user:
+        name: vagrant
+        password: vagrant
+        uid: 1000
   roles:
+    - { role: kamaln7.swapfile, swapfile_size: false }
     - git_config
     - apache2
     - mysql

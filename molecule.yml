@@ -4,6 +4,8 @@ dependency:
   requirements_file: provisioning/playbooks/requirements.yml
 ansible:
   playbook: provisioning/playbooks/test.yml
+  ansiblecfg_ssh_connection:
+    pipelining: true
 driver:
   name: docker
 docker:
@@ -12,7 +14,11 @@ docker:
       image: ubuntu
       image_version: '14.04'
       privileged: true
+      volume_mounts:
+        - /home/travis/build/lemberg/draft-environment:/var/www/default.localhost
     - name: draft-environment-16.04
       image: ubuntu
       image_version: '16.04'
       privileged: true
+      volume_mounts:
+        - /home/travis/build/lemberg/draft-environment:/var/www/default.localhost

@@ -14,8 +14,8 @@ php_extensions:
 php_configuration:
   PHP:
     error_reporting: E_ALL
-    display_errors: On
-    display_startup_errors: On
+    display_errors: 'On'
+    display_startup_errors: 'On'
     memory_limit: 256M
     upload_max_filesize: 64M
     post_max_size: 512M
