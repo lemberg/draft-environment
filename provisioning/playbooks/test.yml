@@ -1,0 +1,31 @@
+---
+# This is exact copy of main playbook, except kamaln7.swapfile is missing
+# because it's not possible to test it on Travis CI.
+- hosts: all
+  become: true
+
+  pre_tasks:
+    - name: Update apt cache if needed.
+      apt:
+        update_cache: yes
+        cache_valid_time: 86400
+    - name: Ensure base packages are installed.
+      apt:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - curl
+        - git
+        - unzip
+        - wget
+  roles:
+    - git_config
+    - apache2
+    - mysql
+    - T2L.php
+    - T2L.composer
+    - T2L.composer-global-packages
+  vars_files:
+    - vars/swapfile.yml
+    - vars/php.yml
+    - vars/composer-global-packages.yml
