@@ -2,7 +2,7 @@
 /.vagrant
 
 # Ignore Molecule directory.
-/.molecule
+/provisioning/.molecule
 
 # Ignore documents root folder.
 /docroot
