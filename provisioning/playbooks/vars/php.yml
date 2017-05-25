@@ -9,6 +9,7 @@ php_extensions:
   - mysql
   - sqlite3
   - xml
+  - zip
 
 # Configure PHP.
 php_configuration:

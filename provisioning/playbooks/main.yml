@@ -27,4 +27,5 @@
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml
+    - vars/composer.yml
     - vars/composer-global-packages.yml

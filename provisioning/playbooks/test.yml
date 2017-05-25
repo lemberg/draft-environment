@@ -6,11 +6,11 @@
   remote_user: root
 
   pre_tasks:
-    - name: Update apt cache if needed.
+    - name: Update apt cache
       apt:
         update_cache: yes
         cache_valid_time: 86400
-    - name: Ensure base packages are installed.
+    - name: Ensure base packages are installed
       apt:
         name: "{{ item }}"
         state: present
