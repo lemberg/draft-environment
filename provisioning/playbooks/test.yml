@@ -1,6 +1,9 @@
 ---
+# This is exact copy of main playbook, except kamaln7.swapfile is skipped
+# because it's not possible to test it on Travis CI. Also we manually add
+# vagrant user as it does not exist in Docker.
 - hosts: all
-  become: true
+  remote_user: root
 
   pre_tasks:
     - name: Update apt cache if needed.
@@ -16,8 +19,13 @@
         - git
         - unzip
         - wget
+    - name: Add vagrant user
+      user:
+        name: vagrant
+        password: vagrant
+        uid: 1000
   roles:
-    - kamaln7.swapfile
+    - { role: kamaln7.swapfile, swapfile_size: false }
     - git_config
     - apache2
     - mysql
