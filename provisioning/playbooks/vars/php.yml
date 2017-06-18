@@ -8,6 +8,7 @@ php_extensions:
   - mbstring
   - mysql
   - sqlite3
+  - xdebug
   - xml
   - zip
 
@@ -18,5 +19,12 @@ php_configuration:
     display_errors: 'On'
     display_startup_errors: 'On'
     memory_limit: 256M
+    output_buffering: 'Off'
     upload_max_filesize: 64M
     post_max_size: 512M
+
+# Configure PHP extensions.
+php_extensions_configuration:
+  xdebug:
+    xdebug.remote_enable: 'On'
+    xdebug.remote_connect_back: 'On'

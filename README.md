@@ -71,7 +71,7 @@ $ vagrant plugin install vagrant-winnfsd
     - git_config (internal)
     - apache2 (internal)
     - mysql (internal)
-    - [T2L.php](https://github.com/T2L/ansible-role-php/blob/1.0.0/defaults/main.yml)
+    - [T2L.php](https://github.com/T2L/ansible-role-php/blob/1.1.0/defaults/main.yml)
     - [T2L.composer](https://github.com/T2L/ansible-role-composer/blob/1.1.1/defaults/main.yml)
     - [T2L.composer-global-packages](https://github.com/T2L/ansible-role-composer-global-packages/blob/1.0.3/defaults/main.yml)
 
@@ -80,3 +80,7 @@ $ vagrant plugin install vagrant-winnfsd
 1. Commit `Vagrantfile` and `vm-settings.yml` to lock the VM state
 
 1. File `vm-settings.yml` is project-specific, not a machine specific. Configuration can be overridden in `vm-settings.local.yml` (and this file must not be committed)
+
+## Changelog
+
+Changelog can be found here [CHANGELOG.md](CHANGELOG.md)
