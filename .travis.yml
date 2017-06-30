@@ -26,12 +26,12 @@ before_install:
   - sudo apt-get -y --force-yes install linux-headers-`uname -r`
   # Install VirtualBox 5.1
   - sudo apt-get install virtualbox-5.1
-  # Install Vagrant 1.9.1
+  # Install Vagrant 1.9.6
   # Todo: install from a package repository, not from a hardcoded URL.
-  - curl -O https://releases.hashicorp.com/vagrant/1.9.1/vagrant_1.9.1_x86_64.deb
-  - sudo dpkg -i vagrant_1.9.1_x86_64.deb
+  - curl -O https://releases.hashicorp.com/vagrant/1.9.6/vagrant_1.9.6_x86_64.deb
+  - sudo dpkg -i vagrant_1.9.6_x86_64.deb
   # Install Docker engine
-  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-engine
+  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-ce
 
 install:
   - composer install --no-interaction
