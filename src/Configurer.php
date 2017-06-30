@@ -43,7 +43,15 @@ class Configurer {
     if (!file_exists("./vm-settings.yml")) {
       $parser = new Parser();
       $config = $parser->parse(file_get_contents("$installPath/default.vm-settings.yml"));
-      $config['vagrant']['hostname'] = $event->getIO()->ask('Please specify project name (lowercase letters, numbers, and underscores): ', 'default');
+      $project_name_help_text = <<<HERE
+<info>Please specify project name. Must be valid domain name:
+  - Allowed characters: lowercase letters (a-z), numbers (0-9), period (.) and
+    dash (-)
+  - Should not start or end with dash (-) (e.g. -google-)
+  - Should be between 3 and 63 characters long</info>
+$
+HERE;
+      $config['vagrant']['hostname'] = $event->getIO()->askAndValidate($project_name_help_text, [__CLASS__, 'validateProjectName'], NULL, 'default-' . time());
 
       $yaml = new Dumper();
       $yaml->setIndentation(2);
@@ -62,6 +70,23 @@ class Configurer {
         copy("$installPath/Vagrantfile.proxy", "./Vagrantfile");
       }
     }
+  }
+
+  /**
+   * Validates that given value is a valid project name.
+   *
+   * @param string $value
+   *   Project name.
+   *
+   * @throws \UnexpectedValueException
+   *   When project name is not valid.
+   */
+  public static function validateProjectName($value) {
+    if (!preg_match('/^[a-z0-9][a-z0-9-]{1,61}[a-zA-Z0-9]$/', $value)) {
+      throw new \UnexpectedValueException('Specified value is not a valid project name. Please try again');
+    }
+
+    return $value;
   }
 
 }
