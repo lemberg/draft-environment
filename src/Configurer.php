@@ -7,7 +7,7 @@ use Composer\Script\Event;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
 
-class ScriptHandler {
+class Configurer {
 
   /**
    * Sets up new project environment.

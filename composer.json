@@ -10,16 +10,16 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "Lemberg\\Draft\\Environment\\ScriptHandler::setUp"
+            "Lemberg\\Draft\\Environment\\Configurer::setUp"
         ],
         "post-update-cmd": [
-            "Lemberg\\Draft\\Environment\\ScriptHandler::setUp"
+            "Lemberg\\Draft\\Environment\\Configurer::setUp"
         ]
     },
     "autoload": {
-        "classmap": [
-          "scripts/ScriptHandler.php"
-        ]
+        "psr-4": {
+            "Lemberg\\Draft\\Environment\\": "src/"
+        }
     },
     "config": {
         "bin-dir": "bin/"
