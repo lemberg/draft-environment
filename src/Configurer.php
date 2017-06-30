@@ -43,15 +43,17 @@ class Configurer {
     if (!file_exists("./vm-settings.yml")) {
       $parser = new Parser();
       $config = $parser->parse(file_get_contents("$installPath/default.vm-settings.yml"));
-      $project_name_help_text = <<<HERE
-<info>Please specify project name. Must be valid domain name:
+      $project_name_question = <<<HERE
+Please specify project name. Must be valid domain name:
   - Allowed characters: lowercase letters (a-z), numbers (0-9), period (.) and
     dash (-)
   - Should not start or end with dash (-) (e.g. -google-)
-  - Should be between 3 and 63 characters long</info>
-$
+  - Should be between 3 and 63 characters long
 HERE;
-      $config['vagrant']['hostname'] = $event->getIO()->askAndValidate($project_name_help_text, [__CLASS__, 'validateProjectName'], NULL, 'default-' . time());
+      $config['vagrant']['hostname'] = $event->getIO()->askAndValidate(static::addQuestionMarkup($project_name_question), [__CLASS__, 'validateProjectName'], NULL, 'default-' . time());
+      $event->getIO()->write('<info>Now you can make some coffee. It won\'t take too long though. Just relax and run</info> <comment>vagrant up</comment>');
+      $event->getIO()->write('<info>Project will be available at</info> <comment>http://' . $config['vagrant']['hostname'] . '.test</comment> <info>after provisioning</info>');
+      $event->getIO()->write('<info>Happy coding!</info>');
 
       $yaml = new Dumper();
       $yaml->setIndentation(2);
@@ -87,6 +89,19 @@ HERE;
     }
 
     return $value;
+  }
+
+  /**
+   * Adds markup to the given question.
+   *
+   * @param string $question
+   *   Question raw text.
+   *
+   * @return string
+   *   Question with markup.
+   */
+  protected static function addQuestionMarkup($question) {
+    return "<info>$question</info>\n\$ ";
   }
 
 }
