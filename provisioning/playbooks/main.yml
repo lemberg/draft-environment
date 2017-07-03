@@ -24,6 +24,7 @@
     - T2L.php
     - T2L.composer
     - T2L.composer-global-packages
+    - T2L.java
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml
