@@ -36,15 +36,15 @@ $ vagrant plugin install vagrant-winnfsd
 
 1. Install recommended Vagrant plugins
 
-1. Add `post-install-cmd` and `post-update-cmd` events handler `Lemberg\\Draft\\Environment\\ScriptHandler::setUp` to the `scripts` property of the root `composer.json` file. Resulting file might look like this:
+1. Add `post-install-cmd` and `post-update-cmd` events handler `Lemberg\\Draft\\Environment\\Configurer::setUp` to the `scripts` property of the root `composer.json` file. Resulting file might look like this:
 
     ```json
     "scripts": {
         "post-install-cmd": [
-            "Lemberg\\Draft\\Environment\\ScriptHandler::setUp"
+            "Lemberg\\Draft\\Environment\\Configurer::setUp"
         ],
         "post-update-cmd": [
-            "Lemberg\\Draft\\Environment\\ScriptHandler::setUp"
+            "Lemberg\\Draft\\Environment\\Configurer::setUp"
         ]
     },
     ```
