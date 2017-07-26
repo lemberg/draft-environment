@@ -3,7 +3,7 @@
 
 # Some features used in this configuration file require specific version of
 # Vagrant.
-Vagrant.require_version ">= 1.6.0"
+Vagrant.require_version ">= 1.8.0"
 
 # Vagrant API version.
 VAGRANTFILE_API_VERSION = "2"
@@ -95,6 +95,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Tune VirtualBox powered machine.
   config.vm.provider :virtualbox do |v|
+    # Use linked clones instead of importing the base box every time.
+    #
+    # See https://www.vagrantup.com/docs/virtualbox/configuration.html#linked-clones
+    v.linked_clone = true
     # Set VM name.
     v.name = configuration.get("virtualbox.name")
     # Set CPUs count.
