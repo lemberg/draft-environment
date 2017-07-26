@@ -22,6 +22,16 @@ Install plugin:
 $ vagrant plugin install vagrant-hostmanager
 ```
 
+### vagrant-vbguest
+
+Automatically installs the host's VirtualBox Guest Additions on the guest system.
+
+Install plugin:
+
+```
+$ vagrant plugin install vagrant-vbguest
+```
+
 ### Vagrant WinNFSd (WINDOWS only)
 
 Dramatically increases disk IO on Windows by adding NFS support.
