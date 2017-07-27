@@ -33,7 +33,7 @@
     - T2L.composer
     - T2L.composer-global-packages
     - T2L.java
-    - T2L.solr
+    - { role: T2L.solr, solr_cleanup_downloads: false, solr_cleanup_gpg: false }
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml
