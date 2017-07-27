@@ -1,6 +1,27 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Before we start: auto-install recommended plugins. Code borrowed here:
+# https://stackoverflow.com/a/28801317
+# Install Vagrant Host Manager and vagrant-vbguest.
+required_plugins = %w(vagrant-hostmanager vagrant-vbguest)
+
+# Additionally install Vagrant WinNFSd on Windows hosts.
+require "rbconfig"
+if (RbConfig::CONFIG["host_os"] =~ /cygwin|mswin|mingw|bccwin|wince|emx/)
+  required_plugins.push('vagrant-winnfsd')
+end
+
+plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
+if not plugins_to_install.empty?
+  puts "Installing plugins: #{plugins_to_install.join(' ')}"
+  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+    exec "vagrant #{ARGV.join(' ')}"
+  else
+    abort "Installation of one or more plugins has failed. Aborting."
+  end
+end
+
 # Some features used in this configuration file require specific version of
 # Vagrant.
 Vagrant.require_version ">= 1.8.0"

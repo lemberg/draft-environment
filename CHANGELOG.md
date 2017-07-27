@@ -1,5 +1,6 @@
 ## Draft Environment 2.x.x
 
+- Install recommended Vagrant plugins automatically
 - Validate project name (must be a valid domain name)
 - Updated roles:
     * PHP (T2L.php: 1.1.1)

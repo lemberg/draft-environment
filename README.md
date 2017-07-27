@@ -10,37 +10,19 @@ This is Vagrant-based development environment for Drupal projects. This project 
 - Vagrant
 - VirtualBox
 
-## Vagrant plugins (highly recommended)
+## Vagrant plugins (will be automatically installed)
 
-### Vagrant Host Manager
+#### Vagrant Host Manager
 
 Manages host and/or guest `hosts` files. Draft is configured to create a `hostname.test` DNS record on a host machine.
 
-Install plugin:
-
-```
-$ vagrant plugin install vagrant-hostmanager
-```
-
-### vagrant-vbguest
+#### vagrant-vbguest
 
 Automatically installs the host's VirtualBox Guest Additions on the guest system.
 
-Install plugin:
-
-```
-$ vagrant plugin install vagrant-vbguest
-```
-
-### Vagrant WinNFSd (WINDOWS only)
+#### Vagrant WinNFSd (WINDOWS only)
 
 Dramatically increases disk IO on Windows by adding NFS support.
-
-Install plugin:
-
-```
-$ vagrant plugin install vagrant-winnfsd
-```
 
 ## Usage
 
