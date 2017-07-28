@@ -67,7 +67,7 @@ Dramatically increases disk IO on Windows by adding NFS support.
     - [T2L.composer](https://github.com/T2L/ansible-role-composer/blob/2.0.2/defaults/main.yml)
     - [T2L.composer-global-packages](https://github.com/T2L/ansible-role-composer-global-packages/blob/2.0.2/defaults/main.yml)
     - [T2L.java](https://github.com/T2L/ansible-role-java/blob/1.0.1/defaults/main.yml)
-    - [T2L.solr](https://github.com/T2L/ansible-role-solr/blob/1.0.0/defaults/main.yml)
+    - [T2L.solr](https://github.com/T2L/ansible-role-solr/blob/1.1.1/defaults/main.yml)
 
     Some of those variables are already overridden. Find them [here](https://github.com/lemberg/draft-environment/tree/2.x.x/provisioning/playbooks/vars).
 

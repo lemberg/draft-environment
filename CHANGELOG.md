@@ -8,4 +8,5 @@
     * Composer Global Packages (T2L.composer-global-packages: 2.0.2)
 - Added roles:
     * Java (T2L.java: 1.0.1)
+    * Apache Solr (T2L.java: 1.1.1)
 - Updated PHP role allows configuration of PHP extensions which uses own ini files. Say hello to xdebug!
