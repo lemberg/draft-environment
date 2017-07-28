@@ -1,5 +1,6 @@
 ## Draft Environment 2.x.x
 
+- Ability to specify what features will be installed
 - Install recommended Vagrant plugins automatically
 - Validate project name (must be a valid domain name)
 - Updated roles:

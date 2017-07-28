@@ -11,7 +11,6 @@ class Configuration
   # base_path - String that contains Vagrantfile base path.
   def initialize(base_path)
     self.load_settings(base_path)
-    self.verify_settings
     self.merge_default_settings
   end
 
@@ -62,10 +61,13 @@ class Configuration
   # Returns nothing.
   protected
   def load_settings(base_path)
-    if not File.exist?("#{base_path}/vm-settings.yml")
-      abort("Settings file is missing. Start using this VM by copying default.vm-settings.yml into vm-settings.yml");
+    default_settings = YAML::load_file("#{base_path}/default.vm-settings.yml")
+    if File.exist?("#{base_path}/vm-settings.yml")
+      settings = YAML::load_file("#{base_path}/vm-settings.yml")
+      @settings = self.merge_recursively(default_settings, settings)
+    else
+      @settings = default_settings
     end
-    @settings = YAML::load_file("#{base_path}/vm-settings.yml")
     if File.exist?("#{base_path}/vm-settings.local.yml")
       local_settings = YAML::load_file("#{base_path}/vm-settings.local.yml")
       unless local_settings.nil?
@@ -92,22 +94,16 @@ class Configuration
     end
   end
 
-  # Internal: Verify that there are no issues with provided configuration.
-  #
-  # Returns nothing.
-  protected
-  def verify_settings
-    # Vagrant machine host name is required.
-    if self.get("vagrant.hostname").length == 0
-      abort("Vagrant machine host name is required. Please specify it in the vm-settings.yml file.")
-    end
-  end
-
   # Internal: Merge default settings into provided configuration.
   #
   # Returns nothing.
   protected
   def merge_default_settings
+    # Set hostname if it's not defined.
+    if self.get("vagrant.hostname").length == 0
+      require 'securerandom'
+      self.set("virtualbox.hostname", "draft-env-" + SecureRandom.hex(6))
+    end
     # Set VirtualBox machine name to match Vagrant host name if it's empty.
     if self.get("virtualbox.name").length == 0
       self.set("virtualbox.name", self.get("vagrant.hostname"))
