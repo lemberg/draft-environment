@@ -25,8 +25,10 @@
     - T2L.composer
     - T2L.composer-global-packages
     - T2L.java
+    - T2L.solr
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml
+    - vars/solr.yml
     - vars/composer.yml
     - vars/composer-global-packages.yml
