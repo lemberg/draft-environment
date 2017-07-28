@@ -1,5 +1,6 @@
 ## Draft Environment 2.x.x
 
+- Added creation of default MySQL database and user (db: drupal, user: drupal, pass: drupal)
 - Ability to specify what features will be installed
 - Install recommended Vagrant plugins automatically
 - Validate project name (must be a valid domain name)

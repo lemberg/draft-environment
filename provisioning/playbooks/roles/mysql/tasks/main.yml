@@ -1,11 +1,14 @@
 ---
 # Install MySQL server.
-- name: Install MySQL server.
+- name: Install MySQL server and Python MySQLdb connector.
   apt:
-    name: mysql-server
+    name: '{{ item }}'
     state: present
     update_cache: yes
     cache_valid_time: 86400
+  with_items:
+    - mysql-server
+    - python-mysqldb
 
 # Ensure that MySQL daemon starts with the system.
 - name: Ensure MySQL is started and enabled on boot.
@@ -13,3 +16,15 @@
     name: mysql
     state: started
     enabled: yes
+
+- name: Create default database
+  mysql_db:
+    name: drupal
+    collation: utf8mb4_general_ci
+    encoding: utf8mb4
+
+- name: Create default database user
+  mysql_user:
+    name: drupal
+    password: drupal
+    priv: drupal.*:ALL
