@@ -17,15 +17,15 @@
         - unzip
         - wget
   roles:
-    - kamaln7.swapfile
-    - git_config
-    - apache2
-    - mysql
-    - T2L.php
-    - T2L.composer
-    - T2L.composer-global-packages
-    - T2L.java
-    - T2L.solr
+    - { role: kamaln7.swapfile, when: "'swapfile' in draft_features" }
+    - { role: git_config, when: "'git_config' in draft_features" }
+    - { role: apache2, when: "'apache2' in draft_features" }
+    - { role: mysql, when: "'mysql' in draft_features" }
+    - { role: T2L.php, when: "'php' in draft_features" }
+    - { role: T2L.composer, when: "'composer' in draft_features" }
+    - { role: T2L.composer-global-packages, when: "'composer-global-packages' in draft_features" }
+    - { role: T2L.java, when: "'java' in draft_features" }
+    - { role: T2L.solr, when: "'solr' in draft_features" }
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml

@@ -53,6 +53,23 @@ virtualbox:
   # CPU.
   cpuexecutioncap: 100
 
+# List of features to install. Some roles depend on each other, be careful.
+draft_features:
+  # Configure Swap file (sort of required by Composer)
+  - swapfile
+  # Copy host machine GIT credentilas to the VM
+  - git_config
+  - apache2
+  - mysql
+  - php
+  # Composer (PHP dependency manager), requires PHP
+  - composer
+  # Composer global packages, requires PHP and Composer
+  - composer-global-packages
+#  - java
+  # Apache Solr, requires Java
+#  - solr
+
 # Provisioner (Ansible) configuration.
 #
 # Any variable that is being used in any Ansible role can be overridden in this
