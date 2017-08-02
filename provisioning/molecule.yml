@@ -13,8 +13,12 @@ docker:
     - name: draft-environment-14.04
       image: ubuntu
       image_version: '14.04'
-      privileged: true
+      cap_add:
+        - SYS_ADMIN
+        - NET_ADMIN
     - name: draft-environment-16.04
       image: ubuntu
       image_version: '16.04'
-      privileged: true
+      cap_add:
+        - SYS_ADMIN
+        - NET_ADMIN
