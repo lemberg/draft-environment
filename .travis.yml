@@ -36,7 +36,7 @@ before_install:
 install:
   - composer install --no-interaction --no-progress --no-suggest
   - pip install docker
-  - pip install molecule
+  - pip install 'molecule<2.0.0'
 
 script:
   - composer validate --no-check-all --ansi
