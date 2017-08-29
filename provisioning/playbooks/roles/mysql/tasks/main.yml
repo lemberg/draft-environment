@@ -17,13 +17,21 @@
     name: mysql
     enabled: yes
 
-- name: Ensure MySQL is started
-  command: service mysql start
-  # Skip Ansible Lint check, as service module fails to start MySQL on Ubuntu
-  # Trusty.
+- name: Check whether MySQL service is running
+  command: service mysql status
+  register: mysql_service_status
   args:
     warn: false
+  failed_when: false
   changed_when: false
+
+- name: Ensure MySQL is started
+  command: service mysql start
+  when: "'MySQL is stopped' in mysql_service_status.stdout"
+  # Skip Ansible Lint check, as service module fails to start MySQL on Ubuntu
+  # Trusty in a Docker container (because upstart doesn't work).
+  args:
+    warn: false
 
 # Has to be after the root password assignment, for idempotency.
 - name: Copy .my.cnf file with root password credentials.
