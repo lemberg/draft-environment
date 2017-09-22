@@ -39,7 +39,7 @@
     - vars/php.yml
     - vars/solr.yml
     - vars/composer-global-packages.yml
-    - ../vm-settings.yml
+    - ../../vm-settings.yml
 
   post_tasks:
     - name: Tune .gitignore to account for actual document root
