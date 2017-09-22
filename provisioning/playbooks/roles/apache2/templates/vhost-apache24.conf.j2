@@ -1,8 +1,10 @@
-<VirtualHost *:80>
-  ServerName default.localhost
-  DocumentRoot /var/www/default.localhost/docroot
+# {{ ansible_managed }}
 
-  <Directory /var/www/default.localhost/docroot>
+<VirtualHost *:80>
+  ServerName {{ vagrant.hostname }}
+  DocumentRoot {{ vagrant.base_directory }}/{{ apache2_document_root }}
+
+  <Directory {{ vagrant.base_directory }}/{{ apache2_document_root }}>
     AllowOverride All
     Options -Indexes +FollowSymLinks
     Require all granted

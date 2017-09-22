@@ -16,6 +16,7 @@
         - git
         - unzip
         - wget
+
   roles:
     - { role: kamaln7.swapfile, when: "'swapfile' in draft_features" }
     - { role: git_config, when: "'git_config' in draft_features" }
@@ -32,3 +33,10 @@
     - vars/solr.yml
     - vars/composer.yml
     - vars/composer-global-packages.yml
+
+  post_tasks:
+    - name: Tune .gitignore to account for actual document root
+      lineinfile:
+        dest: '{{ vagrant.base_directory }}/.gitignore'
+        regexp: "/docroot"
+        line: "/{{ apache2_document_root }}"

@@ -32,11 +32,17 @@
   notify:
     - Restart Apache2 web server
 
+- name: Ensure that document root directory exists
+  file:
+    path: '{{ vagrant.base_directory }}/{{ apache2_document_root }}'
+    state: directory
+    mode: 0755
+
 # Add custom virtual host.
 - name: Add custom virtual host.
   template:
     src: "vhost-apache24.conf.j2"
-    dest: "/etc/apache2/sites-available/default.conf"
+    dest: "/etc/apache2/sites-available/draft.conf"
     owner: root
     group: root
     mode: 0644
@@ -44,9 +50,9 @@
     - Restart Apache2 web server
 
 - name: Enable custom virtual host.
-  command: a2ensite default
+  command: a2ensite draft
   register: apache2_enable_custom_virtual_host_result
-  changed_when: "'Enabling site default.' in apache2_enable_custom_virtual_host_result.stdout"
+  changed_when: "'Enabling site draft.' in apache2_enable_custom_virtual_host_result.stdout"
   notify:
     - Restart Apache2 web server
 
