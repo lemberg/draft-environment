@@ -1,4 +1,4 @@
-## Draft Environment 2.x.x
+## Draft Environment 2.0.0, 2017-10-11
 
 - Default project location is changed from `/var/www/defalt.localhost` to `/var/www/draft`
 - Ability to specify base directory (in guest OS) and web server document root. See [the docs](docs/base_directory_and_document_root.md)
