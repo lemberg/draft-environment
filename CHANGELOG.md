@@ -1,5 +1,7 @@
 ## Draft Environment 2.x.x
 
+- Default project location is changed from `/var/www/defalt.localhost` to `/var/www/draft`
+- Ability to specify base directory (in guest OS) and web server document root. See [the docs](docs/base_directory_and_document_root.md)
 - Add support of Drupal 8.4 (updated dependency on symfony/yaml to ~3.2)
 - Added creation of default MySQL database and user (db: drupal, user: drupal, pass: drupal)
 - Ability to specify what features will be installed
