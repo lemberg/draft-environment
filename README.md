@@ -55,13 +55,13 @@ Dramatically increases disk IO on Windows by adding NFS support.
     $ vagrant up
     ```
 
-1. Override any variable used in any Ansible role by including it in the `vm-settings.yml`. For details see [default.vm-settings.yml](default.vm-settings.yml)
+1. Override any variable used in any Ansible role by including it in the `vm-settings.yml`. For details see [default.vm-settings.yml](/default.vm-settings.yml)
 
     Here's the list of used roles and available variables (and their default values):
 
     - [kamaln7.swapfile](https://github.com/kamaln7/ansible-swapfile/blob/master/defaults/main.yml)
     - git_config (internal)
-    - [apache2 (internal)](provisioning/playbooks/roles/apache2/defaults/main.yml)
+    - [apache2 (internal)](/provisioning/playbooks/roles/apache2/defaults/main.yml)
     - mysql (internal)
     - [T2L.php](https://github.com/T2L/ansible-role-php/blob/1.1.1/defaults/main.yml)
     - [T2L.composer](https://github.com/T2L/ansible-role-composer/blob/2.0.2/defaults/main.yml)
@@ -69,18 +69,18 @@ Dramatically increases disk IO on Windows by adding NFS support.
     - [T2L.java](https://github.com/T2L/ansible-role-java/blob/1.0.1/defaults/main.yml)
     - [T2L.solr](https://github.com/T2L/ansible-role-solr/blob/1.2.0/defaults/main.yml)
 
-    Some of those variables are already overridden. Find them [here](provisioning/playbooks/vars).
+    Some of those variables are already overridden. Find them [here](/provisioning/playbooks/vars).
 
 1. Commit `Vagrantfile` and `vm-settings.yml` to lock the VM state
 
 1. File `vm-settings.yml` is project-specific, not a machine specific. Configuration can be overridden in `vm-settings.local.yml` (and this file must not be committed)
 
-1. Run `vagrant ssh`. Project is located in `/var/www/draft` by default (see [default.vm-settings.yml](default.vm-settings.yml#L23))
+1. Run `vagrant ssh`. Project is located in `/var/www/draft` by default (see [default.vm-settings.yml](/default.vm-settings.yml#L23))
 
 ## Documentation
 
-Everybody loves documentation. We do too! [Check this out](docs).
+Everybody loves documentation. We do too! [Check this out](/docs).
 
 ## Changelog
 
-Changelog can be found here [CHANGELOG.md](CHANGELOG.md)
+Changelog can be found here [CHANGELOG.md](/CHANGELOG.md)
