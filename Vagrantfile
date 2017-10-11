@@ -147,7 +147,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See https://docs.vagrantup.com/v2/synced-folders/nfs.html
 
   # Configure synched folders.
-  config.vm.synced_folder ".", "/var/www/default.localhost", create: true, type: "nfs"
+  config.vm.synced_folder ".", configuration.get("vagrant.base_directory"), create: true, type: "nfs"
 
   # Provisioning
   #
@@ -174,7 +174,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # operating system).
   config.vm.provision "shell" do |shell|
     shell.path = "#{VM_BASE_PATH}/provisioning/ansible.sh"
-    shell.args = ["#{vm_pathname.relative_path_from project_pathname}/provisioning/playbooks", settings.to_json]
+    shell.args = [File.join(configuration.get("vagrant.base_directory"), vm_pathname.relative_path_from(project_pathname), "/provisioning/playbooks"), settings.to_json]
   end
 
   # Display an informational message to the user.

@@ -1,0 +1,3 @@
+---
+# Web server document root directory
+apache2_document_root: docroot

@@ -19,6 +19,8 @@ vagrant:
   box_version: "14.04"
   # Host name. This setting is required. Usually host name matches project name.
   hostname: ""
+  # Base directory. No trailing slash!
+  base_directory: /var/www/draft
 
 # VirtualBox configuration.
 #

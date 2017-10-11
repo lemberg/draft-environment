@@ -7,7 +7,7 @@ ANSIBLE_BASE_PATH=$1
 ANSIBLE_EXTRA_VARS=$2
 
 # Make sure Ansible playbook exists.
-if [ ! -f /var/www/default.localhost/${ANSIBLE_BASE_PATH}/main.yml ]; then
+if [ ! -f ${ANSIBLE_BASE_PATH}/main.yml ]; then
   echo "Cannot find Ansible playbook."
   exit 1
 fi
@@ -28,7 +28,7 @@ if [ ! -f /usr/bin/ansible ]; then
 fi
 
 # Install playbook requirements.
-ansible-galaxy install --force -r /var/www/default.localhost/${ANSIBLE_BASE_PATH}/requirements.yml
+ansible-galaxy install --ignore-errors -r ${ANSIBLE_BASE_PATH}/requirements.yml
 
 # Export configuration to the temporary file to avoid issues with escaping.
 echo ${ANSIBLE_EXTRA_VARS} > /tmp/ansible-extra-vars.json
@@ -36,4 +36,4 @@ echo ${ANSIBLE_EXTRA_VARS} > /tmp/ansible-extra-vars.json
 # Run the playbook.
 echo "Running Ansible provisioner defined in the Vagrantfile."
 echo ""
-ansible-playbook -i 'localhost,' /var/www/default.localhost/${ANSIBLE_BASE_PATH}/main.yml --connection=local --extra-vars '@/tmp/ansible-extra-vars.json'
+ansible-playbook -i 'localhost,' ${ANSIBLE_BASE_PATH}/main.yml --connection=local --extra-vars '@/tmp/ansible-extra-vars.json'

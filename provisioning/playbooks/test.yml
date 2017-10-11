@@ -39,3 +39,4 @@
     - vars/php.yml
     - vars/solr.yml
     - vars/composer-global-packages.yml
+    - ../../vm-settings.yml

@@ -16,6 +16,7 @@
         - git
         - unzip
         - wget
+
   roles:
     - { role: kamaln7.swapfile, when: "'swapfile' in draft_features" }
     - { role: git_config, when: "'git_config' in draft_features" }
