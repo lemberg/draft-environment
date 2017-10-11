@@ -1,4 +1,4 @@
-## Draft Environment 2.x.x
+## Draft Environment 2.0.1, 2017-10-11
 
 - Set dependency on symfony/yaml to ~3.2.8 so stable Drupal core can be used
 
