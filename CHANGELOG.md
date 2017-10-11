@@ -1,5 +1,6 @@
 ## Draft Environment 2.x.x
 
+- Add support of Drupal 8.4 (updated dependency on symfony/yaml to ~3.2)
 - Added creation of default MySQL database and user (db: drupal, user: drupal, pass: drupal)
 - Ability to specify what features will be installed
 - Install recommended Vagrant plugins automatically
