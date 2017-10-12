@@ -9,8 +9,8 @@ class Configuration
   # Public: Initialize a Configuration.
   #
   # base_path - String that contains Vagrantfile base path.
-  def initialize(base_path)
-    self.load_settings(base_path)
+  def initialize(project_base_path, draft_base_path)
+    self.load_settings(project_base_path, draft_base_path)
     self.merge_default_settings
   end
 
@@ -60,16 +60,16 @@ class Configuration
   #
   # Returns nothing.
   protected
-  def load_settings(base_path)
-    default_settings = YAML::load_file("#{base_path}/default.vm-settings.yml")
-    if File.exist?("#{base_path}/vm-settings.yml")
-      settings = YAML::load_file("#{base_path}/vm-settings.yml")
+  def load_settings(project_base_path, draft_base_path)
+    default_settings = YAML::load_file("#{draft_base_path}/default.vm-settings.yml")
+    if File.exist?("#{project_base_path}/vm-settings.yml")
+      settings = YAML::load_file("#{project_base_path}/vm-settings.yml")
       @settings = self.merge_recursively(default_settings, settings)
     else
       @settings = default_settings
     end
-    if File.exist?("#{base_path}/vm-settings.local.yml")
-      local_settings = YAML::load_file("#{base_path}/vm-settings.local.yml")
+    if File.exist?("#{project_base_path}/vm-settings.local.yml")
+      local_settings = YAML::load_file("#{project_base_path}/vm-settings.local.yml")
       unless local_settings.nil?
         @settings = self.merge_recursively(@settings, local_settings)
       end

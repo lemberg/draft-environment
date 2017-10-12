@@ -32,8 +32,11 @@ VAGRANTFILE_API_VERSION = "2"
 # Set base path.
 VM_BASE_PATH = File.dirname(__FILE__)
 
+# Draft package base path.
+DRAFT_BASE_PATH = File.dirname(__FILE__)
+
 # Project base path.
-PROJECT_BASE_PATH = File.dirname(__FILE__) unless defined? PROJECT_BASE_PATH
+PROJECT_BASE_PATH = DRAFT_BASE_PATH unless defined? PROJECT_BASE_PATH
 
 # Include configuration.
 require "#{VM_BASE_PATH}/helpers/configuration"
@@ -48,7 +51,7 @@ require "#{VM_BASE_PATH}/helpers/configuration"
 # Settings are being merged recursively. Values from local settings file
 # overwrites ones from the default settings; missing values are not being touch;
 # new values will be added to the resulting settings hash.
-configuration = Configuration.new(PROJECT_BASE_PATH)
+configuration = Configuration.new(PROJECT_BASE_PATH, DRAFT_BASE_PATH)
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
