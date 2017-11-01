@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+
+# Allow executable app dependencies from Composer to be run from the path.
+if [ -n {{ vagrant.base_directory }} -a -f {{ vagrant.base_directory }}/composer.json ] ; then
+  bin=$(composer config bin-dir --working-dir={{ vagrant.base_directory }} --no-interaction 2>/dev/null)
+  if [ -n "$bin" ] ; then
+    export PATH="{{ vagrant.base_directory }}/${bin}:${PATH}"
+  fi
+fi

@@ -24,12 +24,11 @@
     - { role: mysql, when: "'mysql' in draft_features" }
     - { role: T2L.php, when: "'php' in draft_features" }
     - { role: T2L.composer, when: "'composer' in draft_features" }
-    - { role: T2L.composer-global-packages, when: "'composer-global-packages' in draft_features" }
     - { role: T2L.java, when: "'java' in draft_features" }
     - { role: T2L.solr, when: "'solr' in draft_features" }
+    - { role: project }
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml
     - vars/solr.yml
     - vars/composer.yml
-    - vars/composer-global-packages.yml

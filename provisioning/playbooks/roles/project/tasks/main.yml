@@ -1,0 +1,6 @@
+---
+- name: Add Composer bin directory to global $PATH
+  template:
+    src: vendor_path.sh.j2
+    dest: /etc/profile.d/vendor_path.sh
+    mode: 0644
