@@ -1,6 +1,6 @@
 # Draft Environment
 
-[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=2.0.2)](https://travis-ci.org/lemberg/draft-environment)
+[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=2.x.x)](https://travis-ci.org/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.
 
@@ -65,7 +65,6 @@ Dramatically increases disk IO on Windows by adding NFS support.
     - mysql (internal)
     - [T2L.php](https://github.com/T2L/ansible-role-php/blob/1.1.1/defaults/main.yml)
     - [T2L.composer](https://github.com/T2L/ansible-role-composer/blob/2.0.2/defaults/main.yml)
-    - [T2L.composer-global-packages](https://github.com/T2L/ansible-role-composer-global-packages/blob/2.0.2/defaults/main.yml)
     - [T2L.java](https://github.com/T2L/ansible-role-java/blob/1.0.1/defaults/main.yml)
     - [T2L.solr](https://github.com/T2L/ansible-role-solr/blob/1.2.0/defaults/main.yml)
 

@@ -66,8 +66,6 @@ draft_features:
   - php
   # Composer (PHP dependency manager), requires PHP
   - composer
-  # Composer global packages, requires PHP and Composer
-  - composer-global-packages
 #  - java
   # Apache Solr, requires Java
 #  - solr
