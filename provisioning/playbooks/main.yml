@@ -26,6 +26,7 @@
     - { role: T2L.composer, when: "'composer' in draft_features" }
     - { role: T2L.java, when: "'java' in draft_features" }
     - { role: T2L.solr, when: "'solr' in draft_features" }
+    - { role: project }
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml
