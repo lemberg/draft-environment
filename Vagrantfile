@@ -133,6 +133,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--cpuexecutioncap", configuration.get("virtualbox.cpuexecutioncap")]
     # Use host's resolver mechanisms to handle DNS requests.
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    # Allow creation of symlinks in VirtualBox shared folders (works with both
+    # VirtualBox shared folders and NFS).
+    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/" + configuration.get("vagrant.base_directory"), "1"]
   end
 
   # Synced Folders
