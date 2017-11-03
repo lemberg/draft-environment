@@ -42,16 +42,27 @@ class Configuration
   # Returns nothing.
   protected
   def set(key, value)
-    temp_hash = Hash.new
-    key.split(".").reverse.each do |k|
-      if temp_hash.empty?
-        temp_hash = {k => value}
-      else
-        temp_hash = {k => temp_hash}
-      end
+    @settings = self.set_value_by_path(@settings, key.split("."), value)
+  end
+
+  # Internal: Set hash value by given string key path.
+  #
+  # hash  - Hash to look for a path.
+  # path  - String key path.
+  # value - Value for a given key path.
+  #
+  # Returns hash with new value at a key path.
+  protected
+  def set_value_by_path(hash, path, value)
+
+    key = path.shift
+    if path.length == 0
+      hash[key] = value
+      return hash
     end
 
-    @settings = self.merge_recursively(@settings, temp_hash)
+    hash[key] = self.set_value_by_path(hash[key], path, value)
+    return hash
   end
 
   # Internal: Load settings from YAML file(s).
@@ -114,6 +125,8 @@ class Configuration
     self.get_git_credentials
     # Use *.test domain (RFC 2606).
     self.set("vagrant.hostname", self.get("vagrant.hostname") + '.test');
+    # Symbolize synced folder options.
+    self.symbolize_synced_folder_options
   end
 
   # Internal: Generate IP addres based on a Vagrant host name value (in the most
@@ -133,6 +146,19 @@ class Configuration
     part_4 = [[sum % 256, 1].max, 255].min
 
     self.set("vagrant.ip_address", "10.10.#{part_3}.#{part_4}")
+  end
+
+  # Internal: Rehashes synced folders options to make Vagrant happy.
+  #
+  # Actually YAML parses returns keys as strings, and we need to convert them to
+  # symbols.
+  #
+  # Returns nothing.
+  protected
+  def symbolize_synced_folder_options
+    # Code borrowed here https://stackoverflow.com/a/800498
+    symbolized_hash = self.get("vagrant.synced_folder_options").inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
+    self.set("vagrant.synced_folder_options", symbolized_hash)
   end
 
   # Internal: Get Git user name and email from the host system.
