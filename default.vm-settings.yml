@@ -21,6 +21,12 @@ vagrant:
   hostname: ""
   # Base directory. No trailing slash!
   base_directory: /var/www/draft
+  # Synced folder options. Refer to https://www.vagrantup.com/docs/synced-folders/
+  # for possible options and their values. Please note that each synced fodler
+  # type could have extra options, look at NFS or RSync for examples.
+  synced_folder_options:
+    type: nfs
+    create: true
 
 # VirtualBox configuration.
 #

@@ -4,6 +4,7 @@
     * Composer global packages (T2L.composer-global-packages)
 - Drop support of global Composer packages. Project must list all of its dependencies in composer.json file. Composer bin directory will be added to the system $PATH variable
 - Allow creation of symbolic links in shared folders
+- Allow setting of synced folder options via `vagrant.synced_folder_options` variable
 
 ## Draft Environment 2.0.2, 2017-10-12
 
