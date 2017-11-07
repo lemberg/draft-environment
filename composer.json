@@ -22,6 +22,7 @@
         }
     },
     "config": {
-        "bin-dir": "bin/"
+        "bin-dir": "bin/",
+        "sort-packages": true
     }
 }
