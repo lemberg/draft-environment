@@ -90,6 +90,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   if Vagrant.has_plugin?("vagrant-hostmanager")
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
+    unless configuration.get("vagrant.host_aliases").empty?
+      config.hostmanager.aliases = configuration.get("vagrant.host_aliases")
+    end
   end
 
   # Network File System (NFS) requires private network to be specified when
@@ -184,6 +187,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Display an informational message to the user.
-  config.vm.post_up_message = "The app is running at http://" + configuration.get("vagrant.ip_address") + " and http://" + configuration.get("vagrant.hostname")
+  message = "The app is running at http://" + configuration.get("vagrant.ip_address") + " and http://" + configuration.get("vagrant.hostname")
+  unless configuration.get("vagrant.host_aliases").empty?
+    message += ". Alternatively app can be reached at http://" + configuration.get("vagrant.host_aliases").join(" or http://")
+  end
+  config.vm.post_up_message = message
 
 end
