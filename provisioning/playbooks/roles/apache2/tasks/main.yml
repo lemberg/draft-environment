@@ -1,4 +1,13 @@
 ---
+- name: Ensure that document and logs directories exist
+  file:
+    path: '{{ item }}'
+    state: directory
+    mode: 0755
+  with_items:
+    - '{{ vagrant.base_directory }}/{{ apache2_document_root }}'
+    - '{{ vagrant.base_directory }}/logs'
+
 # Install apache2.
 - name: Install Apache2 web server
   apt:
@@ -31,12 +40,6 @@
   changed_when: "'Site 000-default disabled.' in apache2_disable_default_virtual_host_result.stdout"
   notify:
     - Restart Apache2 web server
-
-- name: Ensure that document root directory exists
-  file:
-    path: '{{ vagrant.base_directory }}/{{ apache2_document_root }}'
-    state: directory
-    mode: 0755
 
 # Add custom virtual host.
 - name: Add custom virtual host.

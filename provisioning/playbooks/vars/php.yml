@@ -16,6 +16,7 @@ php_extensions:
 php_configuration:
   PHP:
     error_reporting: E_ALL
+    error_log: '{{ vagrant.base_directory }}/logs/php_error.log'
     display_errors: 'On'
     display_startup_errors: 'On'
     memory_limit: 256M
@@ -25,6 +26,9 @@ php_configuration:
 
 # Configure PHP extensions.
 php_extensions_configuration:
+  opcache:
+    opcache.error_log: '{{ vagrant.base_directory }}/logs/php_opcache_error.log'
   xdebug:
     xdebug.remote_enable: 'On'
     xdebug.remote_connect_back: 'On'
+    xdebug.remote_log: '{{ vagrant.base_directory }}/logs/php_xdebug_remote.log'

@@ -8,6 +8,10 @@
 
   DocumentRoot {{ vagrant.base_directory }}/{{ apache2_document_root }}
 
+  CustomLog "{{ vagrant.base_directory }}/logs/access_access.log" common
+  ErrorLog {{ vagrant.base_directory }}/logs/apache_error.log
+  LogLevel {{ apache2_log_level }}
+
   <Directory {{ vagrant.base_directory }}/{{ apache2_document_root }}>
     AllowOverride All
     Options -Indexes +FollowSymLinks
