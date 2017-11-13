@@ -7,6 +7,9 @@
 # Ignore documents root folder.
 /docroot
 
+# Ignore logs.
+/logs
+
 # Ignore binaries.
 /bin
 

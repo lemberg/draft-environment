@@ -3,14 +3,12 @@
   become: true
 
   pre_tasks:
-    - name: Update apt cache if needed.
+    - name: Ensure base packages are installed
       apt:
+        name: '{{ item }}'
+        state: present
         update_cache: yes
         cache_valid_time: 86400
-    - name: Ensure base packages are installed.
-      apt:
-        name: "{{ item }}"
-        state: present
       with_items:
         - curl
         - git
