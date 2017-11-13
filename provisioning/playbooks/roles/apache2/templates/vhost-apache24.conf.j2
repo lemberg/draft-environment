@@ -2,6 +2,10 @@
 
 <VirtualHost *:80>
   ServerName {{ vagrant.hostname }}
+{% if vagrant.host_aliases|length > 0 %}
+  ServerAlias {{ vagrant.host_aliases|join(" ") }}
+{% endif %}
+
   DocumentRoot {{ vagrant.base_directory }}/{{ apache2_document_root }}
 
   <Directory {{ vagrant.base_directory }}/{{ apache2_document_root }}>
