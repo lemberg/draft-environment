@@ -143,7 +143,7 @@ class Configuration
     # Make sure that IP address parts are in range [2, 255], i.e. skip 0, 1 and
     # 256.
     part_3 = [[sum >> 8, 1].max, 255].min
-    part_4 = [[sum % 256, 1].max, 255].min
+    part_4 = [[sum % 256, 2].max, 255].min
 
     self.set("vagrant.ip_address", "10.10.#{part_3}.#{part_4}")
   end
