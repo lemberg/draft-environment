@@ -110,7 +110,7 @@ HERE;
    * Validates that given value is a valid project name.
    *
    * @param string $value
-   *   Timnezone.
+   *   Timnezone identifier.
    *
    * @throws \UnexpectedValueException
    *   When timezone is not valid.
@@ -162,6 +162,8 @@ HERE;
    *
    * @param string $question
    *   Question raw text.
+   * @param string $default_value
+   *   (optional) Question default value.
    *
    * @return string
    *   Question with markup.
