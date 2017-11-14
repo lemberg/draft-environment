@@ -3,6 +3,9 @@
   become: true
 
   pre_tasks:
+    - name: Set timezone
+      timezone:
+        name: '{{ vagrant.timezone }}'
     - name: Ensure base packages are installed
       apt:
         name: '{{ item }}'
