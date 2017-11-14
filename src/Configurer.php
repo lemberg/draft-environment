@@ -41,19 +41,34 @@ class Configurer {
 
     // Assume VM settings has already been set.
     if (!file_exists("./vm-settings.yml")) {
+      $io = $event->getIO();
+
       $parser = new Parser();
       $config = $parser->parse(file_get_contents("$installPath/default.vm-settings.yml"));
+
+      // Set project name.
       $project_name_question = <<<HERE
 Please specify project name. Must be valid domain name:
   - Allowed characters: lowercase letters (a-z), numbers (0-9), period (.) and
     dash (-)
   - Should not start or end with dash (-) (e.g. -google-)
   - Should be between 3 and 63 characters long
+
+Project name
 HERE;
-      $config['vagrant']['hostname'] = $event->getIO()->askAndValidate(static::addQuestionMarkup($project_name_question), [__CLASS__, 'validateProjectName'], NULL, 'default-' . time());
-      $event->getIO()->write('<info>Now you can make some coffee. It won\'t take too long though. Just relax and run</info> <comment>vagrant up</comment>');
-      $event->getIO()->write('<info>Project will be available at</info> <comment>http://' . $config['vagrant']['hostname'] . '.test</comment> <info>after provisioning</info>');
-      $event->getIO()->write('<info>Happy coding!</info>');
+      $default_project_name = 'default-' . time();
+      $config['vagrant']['hostname'] = $io->askAndValidate(static::addQuestionMarkup($project_name_question, $default_project_name), [__CLASS__, 'validateProjectName'], NULL, $default_project_name);
+
+      // Set timezone.
+      $timezone_question = 'Please specify valid timezone identifier, like "Europe/Kiev"';
+      $default_timezone = static::getSystemTimezone();
+      $config['vagrant']['timezone'] = $io->askAndValidate(static::addQuestionMarkup($timezone_question, $default_timezone), [__CLASS__, 'validateTimezone'], NULL, $default_timezone);
+
+      $io->write('');
+      $io->write('<info>Now you can make some coffee. It won\'t take too long though. Just relax and run</info> <comment>vagrant up</comment>');
+      $io->write('<info>Project will be available at</info> <comment>http://' . $config['vagrant']['hostname'] . '.test</comment> <info>after provisioning</info>');
+      $io->write('<info>Happy coding!</info>');
+      $io->write('');
 
       $yaml = new Dumper();
       $yaml->setIndentation(2);
@@ -92,6 +107,57 @@ HERE;
   }
 
   /**
+   * Validates that given value is a valid project name.
+   *
+   * @param string $value
+   *   Timnezone.
+   *
+   * @throws \UnexpectedValueException
+   *   When timezone is not valid.
+   */
+  public static function validateTimezone($value) {
+    if (!in_array($value, timezone_identifiers_list())) {
+      throw new \UnexpectedValueException('Specified value is not a valid timezone. Please try again');
+    }
+
+    return $value;
+  }
+
+  /**
+   * Get system timezone.
+   *
+   * PHP 5.4 has removed the autodetection of the system timezone,
+   * so it needs to be done manually.
+   * Fallback to timezone in php.ini in case autodetection fails.
+   */
+  public static function getSystemTimezone() {
+    $timezone = date_default_timezone_get();
+    if (is_link('/etc/localtime')) {
+      // Mac OS X (and older Linuxes)
+      // /etc/localtime is a symlink to the timezone in /usr/share/zoneinfo.
+      $filename = readlink('/etc/localtime');
+      if (strpos($filename, '/var/db/timezone/zoneinfo/') === 0) {
+        $timezone = substr($filename, 26);
+      }
+    }
+    elseif (file_exists('/etc/timezone')) {
+      // Ubuntu/Debian.
+      $data = file_get_contents('/etc/timezone');
+      if ($data) {
+        $timezone = trim($data);
+      }
+    }
+    elseif (file_exists('/etc/sysconfig/clock')) {
+      // RHEL/CentOS
+      $data = parse_ini_file('/etc/sysconfig/clock');
+      if (!empty($data['ZONE'])) {
+        $timezone = trim($data['ZONE']);
+      }
+    }
+    return $timezone;
+  }
+
+  /**
    * Adds markup to the given question.
    *
    * @param string $question
@@ -100,8 +166,13 @@ HERE;
    * @return string
    *   Question with markup.
    */
-  protected static function addQuestionMarkup($question) {
-    return "<info>$question</info>\n\$ ";
+  protected static function addQuestionMarkup($question, $default_value = NULL) {
+    if ($default_value) {
+      return $question . ' <question>[' . $default_value . ']</question> ';
+    }
+    else {
+      return $question . ' ';
+    }
   }
 
 }
