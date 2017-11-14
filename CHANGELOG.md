@@ -1,4 +1,4 @@
-## Draft Environment 2.x.x
+## Draft Environment 2.1.0, 2017-11-14
 
 - Removed roles:
     * Composer global packages (T2L.composer-global-packages)
