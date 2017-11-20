@@ -1,3 +1,7 @@
+## Draft Environment 2.1.1, 2017-11-20
+
+- Move logs to `/var/log/draft` so Apache can start on machine boot
+
 ## Draft Environment 2.1.0, 2017-11-14
 
 - Removed roles:
