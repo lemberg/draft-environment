@@ -3,9 +3,6 @@
   become: true
 
   pre_tasks:
-    - name: Set timezone
-      timezone:
-        name: '{{ vagrant.timezone }}'
     - name: Ensure base packages are installed
       apt:
         name: '{{ item }}'
@@ -15,8 +12,12 @@
       with_items:
         - curl
         - git
+        - tzdata
         - unzip
         - wget
+    - name: Set timezone
+      timezone:
+        name: '{{ vagrant.timezone }}'
     - name: Add vagrant user to syslog group
       user:
         name: vagrant
