@@ -17,6 +17,20 @@
         - git
         - unzip
         - wget
+    - name: Add vagrant user to syslog group
+      user:
+        name: vagrant
+        groups: syslog
+        append: yes
+    - name: Ensure that logs directories exist
+      file:
+        path: '{{ item }}'
+        state: directory
+        mode: 0755
+        group: vagrant
+        owner: vagrant
+      with_items:
+        - /var/log/draft
 
   roles:
     - { role: kamaln7.swapfile, when: "'swapfile' in draft_features" }
