@@ -15,6 +15,7 @@
       with_items:
         - curl
         - git
+        - rsyslog
         - tzdata
         - unzip
         - wget
