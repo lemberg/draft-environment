@@ -18,6 +18,7 @@
       with_items:
         - curl
         - git
+        - tzdata
         - unzip
         - wget
     - name: Add vagrant user
