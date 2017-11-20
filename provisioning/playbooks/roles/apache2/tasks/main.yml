@@ -1,12 +1,11 @@
 ---
-- name: Ensure that document and logs directories exist
+- name: Ensure that document directory exist
   file:
     path: '{{ item }}'
     state: directory
     mode: 0755
   with_items:
     - '{{ vagrant.base_directory }}/{{ apache2_document_root }}'
-    - '{{ vagrant.base_directory }}/logs'
 
 # Install apache2.
 - name: Install Apache2 web server
