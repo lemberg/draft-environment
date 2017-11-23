@@ -33,6 +33,12 @@
         owner: vagrant
       with_items:
         - /var/log/draft
+    # Required by Deamonize, which is required by MailHog
+    - name: Ensure build-essential package is installed
+      apt:
+        name: build-essential
+        state: present
+      when: "'mailhog' in draft_features"
 
   roles:
     - { role: kamaln7.swapfile, when: "'swapfile' in draft_features" }
@@ -47,7 +53,7 @@
     - { role: project }
   vars_files:
     - vars/swapfile.yml
-    - vars/mailhog.yml    
+    - vars/mailhog.yml
     - vars/php.yml
     - vars/solr.yml
     - vars/composer.yml
