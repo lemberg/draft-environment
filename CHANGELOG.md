@@ -1,4 +1,4 @@
-## Draft Environment 2.1.2, 2017-11-23
+## Draft Environment 2.x.x, 2017-11-23
 
 - Added email testing tool - MailHog and configured it.
 - Configured PHP to redirect system mail into MailHog's built-in SMTP server
