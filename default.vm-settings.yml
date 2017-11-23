@@ -69,7 +69,6 @@ virtualbox:
 draft_features:
   # Configure Swap file (sort of required by Composer)
   - swapfile
-  # Configure MailHog
   - mailhog  
   # Copy host machine GIT credentilas to the VM
   - git_config

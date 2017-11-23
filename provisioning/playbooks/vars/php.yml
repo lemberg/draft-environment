@@ -23,7 +23,7 @@ php_configuration:
     output_buffering: 'Off'
     upload_max_filesize: 64M
     post_max_size: 512M
-    # Dependence on MailHog role.
+    # Requires MailHog.
     sendmail_path: "/opt/mailhog/mhsendmail"
 
 # Configure PHP extensions.

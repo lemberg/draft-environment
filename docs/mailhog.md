@@ -1,7 +1,7 @@
 # MailHog
 
-Draft environment installs [MailHog](https://github.com/mailhog/MailHog) with using [Ansible role](https://galaxy.ansible.com/geerlingguy/mailhog).
-Now you could send all emails in PHP and them will be captured via MailHog SMTP.
+Draft environment installs [MailHog](https://github.com/mailhog/MailHog) using [geerlingguy.mailhog@2.1.3](https://galaxy.ansible.com/geerlingguy/mailhog) Ansible role.
+All emails sent within VM will be captured by MailHog.
 
 ## Access to MailHog
 
