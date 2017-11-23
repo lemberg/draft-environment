@@ -1,3 +1,9 @@
+## Draft Environment 2.x.x, 2017-11-23
+
+- Added email testing tool - MailHog and configured it.
+- Configured PHP to redirect system mail into MailHog's built-in SMTP server
+- Added base doc.  See [the docs](docs/mailhog.md)
+
 ## Draft Environment 2.1.1, 2017-11-20
 
 - Move logs to `/var/log/draft` so Apache can start on machine boot
