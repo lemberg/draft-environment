@@ -1,8 +1,8 @@
-## Draft Environment 2.x.x, 2017-11-23
+## Draft Environment 2.x.x
 
-- Added email testing tool - MailHog and configured it.
-- Configured PHP to redirect system mail into MailHog's built-in SMTP server
-- Added base doc.  See [the docs](docs/mailhog.md)
+- Added roles:
+    * MailHog (geerlingguy.mailhog: 2.1.3)
+- Add MailHog - email testing tool and configured it. See [the docs](docs/mailhog.md)
 
 ## Draft Environment 2.1.1, 2017-11-20
 
