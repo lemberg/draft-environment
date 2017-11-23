@@ -20,7 +20,7 @@ vagrant:
   # VM timezone.
   timezone: "UTC"
   # Host name. This setting is required. Usually host name matches project name.
-  hostname: "testdrive"
+  hostname: ""
   # Host aliases. Will be added to hosts file alongside <hostname>.test.
   host_aliases: []
   # Base directory. No trailing slash!
@@ -52,7 +52,7 @@ vagrant:
 # the right place to do it.
 virtualbox:
   # Machine name. Optional, defaults to Vagrant host name.
-  name: "testdrive"
+  name: ""
   # Number of CPUs. Lower this value if host machine has single/dual core CPU
   # and/or no hardware virtualization support.
   cpus: 2
