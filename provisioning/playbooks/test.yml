@@ -40,6 +40,7 @@
         - /var/log/draft
   roles:
     - { role: kamaln7.swapfile, swapfile_size: false }
+    - geerlingguy.mailhog   
     - git_config
     - apache2
     - mysql
@@ -51,4 +52,5 @@
     - vars/swapfile.yml
     - vars/php.yml
     - vars/solr.yml
+    - vars/mailhog.yml    
     - ../../vm-settings.yml
