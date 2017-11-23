@@ -24,7 +24,7 @@ php_configuration:
     upload_max_filesize: 64M
     post_max_size: 512M
     # Requires MailHog.
-    sendmail_path: "/opt/mailhog/mhsendmail"
+    sendmail_path: '{{ mailhog_install_dir }}/mhsendmail'
 
 # Configure PHP extensions.
 php_extensions_configuration:
