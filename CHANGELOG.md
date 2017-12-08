@@ -1,4 +1,4 @@
-## Draft Environment 2.x.x
+## Draft Environment 2.2.0, 2017-12-08
 
 - Added roles:
     * MailHog (geerlingguy.mailhog: 2.1.3)
