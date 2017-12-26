@@ -1,0 +1,3 @@
+---
+
+ssh_default_directory: "{{ vagrant.base_directory }}"

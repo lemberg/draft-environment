@@ -4,3 +4,10 @@
     src: vendor_path.sh.j2
     dest: /etc/profile.d/vendor_path.sh
     mode: 0644
+
+- name: Use Vagrant base directory as a default SSH directory
+  become: true
+  become_user: vagrant
+  lineinfile:
+    path: ~/.bashrc
+    line: cd {{ ssh_default_directory }}
