@@ -8,7 +8,7 @@ Base project directory can be set by overriding `vagrant.base_directory` variabl
 
 Web server document root can be specified by overriding `apache2_document_root` variable (defaults to `docroot`). See [Apache2 role defaults](/provisioning/playbooks/roles/apache2/defaults/main.yml).
 
-SSH default directory can be set by overriding `ssh_default_directory` variable (defaults to value of `vagrant.base_directory` variable, which is `\var\www\draft` by default :) ). See [Project role defaults](/provisioning/playbooks/roles/project/defaults/main.yml). Yeah too many defaults here.
+SSH default directory can be set by overriding `ssh_default_directory` variable (defaults to value of `vagrant.base_directory` variable, which is `/var/www/draft` by default :) ). See [Project role defaults](/provisioning/playbooks/roles/project/defaults/main.yml). Yeah too many defaults here.
 
 ## Synced folder options
 
