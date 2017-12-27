@@ -1,4 +1,4 @@
-## Draft Environment 2.x.x
+## Draft Environment 2.3.0, 2017-12-27
 
 - Set SSH default directory via `ssh_default_directory` variable (defaults to value of `vagrant.base_directory` variable, which is `/var/www/draft` by default). Yeah too many defaults here
 - Move pre_tasks from Ansible playbooks (main and test) to internal draft role
