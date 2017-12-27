@@ -1,8 +1,4 @@
 ---
-- name: Set timezone
-  timezone:
-    name: '{{ vagrant.timezone }}'
-
 - name: Ensure base packages are installed
   apt:
     name: '{{ item }}'
@@ -16,6 +12,10 @@
     - tzdata
     - unzip
     - wget
+
+- name: Set timezone
+  timezone:
+    name: '{{ vagrant.timezone }}'
 
 - name: Add vagrant user to syslog group
   user:
