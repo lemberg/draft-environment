@@ -59,6 +59,7 @@ Dramatically increases disk IO on Windows by adding NFS support.
 
     Here's the list of used roles and available variables (and their default values):
 
+    - [draft (internal)](/provisioning/playbooks/roles/draft/defaults/main.yml)
     - [kamaln7.swapfile](https://github.com/kamaln7/ansible-swapfile/blob/master/defaults/main.yml)
     - [geerlingguy.mailhog](https://github.com/geerlingguy/ansible-role-mailhog/blob/2.1.3/defaults/main.yml)
     - git_config (internal)
