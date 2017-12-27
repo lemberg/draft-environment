@@ -41,6 +41,7 @@
       when: "'mailhog' in draft_features"
 
   roles:
+    - { role: draft }
     - { role: kamaln7.swapfile, when: "'swapfile' in draft_features" }
     - { role: geerlingguy.mailhog, when: "'mailhog' in draft_features" }
     - { role: git_config, when: "'git_config' in draft_features" }
@@ -50,7 +51,6 @@
     - { role: T2L.composer, when: "'composer' in draft_features" }
     - { role: T2L.java, when: "'java' in draft_features" }
     - { role: T2L.solr, when: "'solr' in draft_features" }
-    - { role: project }
   vars_files:
     - vars/swapfile.yml
     - vars/mailhog.yml

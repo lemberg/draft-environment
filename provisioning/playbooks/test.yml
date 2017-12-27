@@ -46,6 +46,7 @@
       when: "'mailhog' in draft_features"
 
   roles:
+    - draft
     - { role: kamaln7.swapfile, swapfile_size: false }
     - geerlingguy.mailhog
     - git_config
@@ -55,7 +56,6 @@
     - T2L.composer
     - T2L.java
     - { role: T2L.solr, solr_cleanup_downloads: false, solr_cleanup_gpg: false }
-    - project
   vars_files:
     - vars/swapfile.yml
     - vars/php.yml
