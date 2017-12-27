@@ -11,8 +11,6 @@
         name: vagrant
         password: vagrant
         uid: 1000
-        groups: syslog
-        append: yes
 
   roles:
     - draft
