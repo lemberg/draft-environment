@@ -59,11 +59,6 @@ HERE;
       $default_project_name = 'default-' . time();
       $config['vagrant']['hostname'] = $io->askAndValidate(static::addQuestionMarkup($project_name_question, $default_project_name), [__CLASS__, 'validateProjectName'], NULL, $default_project_name);
 
-      // Set timezone.
-      $timezone_question = 'Please specify valid timezone identifier, like "Europe/Kiev"';
-      $default_timezone = static::getSystemTimezone();
-      $config['vagrant']['timezone'] = $io->askAndValidate(static::addQuestionMarkup($timezone_question, $default_timezone), [__CLASS__, 'validateTimezone'], NULL, $default_timezone);
-
       $io->write('');
       $io->write('<info>Now you can make some coffee. It won\'t take too long though. Just relax and run</info> <comment>vagrant up</comment>');
       $io->write('<info>Project will be available at</info> <comment>http(s)://' . $config['vagrant']['hostname'] . '.test</comment> <info>after provisioning</info>');
@@ -104,57 +99,6 @@ HERE;
     }
 
     return $value;
-  }
-
-  /**
-   * Validates that given value is a valid project name.
-   *
-   * @param string $value
-   *   Timnezone identifier.
-   *
-   * @throws \UnexpectedValueException
-   *   When timezone is not valid.
-   */
-  public static function validateTimezone($value) {
-    if (!in_array($value, timezone_identifiers_list())) {
-      throw new \UnexpectedValueException('Specified value is not a valid timezone. Please try again');
-    }
-
-    return $value;
-  }
-
-  /**
-   * Get system timezone.
-   *
-   * PHP 5.4 has removed the autodetection of the system timezone,
-   * so it needs to be done manually.
-   * Fallback to timezone in php.ini in case autodetection fails.
-   */
-  public static function getSystemTimezone() {
-    $timezone = date_default_timezone_get();
-    if (is_link('/etc/localtime')) {
-      // Mac OS X (and older Linuxes)
-      // /etc/localtime is a symlink to the timezone in /usr/share/zoneinfo.
-      $filename = readlink('/etc/localtime');
-      if (strpos($filename, '/var/db/timezone/zoneinfo/') === 0) {
-        $timezone = substr($filename, 26);
-      }
-    }
-    elseif (file_exists('/etc/timezone')) {
-      // Ubuntu/Debian.
-      $data = file_get_contents('/etc/timezone');
-      if ($data) {
-        $timezone = trim($data);
-      }
-    }
-    elseif (file_exists('/etc/sysconfig/clock')) {
-      // RHEL/CentOS
-      $data = parse_ini_file('/etc/sysconfig/clock');
-      if (!empty($data['ZONE'])) {
-        $timezone = trim($data['ZONE']);
-      }
-    }
-    return $timezone;
   }
 
   /**

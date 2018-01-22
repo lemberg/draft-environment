@@ -17,8 +17,6 @@ vagrant:
   box: "ubuntu/trusty64"
   # Box version.
   box_version: "14.04"
-  # VM timezone.
-  timezone: "UTC"
   # Host name. This setting is required. Usually host name matches project name.
   hostname: ""
   # Host aliases. Will be added to hosts file alongside <hostname>.test.
