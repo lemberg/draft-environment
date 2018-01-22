@@ -1,3 +1,7 @@
+## Draft Environment 2.x.x
+
+- Draft virtual host now support SSL (with self-signed certificate)
+
 ## Draft Environment 2.3.0, 2017-12-27
 
 - Set SSH default directory via `ssh_default_directory` variable (defaults to value of `vagrant.base_directory` variable, which is `/var/www/draft` by default). Yeah too many defaults here
