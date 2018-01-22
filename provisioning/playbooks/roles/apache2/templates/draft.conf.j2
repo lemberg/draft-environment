@@ -1,0 +1,40 @@
+# {{ ansible_managed }}
+
+<Directory {{ vagrant.base_directory }}/{{ apache2_document_root }}>
+  AllowOverride All
+  Options -Indexes +FollowSymLinks
+  Require all granted
+</Directory>
+
+<VirtualHost *:80>
+  ServerName {{ vagrant.hostname }}
+{% if vagrant.host_aliases|length > 0 %}
+  ServerAlias {{ vagrant.host_aliases|join(" ") }}
+{% endif %}
+
+  DocumentRoot {{ vagrant.base_directory }}/{{ apache2_document_root }}
+
+  CustomLog "/var/log/draft/apache_access.log" common
+  ErrorLog /var/log/draft/apache_error.log
+  LogLevel {{ apache2_log_level }}
+
+</VirtualHost>
+
+<VirtualHost *:443>
+  ServerName {{ vagrant.hostname }}
+{% if vagrant.host_aliases|length > 0 %}
+  ServerAlias {{ vagrant.host_aliases|join(" ") }}
+{% endif %}
+
+  DocumentRoot {{ vagrant.base_directory }}/{{ apache2_document_root }}
+
+  CustomLog "/var/log/draft/apache_access.log" common
+  ErrorLog /var/log/draft/apache_error.log
+  LogLevel {{ apache2_log_level }}
+
+  <IfModule mod_ssl.c>
+    SSLEngine on
+    SSLCertificateFile /etc/apache2/ssl/draft.crt
+    SSLCertificateKeyFile /etc/apache2/ssl/draft.key
+  </IfModule>
+</VirtualHost>

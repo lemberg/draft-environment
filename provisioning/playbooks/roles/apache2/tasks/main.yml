@@ -1,4 +1,37 @@
 ---
+- name: Enable Apache2 modules
+  apache2_module:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - rewrite
+      - ssl
+  notify:
+    - Restart Apache2 web server
+
+- name: Ensure that directory for SSL keys exist
+  file:
+    path: /etc/apache2/ssl
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Create OpenSSL config file
+  template:
+    src: draft-ssl-config.ini.j2
+    dest: /etc/apache2/ssl/draft-ssl-config.ini
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart Apache2 web server
+
+- name: Generate SSL keys
+  command: openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -config /etc/apache2/ssl/draft-ssl-config.ini -keyout /etc/apache2/ssl/draft.key -out /etc/apache2/ssl/draft.crt
+  notify:
+    - Restart Apache2 web server
+
 - name: Ensure that document directory exist
   file:
     path: '{{ item }}'
@@ -14,16 +47,6 @@
     state: present
     update_cache: yes
     cache_valid_time: 86400
-
-# Configure enabled modules.
-- name: Enable Apache2 modules
-  apache2_module:
-    name: "{{ item }}"
-    state: present
-  with_items:
-      - rewrite
-  notify:
-    - Restart Apache2 web server
 
 # Configure web server.
 - name: Set correct DirectoryIndex
@@ -43,7 +66,7 @@
 # Add custom virtual host.
 - name: Add custom virtual host.
   template:
-    src: "vhost-apache24.conf.j2"
+    src: "draft.conf.j2"
     dest: "/etc/apache2/sites-available/draft.conf"
     owner: root
     group: root
