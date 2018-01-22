@@ -66,7 +66,7 @@ HERE;
 
       $io->write('');
       $io->write('<info>Now you can make some coffee. It won\'t take too long though. Just relax and run</info> <comment>vagrant up</comment>');
-      $io->write('<info>Project will be available at</info> <comment>http://' . $config['vagrant']['hostname'] . '.test</comment> <info>after provisioning</info>');
+      $io->write('<info>Project will be available at</info> <comment>http(s)://' . $config['vagrant']['hostname'] . '.test</comment> <info>after provisioning</info>');
       $io->write('<info>Happy coding!</info>');
       $io->write('');
 

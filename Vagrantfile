@@ -187,9 +187,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Display an informational message to the user.
-  message = "The app is running at http://" + configuration.get("vagrant.ip_address") + " and http://" + configuration.get("vagrant.hostname")
+  message = "The app is running at http(s)://" + configuration.get("vagrant.ip_address") + " and http(s)://" + configuration.get("vagrant.hostname")
   unless configuration.get("vagrant.host_aliases").empty?
-    message += ". Alternatively app can be reached at http://" + configuration.get("vagrant.host_aliases").join(" or http://")
+    message += ". Alternatively app can be reached at http(s)://" + configuration.get("vagrant.host_aliases").join(" or http(s)://")
   end
   config.vm.post_up_message = message
 
