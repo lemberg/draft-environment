@@ -11,6 +11,9 @@
         name: vagrant
         password: vagrant
         uid: 1000
+    - name: Fake IP address
+      set_fact:
+        vagrant.ip_address: 10.10.10.10
 
   roles:
     - draft
