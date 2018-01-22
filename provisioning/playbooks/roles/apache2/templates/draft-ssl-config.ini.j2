@@ -1,0 +1,28 @@
+# {{ ansible_managed }}
+
+# OpenSSL configuration to generate a new key with signing requst for a x509v3
+# multidomain certificate
+[ req ]
+prompt             = no
+encrypt_key        = no
+
+# base request
+distinguished_name = req_distinguished_name
+
+# extensions
+x509_extensions     = v3_req
+
+# distinguished_name
+[ req_distinguished_name ]
+CN = "Draft Environment"
+
+# req_extensions
+[ v3_req ]
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+{% if vagrant.host_aliases|length > 0 %}
+subjectAltName = IP:{{ vagrant.ip_address }},DNS:{{ vagrant.hostname }},DNS:{{ vagrant.host_aliases|join(",DNS:") }}
+{% else %}
+subjectAltName = IP:{{ vagrant.ip_address }},DNS:{{ vagrant.hostname }}
+{% endif %}
