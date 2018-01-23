@@ -1,4 +1,4 @@
-## Draft Environment 2.x.x
+## Draft Environment 2.4.0, 2018-01-23
 
 - Drop setting a timezone
 - Draft virtual host now support SSL (with self-signed certificate)

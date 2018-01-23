@@ -1,6 +1,6 @@
 # Draft Environment
 
-[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=2.3.0)](https://travis-ci.org/lemberg/draft-environment)
+[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=2.4.0)](https://travis-ci.org/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.
 
@@ -24,9 +24,7 @@ Automatically installs the host's VirtualBox Guest Additions on the guest system
 
 Dramatically increases disk IO on Windows by adding NFS support.
 
-## Usage
-
-1. Install recommended Vagrant plugins
+## How to
 
 1. Add `post-install-cmd` and `post-update-cmd` events handler `Lemberg\\Draft\\Environment\\Configurer::setUp` to the `scripts` property of the root `composer.json` file. Resulting file might look like this:
 
