@@ -1,3 +1,7 @@
+## Draft Environment 2.x.x
+
+- Set dependency on symfony/yaml to `^2.8|^3.2` so Drupal 8.5.x can be installed
+
 ## Draft Environment 2.4.0, 2018-01-23
 
 - Drop setting a timezone
