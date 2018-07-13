@@ -61,7 +61,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # http://docs.vagrantup.com/v2/boxes.html
   #
   # HashiCorp provides publicly available list of Vagrant boxes at
-  # https://atlas.hashicorp.com/boxes/search
+  # https://app.vagrantup.com/boxes/search
 
   # Set box and box version.
   config.vm.box = configuration.get("vagrant.box")
@@ -139,6 +139,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Allow creation of symlinks in VirtualBox shared folders (works with both
     # VirtualBox shared folders and NFS).
     v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/" + configuration.get("vagrant.base_directory"), "1"]
+    # When using the Vagrantbox ubuntu/xenial64 you will have a file
+    # ubuntu-xenial-16.04-cloudimg-console.log after the start. Get rid of it.
+    # Thanks to https://betacloud.io/get-rid-of-ubuntu-xenial-16-04-cloudimg-console-log/
+    v.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
   end
 
   # Synced Folders
