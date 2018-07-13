@@ -17,6 +17,9 @@ vagrant:
   box: "ubuntu/xenial64"
   # Box version.
   box_version: ">= 0"
+  # Disable automatic update checking be setting this option to false.
+  # See https://www.vagrantup.com/docs/boxes/versioning.html#automatic-update-checking
+  box_check_update: true
   # Host name. This setting is required. Usually host name matches project name.
   hostname: ""
   # Host aliases. Will be added to hosts file alongside <hostname>.test.

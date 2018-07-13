@@ -1,6 +1,7 @@
 ## Draft Environment 3.x.x
 
 - Use Ubuntu 16.04 LTS (Xenial Xerus) as default OS
+- Add option to disable automatic Vagrant box update checking: `vagrant.box_check_update`
 
 ## Draft Environment 2.5.0, 2018-03-15
 
