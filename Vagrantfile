@@ -66,6 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Set box and box version.
   config.vm.box = configuration.get("vagrant.box")
   config.vm.box_version = configuration.get("vagrant.box_version")
+  config.vm.box_check_update = configuration.get("vagrant.box_check_update")
 
   # Networking
   #
