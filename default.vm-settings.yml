@@ -12,11 +12,11 @@ vagrant:
   # Do not change this value, unless absolutely necessary. Valid use case is
   # 32-bit host machine and no support for virtualization of 64-bit guest
   # machine.
-  # Default to "Official Ubuntu Server 14.04 LTS (Trusty Tahr)".
+  # Defaults to "Official Ubuntu Server 16.04 LTS (Xenial Xerus)".
   # Change this parameter in the local settings file.
-  box: "ubuntu/trusty64"
+  box: "ubuntu/xenial64"
   # Box version.
-  box_version: "14.04"
+  box_version: ">= 0"
   # Host name. This setting is required. Usually host name matches project name.
   hostname: ""
   # Host aliases. Will be added to hosts file alongside <hostname>.test.
