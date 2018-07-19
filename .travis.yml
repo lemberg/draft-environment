@@ -2,6 +2,14 @@ sudo: required
 
 language: python
 
+env:
+  - GUEST_OS=ubuntu-16.04
+  - GUEST_OS=ubuntu-18.04
+
+matrix:
+  allow_failures:
+    - env: GUEST_OS=ubuntu-18.04
+
 cache:
   apt: true
   pip: true
@@ -37,6 +45,9 @@ install:
   - composer install --no-interaction --no-progress --no-suggest
   - pip install docker
   - pip install 'molecule<2.0.0'
+
+before_script:
+  - cp ./provisioning/molecule-${GUEST_OS}.yml ./provisioning/molecule.yml
 
 script:
   - composer validate --no-check-all --ansi

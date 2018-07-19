@@ -1,0 +1,18 @@
+---
+dependency:
+  name: galaxy
+  requirements_file: playbooks/requirements.yml
+ansible:
+  playbook: playbooks/test.yml
+  ansiblecfg_ssh_connection:
+    pipelining: true
+driver:
+  name: docker
+docker:
+  containers:
+    - name: draft-ubuntu-16.04
+      image: ubuntu
+      image_version: '16.04'
+      cap_add:
+        - SYS_ADMIN
+        - NET_ADMIN
