@@ -43,7 +43,7 @@
   command: openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -config /etc/apache2/ssl/draft-ssl-config.ini -keyout /etc/apache2/ssl/draft.key -out /etc/apache2/ssl/draft.crt
   notify:
     - Restart Apache2 web server
-  when: draft_ssl_config_file|changed
+  when: draft_ssl_config_file is changed
   # Skip Ansible Lint check. This should not be a handler.
   tags:
     - skip_ansible_lint
