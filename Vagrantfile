@@ -26,7 +26,7 @@ end
 
 # Some features used in this configuration file require specific version of
 # Vagrant.
-Vagrant.require_version ">= 1.8.0"
+Vagrant.require_version ">= 2.1.2"
 
 # Vagrant API version.
 VAGRANTFILE_API_VERSION = "2"
