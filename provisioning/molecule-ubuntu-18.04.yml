@@ -10,13 +10,7 @@ driver:
   name: docker
 docker:
   containers:
-    - name: draft-environment-16.04
-      image: ubuntu
-      image_version: '16.04'
-      cap_add:
-        - SYS_ADMIN
-        - NET_ADMIN
-    - name: draft-environment-18.04
+    - name: draft-ubuntu-18.04
       image: ubuntu
       image_version: '18.04'
       cap_add:
