@@ -4,6 +4,7 @@
 - Add option to disable automatic Vagrant box update checking: `vagrant.box_check_update`
 - Updated roles:
     * Apache Solr (T2L.solr: 1.3.1)
+    * Mailhog (T2L.mailhog: 2.1.4)
 
 ## Draft Environment 2.5.0, 2018-03-15
 
