@@ -32,12 +32,12 @@ before_install:
   - sudo apt-get update -qq
   # Install Linux headers
   - sudo apt-get -y --force-yes install linux-headers-`uname -r`
-  # Install VirtualBox 5.1
-  - sudo apt-get install virtualbox-5.1
-  # Install Vagrant 2.0.0
+  # Install VirtualBox 5.2
+  - sudo apt-get install virtualbox-5.2
+  # Install Vagrant 2.1.2
   # Todo: install from a package repository, not from a hardcoded URL.
-  - curl -O https://releases.hashicorp.com/vagrant/2.0.0/vagrant_2.0.0_x86_64.deb
-  - sudo dpkg -i vagrant_2.0.0_x86_64.deb
+  - curl -O https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb
+  - sudo dpkg -i vagrant_2.1.2_x86_64.deb
   # Install Docker engine
   - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-ce
 
