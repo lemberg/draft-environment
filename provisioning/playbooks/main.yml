@@ -4,7 +4,7 @@
 
   roles:
     - { role: draft }
-    - { role: kamaln7.swapfile, when: "'swapfile' in draft_features" }
+    - { role: oefenweb.swapfile, when: "'swapfile' in draft_features" }
     - { role: geerlingguy.mailhog, when: "'mailhog' in draft_features" }
     - { role: git_config, when: "'git_config' in draft_features" }
     - { role: apache2, when: "'apache2' in draft_features" }
