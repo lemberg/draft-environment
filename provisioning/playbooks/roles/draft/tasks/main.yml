@@ -8,6 +8,7 @@
   with_items:
     - curl
     - git
+    - locales
     - rsyslog
     - tzdata
     - unzip
