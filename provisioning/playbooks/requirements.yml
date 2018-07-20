@@ -1,6 +1,6 @@
 ---
 - src: oefenweb.swapfile
-  version: v2.0.9
+  version: v2.0.7
 - src: geerlingguy.mailhog
   version: 2.1.4
 - src: T2L.php
