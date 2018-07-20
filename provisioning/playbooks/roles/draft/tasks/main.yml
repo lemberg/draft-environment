@@ -48,3 +48,7 @@
   lineinfile:
     path: ~/.bashrc
     line: cd {{ ssh_default_directory }}
+
+- name: Set valid locale
+  command: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+  when: ansible_env.LC_ALL is not defined
