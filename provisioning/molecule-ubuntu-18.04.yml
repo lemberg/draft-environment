@@ -16,3 +16,9 @@ docker:
       cap_add:
         - SYS_ADMIN
         - NET_ADMIN
+      environment:
+        # The /etc/default/locale file is loaded by PAM; see /etc/pam.d/login
+        # for example. However, PAM is not invoked when running a command in a
+        # Docker container.
+        LANG: en_US.UTF-8
+        LC_ALL: en_US.UTF-8
