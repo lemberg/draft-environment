@@ -1,13 +1,13 @@
 # Draft Environment
 
-[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=2.5.0)](https://travis-ci.org/lemberg/draft-environment)
+[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=3.x.x)](https://travis-ci.org/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.
 
 ## Prerequisites
 
-- PHP/Composer
-- Vagrant
+- PHP and Composer
+- Vagrant (2.1.2+)
 - VirtualBox
 
 ## Vagrant plugins (will be automatically installed)
@@ -58,8 +58,8 @@ Dramatically increases disk IO on Windows by adding NFS support.
     Here's the list of used roles and available variables (and their default values):
 
     - [draft (internal)](/provisioning/playbooks/roles/draft/defaults/main.yml)
-    - [kamaln7.swapfile](https://github.com/kamaln7/ansible-swapfile/blob/master/defaults/main.yml)
-    - [geerlingguy.mailhog](https://github.com/geerlingguy/ansible-role-mailhog/blob/2.1.3/defaults/main.yml)
+    - [oefenweb.swapfile](https://github.com/Oefenweb/ansible-swapfile/blob/v2.0.7/defaults/main.yml)
+    - [geerlingguy.mailhog](https://github.com/geerlingguy/ansible-role-mailhog/blob/2.1.4/defaults/main.yml)
     - git_config (internal)
     - [apache2 (internal)](/provisioning/playbooks/roles/apache2/defaults/main.yml)
     - mysql (internal)
@@ -74,7 +74,7 @@ Dramatically increases disk IO on Windows by adding NFS support.
 
 1. File `vm-settings.yml` is project-specific, not a machine specific. Configuration can be overridden in `vm-settings.local.yml` (and this file must not be committed)
 
-1. Run `vagrant ssh`. Project is located in `/var/www/draft` by default (see [default.vm-settings.yml](/default.vm-settings.yml#L23))
+1. Run `vagrant ssh`. Project is located in `/var/www/draft` by default (see [default.vm-settings.yml](/default.vm-settings.yml#L28))
 
 ## Documentation
 
