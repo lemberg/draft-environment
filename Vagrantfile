@@ -175,22 +175,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # file or directory" error messages, stdout and sterr have been redirected
   # to /dev/null. See provisioning/windows.sh
 
-  # Get correct path to the Ansible playbook.
-  require 'pathname'
-  project_pathname = Pathname.new PROJECT_BASE_PATH
-  vm_pathname = Pathname.new VM_BASE_PATH
-
-  # Pass configuration to Ansible.
-  require 'json'
-  settings = configuration.getConfiguration()
-
-  # Run Ansible provisioner from within the virtual machine using proxy shell
-  # script so the developer experience is the same on all platforms (this means
-  # there is no need to install Ansible and playbook's dependencies on the host
-  # operating system).
-  config.vm.provision "shell" do |shell|
-    shell.path = "#{VM_BASE_PATH}/provisioning/ansible.sh"
-    shell.args = [File.join(configuration.get("vagrant.base_directory"), vm_pathname.relative_path_from(project_pathname), "/provisioning/playbooks"), settings.to_json]
+  # Run Ansible provisioner from within the virtual machine using Ansible Local
+  # provisioner.
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.become = true
+    ansible.playbook = "main.yml"
+    ansible.provisioning_path = configuration.get("vagrant.base_directory") + "/provisioning/playbooks"
+    ansible.extra_vars = configuration.getConfiguration()
+    ansible.galaxy_role_file = "requirements.yml"
+    ansible.galaxy_roles_path = "/etc/ansible/roles"
+    ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
+    ansible.compatibility_mode = "2.0"
+    ansible.install_mode = "pip"
+    ansible.version = "2.6.1"
   end
 
   # Display an informational message to the user.
