@@ -41,7 +41,7 @@ DRAFT_BASE_PATH = File.dirname(__FILE__)
 PROJECT_BASE_PATH = DRAFT_BASE_PATH unless defined? PROJECT_BASE_PATH
 
 # Include configuration.
-require "#{VM_BASE_PATH}/helpers/configuration"
+require "#{VM_BASE_PATH}/provisioning/src/configuration"
 
 # Initialize configuration.
 #
@@ -179,8 +179,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # provisioner.
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
-    ansible.playbook = "main.yml"
-    ansible.provisioning_path = configuration.get("vagrant.base_directory") + "/provisioning/playbooks"
+    ansible.playbook = "playbook.yml"
+    ansible.provisioning_path = configuration.get("vagrant.base_directory") + "/provisioning"
     ansible.extra_vars = configuration.getConfiguration()
     ansible.galaxy_role_file = "requirements.yml"
     ansible.galaxy_roles_path = "/etc/ansible/roles"
