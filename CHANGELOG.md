@@ -3,7 +3,7 @@
 - Use Ubuntu 16.04 LTS (Xenial Xerus) as default OS
 - Add option to disable automatic Vagrant box update checking: `vagrant.box_check_update`
 - Updated roles:
-    * Apache Solr (T2L.solr: 1.3.1)
+    * Apache Solr (T2L.solr: 1.4.0)
     * Mailhog (T2L.mailhog: 2.1.4)
 - Switch to Ansible Local provisioner and lock Ansible version at 2.6.1
 - Replaced kamaln7.swapfile role with oefenweb.swapfile@v2.0.7
