@@ -7,6 +7,7 @@
     * Mailhog (T2L.mailhog: 2.1.4)
 - Switch to Ansible Local provisioner and lock Ansible version at 2.6.1
 - Replaced kamaln7.swapfile role with oefenweb.swapfile@v2.0.7
+- Configure Solr cores to work with Drupal automatically
 
 ## Draft Environment 2.5.0, 2018-03-15
 

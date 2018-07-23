@@ -22,6 +22,7 @@
     - T2L.composer
     - T2L.java
     - { role: T2L.solr, solr_cleanup_downloads: false, solr_cleanup_gpg: false }
+    - ../provisioning/roles/solr_drupal
   vars_files:
     - ../provisioning/vars/swapfile.yml
     - ../provisioning/vars/php.yml

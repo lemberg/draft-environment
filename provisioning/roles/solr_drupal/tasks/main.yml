@@ -1,0 +1,27 @@
+---
+- name: Find all Solr configuration files
+  find:
+    paths:
+      - "{{ vagrant.base_directory}}/{{ apache2_document_root }}/modules/contrib/search_api_solr/solr-conf/{{ solr_version.split('.')[0] }}.x"
+  register: solr_drupal_files
+  changed_when: false
+
+- name: Configure Solr core(s) to work with Drupal Search API Solr
+  copy:
+    group: "{{ solr_group }}"
+    owner: "{{ solr_user }}"
+    src: "{{ item[1].path }}"
+    dest: "{{ solr_data_dir }}/data/{{ solr_cores[0] }}/conf"
+    remote_src: true
+    mode: preserve
+  loop: "{{ solr_cores|product(solr_drupal_files.files)|list }}"
+  when: solr_drupal_files.matched != 0
+
+- name: Fix incorrect path to Solr plugins
+  replace:
+    group: "{{ solr_group }}"
+    owner: "{{ solr_user }}"
+    path: "{{ solr_data_dir }}/data/{{ solr_cores.0 }}/conf/solrconfig.xml"
+    regexp: '\${solr.install.dir:../../../..}'
+    replace: '${solr.install.dir:}'
+  when: solr_drupal_files.matched != 0
