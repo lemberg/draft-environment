@@ -1,4 +1,10 @@
 ---
+molecule:
+  ignore_paths:
+    - .git
+    - .vagrant
+    - .molecule
+    - vendor
 dependency:
   name: galaxy
   requirements_file: provisioning/requirements.yml
