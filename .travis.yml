@@ -38,8 +38,6 @@ before_install:
   # Todo: install from a package repository, not from a hardcoded URL.
   - curl -O https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb
   - sudo dpkg -i vagrant_2.1.2_x86_64.deb
-  # Install Docker engine
-  - sudo apt-get install -o Dpkg::Options::="--force-confold" --force-yes -y docker-ce
 
 install:
   - composer install --no-interaction --no-progress --no-suggest
