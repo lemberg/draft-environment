@@ -47,10 +47,9 @@ install:
   - pip install 'molecule<2.0.0'
 
 before_script:
-  - cp ./provisioning/molecule-${GUEST_OS}.yml ./provisioning/molecule.yml
+  - cp ./tests/molecule-${GUEST_OS}.yml ./molecule.yml
 
 script:
   - composer validate --no-check-all --ansi
   - vagrant status
-  - cd provisioning
-  - molecule test
+  - cd provisioning && molecule test
