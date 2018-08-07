@@ -1,3 +1,7 @@
+## Draft Environment 2.x.x
+
+- Use Ubuntu 16.04 as a default guest OS
+
 ## Draft Environment 2.5.0, 2018-03-15
 
 - Set dependency on symfony/yaml to `^2.8|^3.2` so Drupal 8.5.x can be installed
