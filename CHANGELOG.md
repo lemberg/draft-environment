@@ -1,4 +1,4 @@
-## Draft Environment 2.x.x
+## Draft Environment 2.6.0, 2018-08-07
 
 - Use Ubuntu 16.04 as a default guest OS
 
