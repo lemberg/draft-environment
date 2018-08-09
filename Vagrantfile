@@ -169,18 +169,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # See https://docs.vagrantup.com/v2/provisioning/index.html
 
-  # IMPORTANT. Vagrant has an issue with Shell provisioner (described here
-  # https://github.com/mitchellh/vagrant/issues/1673). To avoid annoying
-  # "stdin: is not a tty" and/or "dpkg-reconfigure: unable to re-open stdin: No
-  # file or directory" error messages, stdout and sterr have been redirected
-  # to /dev/null. See provisioning/windows.sh
+  # Get correct path to the Ansible playbook within the machine.
+  require 'pathname'
+  project_pathname = Pathname.new PROJECT_BASE_PATH
+  vm_pathname = Pathname.new VM_BASE_PATH
 
   # Run Ansible provisioner from within the virtual machine using Ansible Local
   # provisioner.
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
     ansible.playbook = "playbook.yml"
-    ansible.provisioning_path = configuration.get("vagrant.base_directory") + "/provisioning"
+    ansible.provisioning_path = File.join(configuration.get("vagrant.base_directory"), vm_pathname.relative_path_from(project_pathname), "/provisioning")
     ansible.extra_vars = configuration.getConfiguration()
     ansible.galaxy_role_file = "requirements.yml"
     ansible.galaxy_roles_path = "/etc/ansible/roles"
