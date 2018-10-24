@@ -12,10 +12,10 @@ TBD
 
 - Add `mailhog` to the `draft_features` variable in your `vm-settings.yml` in order to get MailHog set up. More details about MailHog is [here](/docs/mailhog.md)
 
-### 2.6.0
+### 3.0.0
 
-- Destroy existing VM by running
-    
+- Destroy existing VM by running (all data will be lost)
+
     ```
     vagrant destroy -f
     ```
@@ -23,14 +23,16 @@ TBD
 - Update guest OS by editing `vm-settings.yml` file:
 
     ```
-    box: "ubuntu/xenial64"
-    box_version: ">=0"
+    vagrant:
+      box: "ubuntu/xenial64"
+      box_version: ">=0"
     ```
-    
-- Run and provision new VM
-    
+
+- Add new variable `vagrant.box_check_update` to the `vm-settings.yml` file in order to get rid of the "box is out of date" message:
+
     ```
-    vagrant up
+    vagrant:
+      box_check_update: false
     ```
 
 ## Then run
