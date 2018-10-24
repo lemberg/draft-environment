@@ -186,7 +186,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.compatibility_mode = "2.0"
     ansible.install_mode = "pip"
-    ansible.version = "2.6.1"
+    ansible.version = configuration.get("ansible.version")
   end
 
   # Display an informational message to the user.

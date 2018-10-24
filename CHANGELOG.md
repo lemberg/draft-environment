@@ -6,7 +6,8 @@
     * Java (T2L.java: 1.1.0)
     * Apache Solr (T2L.solr: 2.0.0)
     * Mailhog (T2L.mailhog: 2.1.4)
-- Switch to Ansible Local provisioner and lock Ansible version at 2.6.1
+- Switch to Ansible Local provisioner and lock Ansible version
+- Introduced new variable `ansible.version` that controls Ansible version
 - Replaced kamaln7.swapfile role with oefenweb.swapfile@v2.0.7
 
 ## Draft Environment 2.5.0, 2018-03-15

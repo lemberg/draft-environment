@@ -66,6 +66,10 @@ virtualbox:
   # CPU.
   cpuexecutioncap: 100
 
+# Ansible local configuration.
+ansible:
+  version: 2.6.6
+
 # List of features to install. Some roles depend on each other, be careful.
 draft_features:
   # Configure Swap file (sort of required by Composer)
