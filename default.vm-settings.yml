@@ -19,7 +19,7 @@ vagrant:
   box_version: ">= 0"
   # Disable automatic update checking be setting this option to false.
   # See https://www.vagrantup.com/docs/boxes/versioning.html#automatic-update-checking
-  box_check_update: true
+  box_check_update: false
   # Host name. This setting is required. Usually host name matches project name.
   hostname: ""
   # Host aliases. Will be added to hosts file alongside <hostname>.test.

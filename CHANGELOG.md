@@ -1,7 +1,7 @@
 ## Draft Environment 3.x.x
 
 - Use Ubuntu 16.04 LTS (Xenial Xerus) as default OS
-- Add option to disable automatic Vagrant box update checking: `vagrant.box_check_update`
+- Add option to disable automatic Vagrant box update checking: `vagrant.box_check_update` (disabled by default)
 - Updated roles:
     * Apache Solr (T2L.solr: 1.4.0)
     * Mailhog (T2L.mailhog: 2.1.4)
