@@ -35,6 +35,8 @@ TBD
       box_check_update: false
     ```
 
+- If `solr_cores` variable was overwritten, them convert it to the new format, see [UPGRADE.md 1.x.x -> 2.0.x](https://github.com/T2L/ansible-role-solr/blob/2.0.0/UPGRADE.md#1xx---20x)
+
 ## Then run
 
 ```
