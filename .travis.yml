@@ -34,10 +34,10 @@ before_install:
   - sudo apt-get -y --force-yes install linux-headers-`uname -r`
   # Install VirtualBox 5.2
   - sudo apt-get install virtualbox-5.2
-  # Install Vagrant 2.1.2
+  # Install Vagrant 2.2.0
   # Todo: install from a package repository, not from a hardcoded URL.
-  - curl -O https://releases.hashicorp.com/vagrant/2.1.2/vagrant_2.1.2_x86_64.deb
-  - sudo dpkg -i vagrant_2.1.2_x86_64.deb
+  - curl -O https://releases.hashicorp.com/vagrant/2.2.0/vagrant_2.2.0_x86_64.deb
+  - sudo dpkg -i vagrant_2.2.0_x86_64.deb
 
 install:
   - composer install --no-interaction --no-progress --no-suggest
