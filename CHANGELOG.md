@@ -1,3 +1,8 @@
+## Draft Environment 3.x.x
+
+- Updated roles:
+    * Apache Solr (T2L.solr: 2.0.1)
+
 ## Draft Environment 3.0.0-beta1/3.0.0-beta2, 2018-10-24
 
 - Use Ubuntu 16.04 LTS (Xenial Xerus) as default OS

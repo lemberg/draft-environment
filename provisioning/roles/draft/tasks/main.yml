@@ -37,6 +37,18 @@
     state: present
   when: "'mailhog' in draft_features"
 
+# Required by Solr
+- name: Ensure packages required by Solr role are installed
+  apt:
+    name:
+      - libxml2-dev
+      - libxslt-dev
+      - python-dev
+      - python-lxml
+      - rsync
+    state: present
+  when: "'solr' in draft_features"
+
 - name: Add Composer bin directory to global $PATH
   template:
     src: vendor_path.sh.j2
