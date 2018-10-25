@@ -1,4 +1,4 @@
-## Draft Environment 3.x.x
+## Draft Environment 3.0.0-beta3, 2016-10-26
 
 - Updated roles:
     * Apache Solr (T2L.solr: 2.0.1)
