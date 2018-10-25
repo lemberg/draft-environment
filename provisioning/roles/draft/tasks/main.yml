@@ -1,4 +1,10 @@
 ---
+- name: Ensure Ansible temp directory exists
+  file:
+    path: /tmp/ansible
+    state: directory
+    mode: 0777
+
 - name: Ensure base packages are installed
   apt:
     name: '{{ item }}'

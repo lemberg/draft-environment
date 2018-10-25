@@ -2,6 +2,13 @@
 
 - Updated roles:
     * Apache Solr (T2L.solr: 2.0.1)
+- Fixed Ansible warning:
+
+    ```
+     [WARNING]: Module remote_tmp /root/.ansible/tmp did not exist and was created
+    with a mode of 0700, this may cause issues when running as another user. To
+    avoid this, create the remote_tmp dir with the correct permissions manually
+    ```
 
 ## Draft Environment 3.0.0-beta1/3.0.0-beta2, 2018-10-24
 

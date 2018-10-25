@@ -10,6 +10,8 @@ dependency:
   requirements_file: provisioning/requirements.yml
 ansible:
   playbook: tests/test-playbook.yml
+  ansiblecfg_defaults:
+    remote_tmp: /tmp/ansible
   ansiblecfg_ssh_connection:
     pipelining: true
 driver:
