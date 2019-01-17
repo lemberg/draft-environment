@@ -76,3 +76,15 @@
 - name: Set valid locale
   command: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
   when: ansible_env.LC_ALL is not defined
+
+- name: Ensure that PasswordAuthentication is enabled
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^PasswordAuthentication '
+    line: 'PasswordAuthentication yes'
+
+- name: Ensure that ChallengeResponseAuthentication is enabled
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^ChallengeResponseAuthentication '
+    line: 'ChallengeResponseAuthentication yes'
