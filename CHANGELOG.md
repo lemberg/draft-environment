@@ -1,6 +1,12 @@
 ## Draft Environment 3.x.x
 
 - [GH-82](https://github.com/lemberg/draft-environment/issues/82) - Ensure that PasswordAuthentication and ChallengeResponseAuthentication are enabled. See https://serverfault.com/questions/98289/ssh-doesnt-ask-for-password-gives-permission-denied-immediately
+- [GH-81](https://github.com/lemberg/draft-environment/issues/81) - Fixed Ansible warning:
+
+    ```
+     [WARNING]: The input password appears not to have been hashed. The 'password'
+    argument must be encrypted for this module to work properly.
+    ```
 
 ## Draft Environment 3.0.0-beta3, 2016-10-26
 
