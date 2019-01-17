@@ -16,6 +16,7 @@
     remove the loop. This feature will be removed in version 2.11. Deprecation
     warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
     ```
+- [GH-86](https://github.com/lemberg/draft-environment/issues/86) - Amended post `vagrant up` message in order to make it more readable
 
 ## Draft Environment 3.0.0-beta3, 2016-10-26
 

@@ -190,10 +190,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Display an informational message to the user.
-  message = "The app is running at http(s)://" + configuration.get("vagrant.ip_address") + " and http(s)://" + configuration.get("vagrant.hostname")
+  available_hosts = [configuration.get("vagrant.ip_address"), configuration.get("vagrant.hostname")]
   unless configuration.get("vagrant.host_aliases").empty?
-    message += ". Alternatively app can be reached at http(s)://" + configuration.get("vagrant.host_aliases").join(" or http(s)://")
+    available_hosts.concat(configuration.get("vagrant.host_aliases"))
   end
-  config.vm.post_up_message = message
+  config.vm.post_up_message = "The app is accessible at any of these addresses:\n  - https://" + available_hosts.join("/\n  - https://") + "/"
 
 end
