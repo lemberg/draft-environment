@@ -83,9 +83,13 @@
     path: /etc/ssh/sshd_config
     regexp: '^PasswordAuthentication '
     line: 'PasswordAuthentication yes'
+  notify:
+    - Restart SSH server
 
 - name: Ensure that ChallengeResponseAuthentication is enabled
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^ChallengeResponseAuthentication '
     line: 'ChallengeResponseAuthentication yes'
+  notify:
+    - Restart SSH server
