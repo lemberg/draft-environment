@@ -2,13 +2,12 @@
 # Install apache2.
 - name: Install Apache2 web server
   apt:
-    name: "{{ item }}"
+    name:
+      - apache2
+      - openssl
     state: present
     update_cache: yes
     cache_valid_time: 86400
-  with_items:
-    - apache2
-    - openssl
 
 - name: Enable Apache2 modules
   apache2_module:

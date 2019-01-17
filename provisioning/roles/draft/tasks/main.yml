@@ -7,19 +7,18 @@
 
 - name: Ensure base packages are installed
   apt:
-    name: '{{ item }}'
+    name:
+      - curl
+      - git
+      - locales
+      - openssh-server
+      - rsyslog
+      - tzdata
+      - unzip
+      - wget
     state: present
     update_cache: yes
     cache_valid_time: 86400
-  with_items:
-    - curl
-    - git
-    - locales
-    - openssh-server
-    - rsyslog
-    - tzdata
-    - unzip
-    - wget
 
 - name: Add vagrant user to syslog group
   user:
