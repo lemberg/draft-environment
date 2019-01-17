@@ -4,7 +4,7 @@
 - src: geerlingguy.mailhog
   version: 2.1.4
 - src: T2L.php
-  version: 1.1.1
+  version: 1.1.2
 - src: T2L.composer
   version: 2.0.2
 - src: T2L.java
