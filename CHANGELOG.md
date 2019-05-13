@@ -1,5 +1,7 @@
 ## Draft Environment 3.x.x
 
+## Draft Environment 3.0.0-beta4, 2019-05-13
+
 - [GH-98](https://github.com/lemberg/draft-environment/issues/98) - Fix broken Travis CI; update Vagrant to version 2.2.4 on Travis CI
 - [GH-82](https://github.com/lemberg/draft-environment/issues/82) - Ensure that PasswordAuthentication and ChallengeResponseAuthentication are enabled. See https://serverfault.com/questions/98289/ssh-doesnt-ask-for-password-gives-permission-denied-immediately
 - [GH-81](https://github.com/lemberg/draft-environment/issues/81) - Fixed Ansible warning:
@@ -19,7 +21,7 @@
     ```
 - [GH-86](https://github.com/lemberg/draft-environment/issues/86) - Amended post `vagrant up` message in order to make it more readable
 
-## Draft Environment 3.0.0-beta3, 2016-10-26
+## Draft Environment 3.0.0-beta3, 2018-10-26
 
 - Updated roles:
     * Apache Solr (T2L.solr: 2.0.1)
