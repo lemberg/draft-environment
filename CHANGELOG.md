@@ -1,5 +1,6 @@
 ## Draft Environment 3.x.x
 
+- [GH-98](https://github.com/lemberg/draft-environment/issues/98) - Fix broken Travis CI; update Vagrant to version 2.2.4 on Travis CI
 - [GH-82](https://github.com/lemberg/draft-environment/issues/82) - Ensure that PasswordAuthentication and ChallengeResponseAuthentication are enabled. See https://serverfault.com/questions/98289/ssh-doesnt-ask-for-password-gives-permission-denied-immediately
 - [GH-81](https://github.com/lemberg/draft-environment/issues/81) - Fixed Ansible warning:
 
