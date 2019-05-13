@@ -1,6 +1,7 @@
 sudo: required
 
 language: python
+python: "2.7"
 
 env:
   - GUEST_OS=ubuntu-16.04
