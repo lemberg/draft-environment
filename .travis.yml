@@ -43,6 +43,7 @@ before_install:
 install:
   - composer install --no-interaction --no-progress --no-suggest
   - pip install docker
+  - pip install 'ansible==2.6.6'
   - pip install 'molecule<2.0.0'
 
 before_script:

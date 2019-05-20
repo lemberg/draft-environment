@@ -1,5 +1,7 @@
 ## Draft Environment 3.x.x
 
+- [GH-98](https://github.com/lemberg/draft-environment/issues/98) - Follow-up: lock Travis to Ansible 2.6.6
+
 ## Draft Environment 3.0.0-beta4, 2019-05-13
 
 - [GH-98](https://github.com/lemberg/draft-environment/issues/98) - Fix broken Travis CI; update Vagrant to version 2.2.4 on Travis CI
