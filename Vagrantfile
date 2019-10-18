@@ -146,6 +146,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # ubuntu-xenial-16.04-cloudimg-console.log after the start. Get rid of it.
     # Thanks to https://betacloud.io/get-rid-of-ubuntu-xenial-16-04-cloudimg-console-log/
     v.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+
+    # Tune the guest additions time synchronization parameters.
+    # See https://www.virtualbox.org/manual/ch09.html#changetimesync
+    #
+    # Sync time every 10 seconds.
+    v.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-interval", 10000]
+    # Adjustments if drift > 100 ms.
+    v.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-min-adjust", 100]
+    # Sync time on restore.
+    v.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-on-restore", 1]
+    # Sync time on start.
+    v.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-start", 1]
+    # At 1 second drift, the time will be set and not "smoothly" adjusted.
+    v.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 1000]
   end
 
   # Synced Folders
