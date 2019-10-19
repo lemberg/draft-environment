@@ -3,7 +3,7 @@
 # because it's not possible to test it on Travis CI. Also we manually add
 # vagrant user as it does not exist in Docker.
 - hosts: all
-  remote_user: root
+  become: true
 
   pre_tasks:
     - name: Add vagrant user
@@ -17,18 +17,18 @@
         uid: 1000
 
   roles:
-    - ../provisioning/roles/draft
-    - ../provisioning/roles/git_config
-    - ../provisioning/roles/apache2
-    - ../provisioning/roles/mysql
+    - ../../provisioning/roles/draft
+    - ../../provisioning/roles/git_config
+    - ../../provisioning/roles/apache2
+    - ../../provisioning/roles/mysql
     - geerlingguy.mailhog
     - T2L.php
     - T2L.composer
     - T2L.java
     - { role: T2L.solr, solr_cleanup_downloads: false, solr_cleanup_gpg: false }
   vars_files:
-    - ../provisioning/vars/swapfile.yml
-    - ../provisioning/vars/php.yml
-    - ../provisioning/vars/solr.yml
-    - ../provisioning/vars/mailhog.yml
-    - test-vm-settings.yml
+    - ../../provisioning/vars/swapfile.yml
+    - ../../provisioning/vars/php.yml
+    - ../../provisioning/vars/solr.yml
+    - ../../provisioning/vars/mailhog.yml
+    - vm-settings.yml

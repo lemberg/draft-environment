@@ -18,6 +18,9 @@ virtualbox:
   memory: 1024
   cpuexecutioncap: 100
 
+ansible:
+  version: 2.6.*
+
 draft_features:
   - swapfile
   - mailhog

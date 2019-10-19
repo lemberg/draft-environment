@@ -68,7 +68,7 @@ virtualbox:
 
 # Ansible local configuration.
 ansible:
-  version: 2.6.6
+  version: 2.6.*
 
 # List of features to install. Some roles depend on each other, be careful.
 draft_features:
