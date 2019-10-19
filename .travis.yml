@@ -5,8 +5,8 @@ language: python
 python: "3.6"
 
 env:
-  - MOLECULE_PLATFORM=ubuntu; MOLECULE_PLATFORM_VERSION=16.04
-  - MOLECULE_PLATFORM=ubuntu; MOLECULE_PLATFORM_VERSION=18.04
+  - MOLECULE_PLATFORM=ubuntu:16.04
+  - MOLECULE_PLATFORM=ubuntu:18.04
 
 cache:
   apt: true

@@ -11,8 +11,8 @@ lint:
     config-data:
       ignore: vendor/
 platforms:
-  - name: draft-${MOLECULE_PLATFORM}-${MOLECULE_PLATFORM_VERSION}
-    image: "${MOLECULE_PLATFORM}:${MOLECULE_PLATFORM_VERSION}"
+  - name: draft
+    image: "${MOLECULE_PLATFORM}"
     capabilities:
       - SYS_ADMIN
       - NET_ADMIN
