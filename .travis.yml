@@ -41,6 +41,12 @@ install:
   - composer install --no-interaction --no-progress --no-suggest
   - pip install ansible==2.6.* docker molecule
 
+before_script:
+  - vagrant --version
+  - composer --version
+  - ansible --version
+  - molecule --version
+
 script:
   - composer validate --no-check-all --ansi
   - vagrant status
