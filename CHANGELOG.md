@@ -1,6 +1,9 @@
 ## Draft Environment 3.x.x
 
-- [CH-102](https://github.com/lemberg/draft-environment/issues/102) - Tune the guest additions time synchronization parameters (force virtual machine to sync time with host)
+- [GH-106](https://github.com/lemberg/draft-environment/issues/106) - Converted tests to support Molecule 2
+
+    Side effect: locked Ansible at `2.6.*` (compared to `2.6.6` before): actually, locking to the specific patch version does not make a lot of sense due to deprecations being introduced in major/minor versions only. Locking a patch version does not allow Ansible to update causing more harm than stability
+- [GH-102](https://github.com/lemberg/draft-environment/issues/102) - Tune the guest additions time synchronization parameters (force virtual machine to sync time with host)
 - [GH-98](https://github.com/lemberg/draft-environment/issues/98) - Follow-up: lock Travis to Ansible 2.6.6
 
 ## Draft Environment 3.0.0-beta4, 2019-05-13

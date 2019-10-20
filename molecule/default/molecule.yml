@@ -1,0 +1,31 @@
+---
+dependency:
+  name: galaxy
+  options:
+    role-file: provisioning/requirements.yml
+driver:
+  name: docker
+lint:
+  name: yamllint
+  options:
+    config-data:
+      ignore: vendor/
+platforms:
+  - name: draft
+    image: "${MOLECULE_PLATFORM}"
+    capabilities:
+      - SYS_ADMIN
+      - NET_ADMIN
+    env:
+      # The /etc/default/locale file is loaded by PAM; see /etc/pam.d/login
+      # for example. However, PAM is not invoked when running a command in a
+      # Docker container.
+      LANG: en_US.UTF-8
+      LC_ALL: en_US.UTF-8
+provisioner:
+  name: ansible
+  config_options:
+    ssh_connection:
+      pipelining: true
+  lint:
+    name: ansible-lint

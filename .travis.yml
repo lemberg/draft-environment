@@ -2,15 +2,11 @@ dist: xenial
 sudo: required
 
 language: python
-python: "2.7"
+python: "3.6"
 
 env:
-  - GUEST_OS=ubuntu-16.04
-  - GUEST_OS=ubuntu-18.04
-
-matrix:
-  allow_failures:
-    - env: GUEST_OS=ubuntu-18.04
+  - MOLECULE_PLATFORM=ubuntu:16.04
+  - MOLECULE_PLATFORM=ubuntu:18.04
 
 cache:
   apt: true
@@ -36,19 +32,20 @@ before_install:
   - sudo apt-get -y --force-yes install linux-headers-`uname -r`
   # Install VirtualBox 5.2
   - sudo apt-get install virtualbox-5.2
-  # Install Vagrant 2.2.4
+  # Install Vagrant 2.2.6
   # Todo: install from a package repository, not from a hardcoded URL.
-  - curl -O https://releases.hashicorp.com/vagrant/2.2.4/vagrant_2.2.4_x86_64.deb
-  - sudo dpkg -i vagrant_2.2.4_x86_64.deb
+  - curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb
+  - sudo dpkg -i vagrant_2.2.6_x86_64.deb
 
 install:
   - composer install --no-interaction --no-progress --no-suggest
-  - pip install docker
-  - pip install 'ansible==2.6.6'
-  - pip install 'molecule<2.0.0'
+  - pip install ansible==2.6.* docker molecule
 
 before_script:
-  - cp ./tests/molecule-${GUEST_OS}.yml ./molecule.yml
+  - vagrant --version
+  - composer --version
+  - ansible --version
+  - molecule --version
 
 script:
   - composer validate --no-check-all --ansi
