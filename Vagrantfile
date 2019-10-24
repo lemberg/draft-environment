@@ -3,8 +3,11 @@
 
 # Before we start: auto-install recommended plugins. Code borrowed here:
 # https://github.com/hashicorp/vagrant/issues/8055#issuecomment-403171757
-# Install Vagrant Host Manager and vagrant-vbguest.
-required_plugins = %w(vagrant-hostmanager vagrant-vbguest)
+# Installs:
+#   - vagrant-hostmanager - https://github.com/devopsgroup-io/vagrant-hostmanager
+#   - vagrant-vbguest - https://github.com/dotless-de/vagrant-vbguest
+#   - vagrant-disksize - https://github.com/sprotheroe/vagrant-disksize
+required_plugins = %w(vagrant-hostmanager vagrant-vbguest vagrant-disksize)
 
 # Additionally install Vagrant WinNFSd on Windows hosts.
 require "rbconfig"
@@ -137,6 +140,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = configuration.get("virtualbox.memory")
     # Set CPU execution cap (in %).
     v.customize ["modifyvm", :id, "--cpuexecutioncap", configuration.get("virtualbox.cpuexecutioncap")]
+    # Set VirtualBox disk size (defaults to 10Gb)
+    config.disksize.size = configuration.get("virtualbox.disk_size")
+
     # Use host's resolver mechanisms to handle DNS requests.
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     # Allow creation of symlinks in VirtualBox shared folders (works with both

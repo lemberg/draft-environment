@@ -65,6 +65,9 @@ virtualbox:
   # CPU execution cap (in %). Lower this value if host machine has single core
   # CPU.
   cpuexecutioncap: 100
+  # VirtualBox disk size (added by vagrant-disksize plugin).
+  # See https://github.com/sprotheroe/vagrant-disksize
+  disk_size: 10Gb
 
 # Ansible local configuration.
 ansible:
