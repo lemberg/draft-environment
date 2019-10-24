@@ -127,6 +127,9 @@ class Configuration
     self.set("vagrant.hostname", self.get("vagrant.hostname") + '.test');
     # Symbolize synced folder options.
     self.symbolize_synced_folder_options
+    # Set correct Ansible version to install when wildcard version constraint
+    # has been provided.
+    self.set_ansible_version
   end
 
   # Internal: Generate IP addres based on a Vagrant host name value (in the most
@@ -168,6 +171,29 @@ class Configuration
   def get_git_credentials
     self.set("git_user_name", `git config --get user.name`.strip)
     self.set("git_user_email", `git config --get user.email`.strip)
+  end
+
+  # Internal: Vagrant doesn't support wildcards in Ansible version, but pip does.
+  # This method fixes this by looking up for the latest Ansible version within
+  # the given range constraint and setting up exact version to install.
+  #
+  # Returns nothing.
+  protected
+  def set_ansible_version
+    version = self.get("ansible.version").split(".")
+    if (version.length === 3 && version.last === "*")
+      require 'net/https'
+      uri = URI('https://releases.ansible.com/ansible/')
+      available_releases = Net::HTTP.get(uri)
+
+      latest_release = available_releases
+        .scan(/>ansible-(#{version[0]}\.#{version[1]}\.\d+[a-zA-Z0-9\-\.]*)\.tar.gz</)
+        .flatten
+        .sort_by { |v| Gem::Version.new(v) }
+        .last
+
+      self.set("ansible.version", latest_release)
+    end
   end
 
 end

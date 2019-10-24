@@ -71,6 +71,14 @@ virtualbox:
 
 # Ansible local configuration.
 ansible:
+  # Ansible version to use for the provisioning. Supported version formats:
+  #   - exact version constraint, like 2.6.16, 2.9.0rc2 etc
+  #   - wildcard version range (.*): you can specify a pattern with a * wildcard.
+  #     For example 2.6.* is the equivalent of >=2.6.0 <2.7.0. This option
+  #     installs the latest available Ansible version within the given range
+  #     constraint. This is the default option.
+  #
+  # This project has been successfully tested with Ansible 2.6.
   version: 2.6.*
 
 # List of features to install. Some roles depend on each other, be careful.
