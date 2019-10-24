@@ -1,5 +1,6 @@
 ## Draft Environment 3.x.x
 
+- [GH-96](https://github.com/lemberg/draft-environment/issues/96) - Added vagrant-disksize plugin, which allows to alter VirtualBox disk size. By default VirtualBox disk size is capped at 10Gb, which is fine for most of the projects, unless project has huge database. Introduced new variable `virtualbox.disk_size` (defaults to `10Gb`)
 - [GH-104](https://github.com/lemberg/draft-environment/issues/104) - Bump minimum supported Vagrant version to 2.2.6
 - [GH-106](https://github.com/lemberg/draft-environment/issues/106) - Converted tests to support Molecule 2
 

@@ -41,6 +41,13 @@ TBD
       version: 2.6.*
     ```
 
+- Add new variable `virtualbox.disk_size` to the `vm-settings.yml` file in order to set VirtualBox disk size:
+
+    ```
+    virtualbox:
+      disk_size: 10Gb
+    ```
+
 - If `solr_cores` variable was overwritten, them convert it to the new format, see [UPGRADE.md 1.x.x -> 2.0.x](https://github.com/T2L/ansible-role-solr/blob/2.0.0/UPGRADE.md#1xx---20x)
 
 ## Then run

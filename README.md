@@ -20,6 +20,10 @@ Manages host and/or guest `hosts` files. Draft is configured to create a `hostna
 
 Automatically installs the host's VirtualBox Guest Additions on the guest system.
 
+#### [vagrant-disksize](https://github.com/sprotheroe/vagrant-disksize)
+
+A Vagrant plugin to resize disks in VirtualBox.
+
 #### Vagrant WinNFSd (WINDOWS only)
 
 Dramatically increases disk IO on Windows by adding NFS support.
