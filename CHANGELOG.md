@@ -1,5 +1,6 @@
 ## Draft Environment 3.x.x
 
+- [GH-104](https://github.com/lemberg/draft-environment/issues/104) - Bump minimum supported Vagrant version to 2.2.6
 - [GH-106](https://github.com/lemberg/draft-environment/issues/106) - Converted tests to support Molecule 2
 
     Side effect: locked Ansible at `2.6.*` (compared to `2.6.6` before): actually, locking to the specific patch version does not make a lot of sense due to deprecations being introduced in major/minor versions only. Locking a patch version does not allow Ansible to update causing more harm than stability

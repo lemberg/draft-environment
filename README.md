@@ -7,7 +7,7 @@ This is Vagrant-based development environment for Drupal projects. This project 
 ## Prerequisites
 
 - PHP and Composer
-- Vagrant (2.1.2+)
+- Vagrant (2.2.6+)
 - VirtualBox
 
 ## Vagrant plugins (will be automatically installed)
