@@ -65,8 +65,7 @@ HERE;
       $io->write('<info>Happy coding!</info>');
       $io->write('');
 
-      $yaml = new Dumper();
-      $yaml->setIndentation(2);
+      $yaml = new Dumper(2);
       file_put_contents("./vm-settings.yml", $yaml->dump($config, PHP_INT_MAX));
     }
 
