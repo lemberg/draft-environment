@@ -6,7 +6,8 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "composer/composer": "^1.9"
+        "composer/composer": "^1.9",
+        "phpunit/phpunit": "^6.5 | ^7"
     },
     "require": {
         "php": "^7.2",
@@ -20,6 +21,11 @@
         "post-update-cmd": [
             "Lemberg\\Draft\\Environment\\Configurer::setUp"
         ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lemberg\\Tests\\Draft\\Environment\\": "tests/"
+        }
     },
     "autoload": {
         "psr-4": {

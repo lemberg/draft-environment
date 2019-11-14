@@ -23,14 +23,14 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
   /**
    * {@inheritdoc}
    */
-  public function activate(Composer $composer, IOInterface $io) {
+  public function activate(Composer $composer, IOInterface $io): void {
     $this->app = new App($composer, $io);
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function getSubscribedEvents() {
+  public static function getSubscribedEvents(): array {
     return [
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPrePackageUninstall',
     ];
@@ -41,7 +41,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
    *
    * @param \Composer\Installer\PackageEvent $event
    */
-  public function onPrePackageUninstall(PackageEvent $event) {
+  public function onPrePackageUninstall(PackageEvent $event): void {
     $this->app->onPrePackageUninstall($event);
   }
 
