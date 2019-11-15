@@ -40,6 +40,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
    * Pre package uninstall event callback.
    *
    * @param \Composer\Installer\PackageEvent $event
+   *
    * @return void
    */
   public function onPrePackageUninstall(PackageEvent $event): void {
@@ -47,9 +48,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
   }
 
   /**
-   * Set an app this plugin will be using for the event handling.
+   * Set an app this plugin will be using for the events handling.
    *
    * @param \Lemberg\Draft\Environment\App $app
+   *
    * @return void
    */
   public function setApp(App $app): void {
