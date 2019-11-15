@@ -12,6 +12,7 @@ use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
+use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
 use PHPUnit\Framework\TestCase;
 
@@ -24,7 +25,8 @@ use PHPUnit\Framework\TestCase;
 class PluginTest extends TestCase {
 
   /**
-   * Tests composer plugin activation, as well as event subscribers.
+   * Tests composer plugin activation, as well as correct configuration of the
+   * event subscribers.
    */
   public function testComposerPlugin() {
 
@@ -49,6 +51,11 @@ class PluginTest extends TestCase {
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $composer, $io, FALSE, $policy, $pool, $installedRepo, $request, [$operation], $operation);
+
+    // Ensure that plugin passes events to the app.
+    $app = $this->createMock(App::class);
+    $app->expects($this->once())->method('onPrePackageUninstall');
+    $plugin->setApp($app);
 
     $plugin->onPrePackageUninstall($event);
   }

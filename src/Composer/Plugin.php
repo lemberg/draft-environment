@@ -24,7 +24,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
    * {@inheritdoc}
    */
   public function activate(Composer $composer, IOInterface $io): void {
-    $this->app = new App($composer, $io);
+    $this->setApp(new App($composer, $io));
   }
 
   /**
@@ -40,9 +40,20 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
    * Pre package uninstall event callback.
    *
    * @param \Composer\Installer\PackageEvent $event
+   * @return void
    */
   public function onPrePackageUninstall(PackageEvent $event): void {
     $this->app->onPrePackageUninstall($event);
+  }
+
+  /**
+   * Set an app this plugin will be using for the event handling.
+   *
+   * @param \Lemberg\Draft\Environment\App $app
+   * @return void
+   */
+  public function setApp(App $app): void {
+    $this->app = $app;
   }
 
 }
