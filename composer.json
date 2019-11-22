@@ -1,12 +1,19 @@
 {
     "name": "lemberg/draft-environment",
     "description": "Development environment for Draft Drupal.",
-    "type": "vm",
+    "type": "composer-plugin",
     "license": "GPL-2.0-or-later",
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "require-dev": {
+        "composer/composer": "^1.9",
+        "mikey179/vfsstream": "^1.6",
+        "phpunit/phpunit": "^6.5 | ^7"
+    },
     "require": {
-        "symfony/yaml": "^2.8|^3.2"
+        "php": "^7.2",
+        "composer-plugin-api": "^1.1",
+        "symfony/yaml": "^3.4|^4"
     },
     "scripts": {
         "post-install-cmd": [
@@ -16,6 +23,11 @@
             "Lemberg\\Draft\\Environment\\Configurer::setUp"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Lemberg\\Tests\\Draft\\Environment\\": "tests/"
+        }
+    },
     "autoload": {
         "psr-4": {
             "Lemberg\\Draft\\Environment\\": "src/"
@@ -24,5 +36,8 @@
     "config": {
         "bin-dir": "bin/",
         "sort-packages": true
+    },
+    "extra": {
+        "class": "Lemberg\\Draft\\Environment\\Composer\\Plugin"
     }
 }
