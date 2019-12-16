@@ -24,17 +24,17 @@ use PHPUnit\Framework\TestCase;
 class AppTest extends TestCase {
 
   /**
-   * @var \Composer\Composer $composer
+   * @var \Composer\Composer
    */
   protected $composer;
 
   /**
-   * @var \Composer\IO\IOInterface $io
+   * @var \Composer\IO\IOInterface
    */
   protected $io;
 
   /**
-   * @var \Lemberg\Draft\Environment\App $app
+   * @var \Lemberg\Draft\Environment\App
    */
   protected $app;
 

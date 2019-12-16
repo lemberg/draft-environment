@@ -23,12 +23,12 @@ class App {
   ];
 
   /**
-   * @var \Composer\Composer $composer
+   * @var \Composer\Composer
    */
   protected $composer;
 
   /**
-   * @var \Composer\IO\IOInterface $io
+   * @var \Composer\IO\IOInterface
    */
   protected $io;
 
@@ -54,8 +54,6 @@ class App {
    * Pre package uninstall event callback.
    *
    * @param \Composer\Installer\PackageEvent $event
-   *
-   * @return void
    */
   public function onPrePackageUninstall(PackageEvent $event): void {
     // Clean up Draft Environment config files upon package uninstallation.
