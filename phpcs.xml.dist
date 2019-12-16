@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- See http://pear.php.net/manual/en/package.php.php-codesniffer.annotated-ruleset.php -->
+<ruleset name="Drupal">
+  <description>Drupal coding standard</description>
+  <!-- All PHP code files must be UTF-8 encoded and we treat them as such. -->
+  <arg name="encoding" value="utf-8"/>
+  <!-- Look for *.php files only. -->
+  <arg name="extensions" value="php"/>
+  <!-- Use colors in output. -->
+  <arg name="colors"/>
+
+  <!-- Scan directories with PHP code only. -->
+  <file>./src/</file>
+  <file>./tests/</file>
+
+  <!-- Include the whole Drupal standard -->
+  <rule ref="Drupal">
+    <!--Ignore "Missing short description in doc comment". -->
+    <exclude name="Drupal.Commenting.DocComment.MissingShort"/>
+    <!--Ignore "Doc comment short description must be on a single line, further text should be a separate paragraph". -->
+    <exclude name="Drupal.Commenting.DocComment.ShortSingleLine"/>
+    <!--Ignore "Missing parameter comment". -->
+    <exclude name="Drupal.Commenting.FunctionComment.MissingParamComment"/>
+    <!--Ignore "Description for the @return value is missing". -->
+    <exclude name="Drupal.Commenting.FunctionComment.MissingReturnComment"/>
+  </rule>
+
+</ruleset>

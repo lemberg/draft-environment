@@ -7,6 +7,9 @@ use Composer\Script\Event;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Dumper;
 
+/**
+ * Draft Environment interactive configurator.
+ */
 class Configurer {
 
   /**
@@ -18,21 +21,21 @@ class Configurer {
   public static function setUp(Event $event) {
     $composer = $event->getComposer();
 
-    // This package can be utilized as a root package (for example in Travis CI).
+    // This package can be used as a root package (for example in Travis CI).
     if ($composer->getPackage()->getName() === 'lemberg/draft-environment') {
       $installPath = '.';
     }
     else {
       // Use Composer's local repository to find the path to Draft Environment.
       $package = $composer
-          ->getRepositoryManager()
-          ->getLocalRepository()
-          ->findPackage('lemberg/draft-environment', '*');
+        ->getRepositoryManager()
+        ->getLocalRepository()
+        ->findPackage('lemberg/draft-environment', '*');
 
       if ($package) {
         $installPath = $composer
-            ->getInstallationManager()
-            ->getInstallPath($package);
+          ->getInstallationManager()
+          ->getInstallPath($package);
       }
       else {
         throw new \RuntimeException('lemberg/draft-environment package not found in local repository.');

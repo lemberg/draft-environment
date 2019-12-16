@@ -16,7 +16,7 @@ use Lemberg\Draft\Environment\App;
 class Plugin implements PluginInterface, EventSubscriberInterface {
 
   /**
-   * @var \Lemberg\Draft\Environment\App $app
+   * @var \Lemberg\Draft\Environment\App
    */
   protected $app;
 
@@ -40,8 +40,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
    * Pre package uninstall event callback.
    *
    * @param \Composer\Installer\PackageEvent $event
-   *
-   * @return void
    */
   public function onPrePackageUninstall(PackageEvent $event): void {
     $this->app->onPrePackageUninstall($event);
@@ -51,8 +49,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
    * Set an app this plugin will be using for the events handling.
    *
    * @param \Lemberg\Draft\Environment\App $app
-   *
-   * @return void
    */
   public function setApp(App $app): void {
     $this->app = $app;
