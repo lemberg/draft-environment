@@ -60,7 +60,6 @@ jobs:
 
       env:
         - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:16.04
-        - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:18.04
 
       before_install:
         # Download and register Oracle VirtualBox keys
@@ -90,5 +89,14 @@ jobs:
     - <<: *Molecule
 
       env:
+        - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:18.04
+
+    - <<: *Molecule
+
+      env:
         - VIRTUAL_BOX_VERSION=6.0 MOLECULE_PLATFORM=ubuntu:16.04
+
+    - <<: *Molecule
+
+      env:
         - VIRTUAL_BOX_VERSION=6.0 MOLECULE_PLATFORM=ubuntu:18.04
