@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- See http://pear.php.net/manual/en/package.php.php-codesniffer.annotated-ruleset.php -->
+<!-- See https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-Ruleset -->
 <ruleset name="Drupal">
   <description>Drupal coding standard</description>
   <!-- All PHP code files must be UTF-8 encoded and we treat them as such. -->
@@ -8,6 +8,10 @@
   <arg name="extensions" value="php"/>
   <!-- Use colors in output. -->
   <arg name="colors"/>
+  <!-- Show sniff codes in all reports. -->
+  <arg value="s"/>
+  <!-- Show progress of the run. -->
+  <arg value="p"/>
 
   <!-- Scan directories with PHP code only. -->
   <file>./src/</file>
