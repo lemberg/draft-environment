@@ -22,7 +22,7 @@ jobs:
         - composer self-update
 
       install:
-        - composer install --no-interaction --no-progress --no-suggest
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       script:
         - ./bin/phpcs
