@@ -3,6 +3,7 @@ stages:
   - Molecule
 
 jobs:
+  fast_finish: true
   include:
     - &PHP
 
@@ -54,9 +55,9 @@ jobs:
         directories:
           - "$HOME/.composer/cache"
 
-      language: php
+      language: python
 
-      php: 7.2
+      python: 3.6
 
       env:
         - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:16.04
