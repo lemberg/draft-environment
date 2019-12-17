@@ -44,10 +44,10 @@ final class App {
    * @param \Composer\IO\IOInterface $io
    * @param string $directory
    */
-  public function __construct(Composer $composer, IOInterface $io, string $directory = NULL) {
+  public function __construct(Composer $composer, IOInterface $io, string $directory) {
     $this->composer = $composer;
     $this->io = $io;
-    $this->workingDirectory = $directory ?: getcwd();
+    $this->workingDirectory = $directory;
   }
 
   /**

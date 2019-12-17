@@ -16,6 +16,7 @@ use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
+use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -25,6 +26,15 @@ use PHPUnit\Framework\TestCase;
  * @uses \Lemberg\Draft\Environment\App
  */
 final class PluginTest extends TestCase {
+
+  use PHPMock;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function setUpBeforeClass(): void {
+    self::defineFunctionMock('Lemberg\Draft\Environment\Composer', 'getcwd');
+  }
 
   /**
    * Tests composer plugin activation, as well as correct configuration of the
@@ -60,6 +70,22 @@ final class PluginTest extends TestCase {
     $plugin->setApp($app);
 
     $plugin->onPrePackageUninstall($event);
+  }
+
+  /**
+   * Tests composer plugin throws an exception when getcwd() returns FALSE.
+   */
+  public function testComposerPluginThrowsExceptionWhenGetcwdReturnsFalse(): void {
+    $getcwd = $this->getFunctionMock('Lemberg\Draft\Environment\Composer', 'getcwd');
+    $getcwd->expects(self::once())->willReturn(FALSE);
+
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage('Unable to get the current working directory. Please check if any one of the parent directories does not have the readable or search mode set, even if the current directory does. See https://www.php.net/manual/function.getcwd.php');
+
+    $io = $this->createMock(IOInterface::class);
+    $composer = $this->createMock(Composer::class);
+    $plugin = new Plugin();
+    $plugin->activate($composer, $io);
   }
 
 }

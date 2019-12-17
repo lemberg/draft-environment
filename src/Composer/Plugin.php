@@ -26,7 +26,11 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
    * {@inheritdoc}
    */
   public function activate(Composer $composer, IOInterface $io): void {
-    $this->setApp(new App($composer, $io));
+    if (($cwd = getcwd()) === FALSE) {
+      throw new \RuntimeException('Unable to get the current working directory. Please check if any one of the parent directories does not have the readable or search mode set, even if the current directory does. See https://www.php.net/manual/function.getcwd.php');
+    }
+
+    $this->setApp(new App($composer, $io, $cwd));
   }
 
   /**
