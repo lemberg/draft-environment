@@ -36,3 +36,25 @@ jobs:
     - <<: *PHP
 
       php: 7.4
+
+    - &Vagrant
+
+      dist: windows
+
+      language: php
+
+      env: VIRTUAL_BOX_VERSION=5.2.34
+
+      before_install:
+        - choco install virtualbox --version $VIRTUAL_BOX_VERSION
+        - choco install vagrant --version 2.2.6
+
+      install:
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      script:
+        - vagrant up
+
+    - <<: *Vagrant
+
+      env: VIRTUAL_BOX_VERSION=6.0.14
