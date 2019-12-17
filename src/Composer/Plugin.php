@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lemberg\Draft\Environment\Composer;
 
 use Composer\Composer;
@@ -13,22 +15,28 @@ use Lemberg\Draft\Environment\App;
 /**
  * Composer plugin for configuring Draft Environment.
  */
-class Plugin implements PluginInterface, EventSubscriberInterface {
+final class Plugin implements PluginInterface, EventSubscriberInterface {
 
   /**
    * @var \Lemberg\Draft\Environment\App
    */
-  protected $app;
+  private $app;
 
   /**
    * {@inheritdoc}
    */
   public function activate(Composer $composer, IOInterface $io): void {
-    $this->setApp(new App($composer, $io));
+    if (($cwd = getcwd()) === FALSE) {
+      throw new \RuntimeException('Unable to get the current working directory. Please check if any one of the parent directories does not have the readable or search mode set, even if the current directory does. See https://www.php.net/manual/function.getcwd.php');
+    }
+
+    $this->setApp(new App($composer, $io, $cwd));
   }
 
   /**
-   * {@inheritdoc}
+   * Returns an array of event names this subscriber wants to listen to.
+   *
+   * @return array<string, string>
    */
   public static function getSubscribedEvents(): array {
     return [
@@ -42,7 +50,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface {
    * @param \Composer\Installer\PackageEvent $event
    */
   public function onPrePackageUninstall(PackageEvent $event): void {
-    $this->app->onPrePackageUninstall($event);
+    $this->app->handle($event);
   }
 
   /**

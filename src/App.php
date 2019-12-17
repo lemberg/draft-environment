@@ -1,23 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lemberg\Draft\Environment;
 
 use Composer\Composer;
+use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\Installer\PackageEvent;
+use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Draft Environment application.
  */
-class App {
+final class App {
 
-  const PACKAGE_NAME = 'lemberg/draft-environment';
-
-  const SETTINGS_FILENAME = 'vm-settings.yml';
-
-  const VIRTUAL_MACHINE_FILENAME = 'Vagrantfile';
-
-  const CONFIGURATION_FILENAMES = [
+  public const PACKAGE_NAME = 'lemberg/draft-environment';
+  private const SETTINGS_FILENAME = 'vm-settings.yml';
+  private const VIRTUAL_MACHINE_FILENAME = 'Vagrantfile';
+  private const CONFIGURATION_FILENAMES = [
     self::SETTINGS_FILENAME,
     self::VIRTUAL_MACHINE_FILENAME,
   ];
@@ -25,17 +27,17 @@ class App {
   /**
    * @var \Composer\Composer
    */
-  protected $composer;
+  private $composer;
 
   /**
    * @var \Composer\IO\IOInterface
    */
-  protected $io;
+  private $io;
 
   /**
    * @var string
    */
-  protected $workingDirectory;
+  private $workingDirectory;
 
   /**
    * Draft Environment app constructor.
@@ -44,25 +46,20 @@ class App {
    * @param \Composer\IO\IOInterface $io
    * @param string $directory
    */
-  public function __construct(Composer $composer, IOInterface $io, string $directory = NULL) {
+  public function __construct(Composer $composer, IOInterface $io, string $directory) {
     $this->composer = $composer;
     $this->io = $io;
-    $this->workingDirectory = $directory ?: getcwd();
+    $this->workingDirectory = $directory;
   }
 
   /**
-   * Pre package uninstall event callback.
+   * Composer package events handler callback.
    *
    * @param \Composer\Installer\PackageEvent $event
    */
-  public function onPrePackageUninstall(PackageEvent $event): void {
-    // Clean up Draft Environment config files upon package uninstallation.
-    if ($event->getOperation()->getPackage()->getName() === static::PACKAGE_NAME) {
-      foreach ($this->getConfigurationFilepaths() as $filepath) {
-        if (file_exists($filepath)) {
-          unlink($filepath);
-        }
-      }
+  public function handle(PackageEvent $event): void {
+    if ($event->getName() === PackageEvents::PRE_PACKAGE_UNINSTALL && $event->getOperation() instanceof UninstallOperation) {
+      $this->onPrePackageUninstall($event->getOperation());
     }
   }
 
@@ -70,11 +67,24 @@ class App {
    * Generates and array of file paths to the Draft Environment configuration
    * files.
    *
-   * @return \Iterator
+   * @return \Iterator<int, string>
    */
   public function getConfigurationFilepaths(): \Iterator {
     foreach (static::CONFIGURATION_FILENAMES as $filename) {
       yield $this->workingDirectory . DIRECTORY_SEPARATOR . $filename;
+    }
+  }
+
+  /**
+   * Pre package uninstall event callback.
+   *
+   * @param \Composer\DependencyResolver\Operation\UninstallOperation $operation
+   */
+  private function onPrePackageUninstall(UninstallOperation $operation): void {
+    // Clean up Draft Environment config files upon package uninstallation.
+    if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
+      $fs = new Filesystem();
+      $fs->remove($this->getConfigurationFilepaths());
     }
   }
 

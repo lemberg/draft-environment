@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lemberg\Tests\Draft\Environment\Composer;
 
 use Composer\Composer;
@@ -14,6 +16,7 @@ use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
+use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,13 +25,22 @@ use PHPUnit\Framework\TestCase;
  * @covers \Lemberg\Draft\Environment\Composer\Plugin
  * @uses \Lemberg\Draft\Environment\App
  */
-class PluginTest extends TestCase {
+final class PluginTest extends TestCase {
+
+  use PHPMock;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function setUpBeforeClass(): void {
+    self::defineFunctionMock('Lemberg\Draft\Environment\Composer', 'getcwd');
+  }
 
   /**
    * Tests composer plugin activation, as well as correct configuration of the
    * event subscribers.
    */
-  public function testComposerPlugin() {
+  public function testComposerPlugin(): void {
 
     // Ensure that plugin activation does not produce any errors.
     $io = $this->createMock(IOInterface::class);
@@ -40,7 +52,7 @@ class PluginTest extends TestCase {
     $expected = [
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPrePackageUninstall',
     ];
-    $this->assertSame($expected, Plugin::getSubscribedEvents());
+    self::assertSame($expected, Plugin::getSubscribedEvents());
 
     // Ensure that event handlers do not produce any errors.
     $policy = $this->createMock(PolicyInterface::class);
@@ -54,10 +66,26 @@ class PluginTest extends TestCase {
 
     // Ensure that plugin passes events to the app.
     $app = $this->createMock(App::class);
-    $app->expects($this->once())->method('onPrePackageUninstall');
+    $app->expects(self::once())->method('handle');
     $plugin->setApp($app);
 
     $plugin->onPrePackageUninstall($event);
+  }
+
+  /**
+   * Tests composer plugin throws an exception when getcwd() returns FALSE.
+   */
+  public function testComposerPluginThrowsExceptionWhenGetcwdReturnsFalse(): void {
+    $getcwd = $this->getFunctionMock('Lemberg\Draft\Environment\Composer', 'getcwd');
+    $getcwd->expects(self::once())->willReturn(FALSE);
+
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage('Unable to get the current working directory. Please check if any one of the parent directories does not have the readable or search mode set, even if the current directory does. See https://www.php.net/manual/function.getcwd.php');
+
+    $io = $this->createMock(IOInterface::class);
+    $composer = $this->createMock(Composer::class);
+    $plugin = new Plugin();
+    $plugin->activate($composer, $io);
   }
 
 }
