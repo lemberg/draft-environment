@@ -18,7 +18,7 @@ jobs:
       php: 7.2
 
       before_install:
-        - xdebug-disable
+        - phpenv config-rm xdebug.ini
         - composer self-update
 
       install:
