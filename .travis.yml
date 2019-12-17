@@ -1,56 +1,38 @@
-dist: xenial
-sudo: required
+stages:
+  - PHP
+  - Vagrant
+  - Molecule
 
-language: python
-python: "3.6"
+jobs:
+  include:
+    - &PHP
 
-env:
-  - MOLECULE_PLATFORM=ubuntu:16.04
-  - MOLECULE_PLATFORM=ubuntu:18.04
+      dist: xenial
 
-cache:
-  apt: true
-  pip: true
-  directories:
-    - "$HOME/.composer/cache"
+      cache:
+        directories:
+          - "$HOME/.composer/cache"
 
-services:
-  - docker
+      language: php
+  
+      php: 7.2
 
-before_install:
-  # Update composer
-  - phpenv config-rm xdebug.ini
-  - composer self-update
-  # Download and register Oracle VirtualBox keys
-  - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-  - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
-  # Add Oracle VirtualBox repository
-  - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian xenial contrib"
-  # Update apt-get
-  - sudo apt-get update -qq
-  # Install Linux headers
-  - sudo apt-get -y --force-yes install linux-headers-`uname -r`
-  # Install VirtualBox 5.2
-  - sudo apt-get install virtualbox-5.2
-  # Install Vagrant 2.2.6
-  # Todo: install from a package repository, not from a hardcoded URL.
-  - curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb
-  - sudo dpkg -i vagrant_2.2.6_x86_64.deb
+      before_install:
+        - xdebug-disable
+        - composer self-update
 
-install:
-  - composer install --no-interaction --no-progress --no-suggest
-  - pip install ansible==2.6.* docker molecule
+      install:
+        - composer install --no-interaction --no-progress --no-suggest
 
-before_script:
-  - vagrant --version
-  - composer --version
-  - ansible --version
-  - molecule --version
+      script:
+        - ./bin/phpcs
+        - ./bin/phpstan analyse
+        - ./bin/phpunit
 
-script:
-  - composer validate --no-check-all --ansi
-  - vagrant status
-  - ./bin/phpcs
-  - ./bin/phpstan analyse
-  - ./bin/phpunit
-  - molecule test
+    - <<: *PHP
+
+      php: 7.3
+
+    - <<: *PHP
+
+      php: 7.4
