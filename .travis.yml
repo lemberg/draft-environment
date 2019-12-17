@@ -58,7 +58,9 @@ jobs:
       cache:
         apt: true
 
-      language: minimal
+      language: php
+
+      php: 7.2
 
       env: VIRTUAL_BOX_VERSION=5.2
 
@@ -142,7 +144,7 @@ jobs:
 
       language: php
 
-      python: 7.2
+      php: 7.2
 
       before_install:
         - composer self-update
