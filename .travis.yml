@@ -1,11 +1,12 @@
 stages:
   - PHP
-  - Vagrant
   - Molecule
 
 jobs:
   include:
     - &PHP
+
+      stage: PHP
 
       os: linux
 
@@ -39,29 +40,55 @@ jobs:
 
       php: 7.4
 
-    - &Vagrant
+    - &Molecule
 
-      os: windows
+      stage: Molecule
 
-      language: bash
+      os: linux
+
+      dist: xenial
+
+      cache:
+        apt: true
+        pip: true
+        directories:
+          - "$HOME/.composer/cache"
+
+      language: php
+
+      php: 7.2
 
       env:
-        - PHP_VERSION=7.2.25
-        - VIRTUAL_BOX_VERSION=5.2.34
-        - VAGRANT_VERSION=2.2.6
+        - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:16.04
+        - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:18.04
 
       before_install:
-        - choco install php --version $PHP_VERSION
-        - choco install composer
-        - choco install virtualbox --version $VIRTUAL_BOX_VERSION
-        - choco install vagrant --version $VAGRANT_VERSION --ignore-detected-reboot
+        # Download and register Oracle VirtualBox keys
+        - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+        - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+        # Add Oracle VirtualBox repository
+        - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian xenial contrib"
+        # Update apt-get
+        - sudo apt-get update -qq
+        # Install Linux headers
+        - sudo apt-get -y --force-yes install linux-headers-`uname -r`
+        # Install VirtualBox
+        - sudo apt-get install virtualbox-${VIRTUAL_BOX_VERSION}
+        # Install Vagrant
+        # Todo: install from a package repository, not from a hardcoded URL.s
+        - curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb
+        - sudo dpkg -i vagrant_2.2.6_x86_64.deb
 
       install:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
+        - pip install ansible==2.6.* docker molecule
 
       script:
-        - vagrant up
+        - vagrant status
+        - molecule test
 
-    - <<: *Vagrant
+    - <<: *Molecule
 
-      env: VIRTUAL_BOX_VERSION=6.0.14
+      env:
+        - VIRTUAL_BOX_VERSION=6.0 MOLECULE_PLATFORM=ubuntu:16.04
+        - VIRTUAL_BOX_VERSION=6.0 MOLECULE_PLATFORM=ubuntu:18.04
