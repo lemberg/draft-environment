@@ -30,7 +30,9 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
   }
 
   /**
-   * {@inheritdoc}
+   * Returns an array of event names this subscriber wants to listen to.
+   *
+   * @return array<string, string>
    */
   public static function getSubscribedEvents(): array {
     return [

@@ -69,7 +69,7 @@ final class App {
    * Generates and array of file paths to the Draft Environment configuration
    * files.
    *
-   * @return \Iterator
+   * @return \Iterator<int, string>
    */
   public function getConfigurationFilepaths(): \Iterator {
     foreach (static::CONFIGURATION_FILENAMES as $filename) {
