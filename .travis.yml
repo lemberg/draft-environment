@@ -43,13 +43,13 @@ jobs:
 
       os: windows
 
-      language: php
-
-      php: 7.2
+      language: bash
 
       env: VIRTUAL_BOX_VERSION=5.2.34
 
       before_install:
+        - choco install php --version 7.2
+        - choco install composer
         - choco install virtualbox --version $VIRTUAL_BOX_VERSION
         - choco install vagrant --version 2.2.6
 
