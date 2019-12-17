@@ -45,13 +45,16 @@ jobs:
 
       language: bash
 
-      env: VIRTUAL_BOX_VERSION=5.2.34
+      env:
+        - PHP_VERSION=7.2.25
+        - VIRTUAL_BOX_VERSION=5.2.34
+        - VAGRANT_VERSION=2.2.6
 
       before_install:
-        - choco install php --version 7.2
+        - choco install php --version $PHP_VERSION
         - choco install composer
         - choco install virtualbox --version $VIRTUAL_BOX_VERSION
-        - choco install vagrant --version 2.2.6
+        - choco install vagrant --version $VAGRANT_VERSION --ignore-detected-reboot
 
       install:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
