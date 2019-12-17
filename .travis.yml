@@ -1,9 +1,14 @@
 stages:
   - PHP
+  - Vagrant
   - Molecule
 
 jobs:
   fast_finish: true
+  allow_failures:
+    - stage: Vagrant
+      env: VIRTUAL_BOX_VERSION=6.1
+
   include:
     - &PHP
 
@@ -41,9 +46,9 @@ jobs:
 
       php: 7.4
 
-    - &Molecule
+    - &Vagrant
 
-      stage: Molecule
+      stage: Vagrant
 
       os: linux
 
@@ -51,18 +56,14 @@ jobs:
 
       cache:
         apt: true
-        pip: true
-        directories:
-          - "$HOME/.composer/cache"
 
-      language: python
+      language: mimimal
 
-      python: 3.6
-
-      env:
-        - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:16.04
+      env: VIRTUAL_BOX_VERSION=5.2
 
       before_install:
+        - phpenv config-rm xdebug.ini
+        - composer self-update
         # Download and register Oracle VirtualBox keys
         - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
         - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
@@ -80,24 +81,48 @@ jobs:
         - sudo dpkg -i vagrant_2.2.6_x86_64.deb
 
       install:
-        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
-        - pip install ansible==2.6.* docker molecule
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no--dev
 
       script:
         - vagrant status
+
+    - <<: *Vagrant
+
+      env: VIRTUAL_BOX_VERSION=6.0
+
+    - <<: *Vagrant
+
+      env: VIRTUAL_BOX_VERSION=6.1
+
+    - &Molecule
+
+      stage: Molecule
+
+      os: linux
+
+      dist: xenial
+
+      cache:
+        pip: true
+        directories:
+          - "$HOME/.composer/cache"
+
+      language: python
+
+      python: 3.6
+
+      env: MOLECULE_PLATFORM=ubuntu:16.04
+
+      before_install:
+        - composer self-update
+
+      install:
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+        - pip install ansible==2.6.* docker molecule
+
+      script:
         - molecule test
 
     - <<: *Molecule
 
-      env:
-        - VIRTUAL_BOX_VERSION=5.2 MOLECULE_PLATFORM=ubuntu:18.04
-
-    - <<: *Molecule
-
-      env:
-        - VIRTUAL_BOX_VERSION=6.0 MOLECULE_PLATFORM=ubuntu:16.04
-
-    - <<: *Molecule
-
-      env:
-        - VIRTUAL_BOX_VERSION=6.0 MOLECULE_PLATFORM=ubuntu:18.04
+      env: MOLECULE_PLATFORM=ubuntu:18.04
