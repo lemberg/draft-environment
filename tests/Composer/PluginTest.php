@@ -30,7 +30,7 @@ final class PluginTest extends TestCase {
    * Tests composer plugin activation, as well as correct configuration of the
    * event subscribers.
    */
-  public function testComposerPlugin() {
+  public function testComposerPlugin(): void {
 
     // Ensure that plugin activation does not produce any errors.
     $io = $this->createMock(IOInterface::class);
