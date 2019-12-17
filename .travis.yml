@@ -7,6 +7,8 @@ jobs:
   include:
     - &PHP
 
+      os: linux
+
       dist: xenial
 
       cache:
@@ -39,9 +41,11 @@ jobs:
 
     - &Vagrant
 
-      dist: windows
+      os: windows
 
       language: php
+
+      php: 7.2
 
       env: VIRTUAL_BOX_VERSION=5.2.34
 
