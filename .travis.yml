@@ -2,6 +2,7 @@ stages:
   - PHP
   - Vagrant
   - Molecule
+  - Code coverage
 
 jobs:
   fast_finish: true
@@ -126,3 +127,31 @@ jobs:
     - <<: *Molecule
 
       env: MOLECULE_PLATFORM=ubuntu:18.04
+
+    - &CodeCoverage
+
+      stage: Code Coverage
+
+      os: linux
+
+      dist: xenial
+
+      cache:
+        directories:
+          - "$HOME/.composer/cache"
+
+      language: php
+
+      python: 7.2
+
+      before_install:
+        - composer self-update
+
+      install:
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      script:
+        - ./bin/phpunit --coverage-clover=coverage.xml
+
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
