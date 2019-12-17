@@ -1,56 +1,159 @@
-dist: xenial
-sudo: required
+stages:
+  - PHP
+  - Vagrant
+  - Molecule
+  - Code coverage
 
-language: python
-python: "3.6"
+jobs:
+  fast_finish: true
+  allow_failures:
+    - stage: Vagrant
+      env: VIRTUAL_BOX_VERSION=6.1
 
-env:
-  - MOLECULE_PLATFORM=ubuntu:16.04
-  - MOLECULE_PLATFORM=ubuntu:18.04
+  include:
+    - &PHP
 
-cache:
-  apt: true
-  pip: true
-  directories:
-    - "$HOME/.composer/cache"
+      stage: PHP
 
-services:
-  - docker
+      os: linux
 
-before_install:
-  # Update composer
-  - phpenv config-rm xdebug.ini
-  - composer self-update
-  # Download and register Oracle VirtualBox keys
-  - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-  - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
-  # Add Oracle VirtualBox repository
-  - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian xenial contrib"
-  # Update apt-get
-  - sudo apt-get update -qq
-  # Install Linux headers
-  - sudo apt-get -y --force-yes install linux-headers-`uname -r`
-  # Install VirtualBox 5.2
-  - sudo apt-get install virtualbox-5.2
-  # Install Vagrant 2.2.6
-  # Todo: install from a package repository, not from a hardcoded URL.
-  - curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb
-  - sudo dpkg -i vagrant_2.2.6_x86_64.deb
+      dist: xenial
 
-install:
-  - composer install --no-interaction --no-progress --no-suggest
-  - pip install ansible==2.6.* docker molecule
+      cache:
+        directories:
+          - "$HOME/.composer/cache"
 
-before_script:
-  - vagrant --version
-  - composer --version
-  - ansible --version
-  - molecule --version
+      language: php
+  
+      php: 7.2
 
-script:
-  - composer validate --no-check-all --ansi
-  - vagrant status
-  - ./bin/phpcs
-  - ./bin/phpstan analyse
-  - ./bin/phpunit
-  - molecule test
+      before_install:
+        - phpenv config-rm xdebug.ini
+        - composer self-update
+
+      install:
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      script:
+        - ./bin/phpcs
+        - ./bin/phpstan analyse
+        - ./bin/phpunit
+
+    - <<: *PHP
+
+      php: 7.3
+
+    - <<: *PHP
+
+      php: 7.4
+
+    - &Vagrant
+
+      stage: Vagrant
+
+      os: linux
+
+      dist: xenial
+
+      cache:
+        apt: true
+
+      language: php
+
+      php: 7.2
+
+      env: VIRTUAL_BOX_VERSION=5.2
+
+      before_install:
+        - phpenv config-rm xdebug.ini
+        - composer self-update
+        # Download and register Oracle VirtualBox keys
+        - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+        - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+        # Add Oracle VirtualBox repository
+        - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian xenial contrib"
+        # Update apt-get
+        - sudo apt-get update -qq
+        # Install Linux headers
+        - sudo apt-get -y --force-yes install linux-headers-`uname -r`
+        # Install VirtualBox
+        - sudo apt-get install virtualbox-${VIRTUAL_BOX_VERSION}
+        # Install Vagrant
+        # Todo: install from a package repository, not from a hardcoded URL.s
+        - curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb
+        - sudo dpkg -i vagrant_2.2.6_x86_64.deb
+
+      install:
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+
+      script:
+        - vagrant status
+
+    - <<: *Vagrant
+
+      env: VIRTUAL_BOX_VERSION=6.0
+
+    - <<: *Vagrant
+
+      env: VIRTUAL_BOX_VERSION=6.1
+
+    - &Molecule
+
+      stage: Molecule
+
+      os: linux
+
+      dist: xenial
+
+      cache:
+        pip: true
+        directories:
+          - "$HOME/.composer/cache"
+
+      language: python
+
+      python: 3.6
+
+      env: MOLECULE_PLATFORM=ubuntu:16.04
+
+      before_install:
+        - composer self-update
+
+      install:
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+        - pip install ansible==2.6.* docker molecule
+
+      script:
+        - molecule test
+
+    - <<: *Molecule
+
+      env: MOLECULE_PLATFORM=ubuntu:18.04
+
+    - &CodeCoverage
+
+      stage: Code Coverage
+
+      os: linux
+
+      dist: xenial
+
+      cache:
+        directories:
+          - "$HOME/.composer/cache"
+
+      language: php
+
+      php: 7.2
+
+      before_install:
+        - composer self-update
+
+      install:
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      script:
+        - ./bin/phpunit --coverage-clover=coverage.xml
+
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
