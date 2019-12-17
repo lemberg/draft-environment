@@ -51,5 +51,6 @@ script:
   - composer validate --no-check-all --ansi
   - vagrant status
   - ./bin/phpcs
+  - ./bin/phpstan analyse
   - ./bin/phpunit
   - molecule test
