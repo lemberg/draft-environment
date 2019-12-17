@@ -66,7 +66,7 @@ final class PluginTest extends TestCase {
 
     // Ensure that plugin passes events to the app.
     $app = $this->createMock(App::class);
-    $app->expects(self::once())->method('onPrePackageUninstall');
+    $app->expects(self::once())->method('handle');
     $plugin->setApp($app);
 
     $plugin->onPrePackageUninstall($event);

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment;
 
 use Composer\Composer;
+use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\Installer\PackageEvent;
+use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -51,15 +53,13 @@ final class App {
   }
 
   /**
-   * Pre package uninstall event callback.
+   * Composer package events handler callback.
    *
    * @param \Composer\Installer\PackageEvent $event
    */
-  public function onPrePackageUninstall(PackageEvent $event): void {
-    // Clean up Draft Environment config files upon package uninstallation.
-    if ($event->getOperation()->getPackage()->getName() === self::PACKAGE_NAME) {
-      $fs = new Filesystem();
-      $fs->remove($this->getConfigurationFilepaths());
+  public function handle(PackageEvent $event): void {
+    if ($event->getName() === PackageEvents::PRE_PACKAGE_UNINSTALL && $event->getOperation() instanceof UninstallOperation) {
+      $this->onPrePackageUninstall($event->getOperation());
     }
   }
 
@@ -72,6 +72,19 @@ final class App {
   public function getConfigurationFilepaths(): \Iterator {
     foreach (static::CONFIGURATION_FILENAMES as $filename) {
       yield $this->workingDirectory . DIRECTORY_SEPARATOR . $filename;
+    }
+  }
+
+  /**
+   * Pre package uninstall event callback.
+   *
+   * @param \Composer\DependencyResolver\Operation\UninstallOperation $operation
+   */
+  private function onPrePackageUninstall(UninstallOperation $operation): void {
+    // Clean up Draft Environment config files upon package uninstallation.
+    if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
+      $fs = new Filesystem();
+      $fs->remove($this->getConfigurationFilepaths());
     }
   }
 

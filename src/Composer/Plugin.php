@@ -50,7 +50,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
    * @param \Composer\Installer\PackageEvent $event
    */
   public function onPrePackageUninstall(PackageEvent $event): void {
-    $this->app->onPrePackageUninstall($event);
+    $this->app->handle($event);
   }
 
   /**
