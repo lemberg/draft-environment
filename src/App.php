@@ -11,15 +11,12 @@ use Composer\IO\IOInterface;
 /**
  * Draft Environment application.
  */
-class App {
+final class App {
 
-  const PACKAGE_NAME = 'lemberg/draft-environment';
-
-  const SETTINGS_FILENAME = 'vm-settings.yml';
-
-  const VIRTUAL_MACHINE_FILENAME = 'Vagrantfile';
-
-  const CONFIGURATION_FILENAMES = [
+  public const PACKAGE_NAME = 'lemberg/draft-environment';
+  private const SETTINGS_FILENAME = 'vm-settings.yml';
+  private const VIRTUAL_MACHINE_FILENAME = 'Vagrantfile';
+  private const CONFIGURATION_FILENAMES = [
     self::SETTINGS_FILENAME,
     self::VIRTUAL_MACHINE_FILENAME,
   ];
@@ -27,17 +24,17 @@ class App {
   /**
    * @var \Composer\Composer
    */
-  protected $composer;
+  private $composer;
 
   /**
    * @var \Composer\IO\IOInterface
    */
-  protected $io;
+  private $io;
 
   /**
    * @var string
    */
-  protected $workingDirectory;
+  private $workingDirectory;
 
   /**
    * Draft Environment app constructor.
@@ -59,7 +56,7 @@ class App {
    */
   public function onPrePackageUninstall(PackageEvent $event): void {
     // Clean up Draft Environment config files upon package uninstallation.
-    if ($event->getOperation()->getPackage()->getName() === static::PACKAGE_NAME) {
+    if ($event->getOperation()->getPackage()->getName() === self::PACKAGE_NAME) {
       foreach ($this->getConfigurationFilepaths() as $filepath) {
         if (file_exists($filepath)) {
           unlink($filepath);

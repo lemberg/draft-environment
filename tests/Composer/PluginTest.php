@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Lemberg\Draft\Environment\Composer\Plugin
  * @uses \Lemberg\Draft\Environment\App
  */
-class PluginTest extends TestCase {
+final class PluginTest extends TestCase {
 
   /**
    * Tests composer plugin activation, as well as correct configuration of the

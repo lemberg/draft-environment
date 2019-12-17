@@ -15,12 +15,12 @@ use Lemberg\Draft\Environment\App;
 /**
  * Composer plugin for configuring Draft Environment.
  */
-class Plugin implements PluginInterface, EventSubscriberInterface {
+final class Plugin implements PluginInterface, EventSubscriberInterface {
 
   /**
    * @var \Lemberg\Draft\Environment\App
    */
-  protected $app;
+  private $app;
 
   /**
    * {@inheritdoc}

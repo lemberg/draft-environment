@@ -17,13 +17,14 @@ use Composer\Repository\CompositeRepository;
 use Lemberg\Draft\Environment\App;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Tests Draft Environment app.
  *
  * @covers \Lemberg\Draft\Environment\App
  */
-class AppTest extends TestCase {
+final class AppTest extends TestCase {
 
   /**
    * @var \Composer\Composer
