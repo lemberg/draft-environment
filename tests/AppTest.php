@@ -56,8 +56,9 @@ final class AppTest extends TestCase {
   public function testComposerPrePackageUninstallEvent(): void {
 
     // Configuration files must exists before the test execution.
+    $fs = new Filesystem();
     foreach ($this->app->getConfigurationFilepaths() as $filepath) {
-      file_put_contents($filepath, '');
+      $fs->dumpFile($filepath, '');
     }
 
     // Mock required PackageEvent constructor arguments.

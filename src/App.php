@@ -7,6 +7,7 @@ namespace Lemberg\Draft\Environment;
 use Composer\Composer;
 use Composer\Installer\PackageEvent;
 use Composer\IO\IOInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Draft Environment application.
@@ -57,11 +58,8 @@ final class App {
   public function onPrePackageUninstall(PackageEvent $event): void {
     // Clean up Draft Environment config files upon package uninstallation.
     if ($event->getOperation()->getPackage()->getName() === self::PACKAGE_NAME) {
-      foreach ($this->getConfigurationFilepaths() as $filepath) {
-        if (file_exists($filepath)) {
-          unlink($filepath);
-        }
-      }
+      $fs = new Filesystem();
+      $fs->remove($this->getConfigurationFilepaths());
     }
   }
 
