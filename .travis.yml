@@ -81,7 +81,7 @@ jobs:
         - sudo dpkg -i vagrant_2.2.6_x86_64.deb
 
       install:
-        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no--dev
+        - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
 
       script:
         - vagrant status
