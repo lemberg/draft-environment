@@ -74,7 +74,7 @@ final class AppTest extends TestCase {
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $policy, $pool, $installedRepo, $request, [$operation], $operation);
     $this->app->onPrePackageUninstall($event);
     foreach ($this->app->getConfigurationFilepaths() as $filepath) {
-      $this->assertFileExists($filepath);
+      self::assertFileExists($filepath);
     }
 
     // Clean up must run when "lemberg/draft-environment" is being uninstalled.
@@ -83,7 +83,7 @@ final class AppTest extends TestCase {
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $policy, $pool, $installedRepo, $request, [$operation], $operation);
     $this->app->onPrePackageUninstall($event);
     foreach ($this->app->getConfigurationFilepaths() as $filepath) {
-      $this->assertFileNotExists($filepath);
+      self::assertFileNotExists($filepath);
     }
   }
 

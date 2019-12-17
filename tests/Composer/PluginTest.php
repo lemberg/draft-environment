@@ -42,7 +42,7 @@ final class PluginTest extends TestCase {
     $expected = [
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPrePackageUninstall',
     ];
-    $this->assertSame($expected, Plugin::getSubscribedEvents());
+    self::assertSame($expected, Plugin::getSubscribedEvents());
 
     // Ensure that event handlers do not produce any errors.
     $policy = $this->createMock(PolicyInterface::class);
@@ -56,7 +56,7 @@ final class PluginTest extends TestCase {
 
     // Ensure that plugin passes events to the app.
     $app = $this->createMock(App::class);
-    $app->expects($this->once())->method('onPrePackageUninstall');
+    $app->expects(self::once())->method('onPrePackageUninstall');
     $plugin->setApp($app);
 
     $plugin->onPrePackageUninstall($event);
