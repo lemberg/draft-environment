@@ -22,4 +22,7 @@
       <directory>./src</directory>
     </whitelist>
   </filter>
+  <extensions>
+    <extension class="Lemberg\Tests\Draft\Environment\PHPUnit\Hook\BypassFinalHook"/>
+  </extensions>
 </phpunit>
