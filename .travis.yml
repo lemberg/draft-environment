@@ -57,7 +57,7 @@ jobs:
       cache:
         apt: true
 
-      language: mimimal
+      language: minimal
 
       env: VIRTUAL_BOX_VERSION=5.2
 
