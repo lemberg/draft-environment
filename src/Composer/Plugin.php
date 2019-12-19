@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment\Composer;
 
 use Composer\Composer;
+use Composer\EventDispatcher\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
@@ -40,17 +40,17 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPrePackageUninstall',
+      PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
     ];
   }
 
   /**
-   * Pre package uninstall event callback.
+   * Composer events handler.
    *
-   * @param \Composer\Installer\PackageEvent $event
+   * @param \Composer\EventDispatcher\Event $event
    */
-  public function onPrePackageUninstall(PackageEvent $event): void {
-    $this->app->handle($event);
+  public function onComposerEvent(Event $event): void {
+    $this->app->handleEvent($event);
   }
 
   /**

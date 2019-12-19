@@ -96,7 +96,7 @@ final class AppTest extends TestCase {
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $this->app->handle($event);
+    $this->app->handleEvent($event);
     foreach ($this->app->getConfigurationFilepaths() as $filepath) {
       self::assertFileExists($filepath);
     }
@@ -106,7 +106,7 @@ final class AppTest extends TestCase {
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $this->app->handle($event);
+    $this->app->handleEvent($event);
     foreach ($this->app->getConfigurationFilepaths() as $filepath) {
       self::assertFileExists($filepath);
     }
@@ -115,7 +115,7 @@ final class AppTest extends TestCase {
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $this->app->handle($event);
+    $this->app->handleEvent($event);
     foreach ($this->app->getConfigurationFilepaths() as $filepath) {
       self::assertFileNotExists($filepath);
     }

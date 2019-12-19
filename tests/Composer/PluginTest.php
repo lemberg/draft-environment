@@ -50,7 +50,7 @@ final class PluginTest extends TestCase {
 
     // Ensure that plugin is subscribed to the correct events.
     $expected = [
-      PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPrePackageUninstall',
+      PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
     ];
     self::assertSame($expected, Plugin::getSubscribedEvents());
 
@@ -66,10 +66,10 @@ final class PluginTest extends TestCase {
 
     // Ensure that plugin passes events to the app.
     $app = $this->createMock(App::class);
-    $app->expects(self::once())->method('handle');
+    $app->expects(self::once())->method('handleEvent');
     $plugin->setApp($app);
 
-    $plugin->onPrePackageUninstall($event);
+    $plugin->onComposerEvent($event);
   }
 
   /**

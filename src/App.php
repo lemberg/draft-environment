@@ -6,6 +6,7 @@ namespace Lemberg\Draft\Environment;
 
 use Composer\Composer;
 use Composer\DependencyResolver\Operation\UninstallOperation;
+use Composer\EventDispatcher\Event;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
@@ -53,13 +54,13 @@ final class App {
   }
 
   /**
-   * Composer package events handler callback.
+   * Composer events handler.
    *
-   * @param \Composer\Installer\PackageEvent $event
+   * @param \Composer\EventDispatcher\Event $event
    */
-  public function handle(PackageEvent $event): void {
-    if ($event->getName() === PackageEvents::PRE_PACKAGE_UNINSTALL && $event->getOperation() instanceof UninstallOperation) {
-      $this->onPrePackageUninstall($event->getOperation());
+  public function handleEvent(Event $event): void {
+    if ($event instanceof PackageEvent) {
+      $this->handlePackageEvent($event);
     }
   }
 
@@ -72,6 +73,17 @@ final class App {
   public function getConfigurationFilepaths(): \Iterator {
     foreach (static::CONFIGURATION_FILENAMES as $filename) {
       yield $this->workingDirectory . DIRECTORY_SEPARATOR . $filename;
+    }
+  }
+
+  /**
+   * Composer package events handler.
+   *
+   * @param \Composer\Installer\PackageEvent $event
+   */
+  private function handlePackageEvent(PackageEvent $event): void {
+    if ($event->getName() === PackageEvents::PRE_PACKAGE_UNINSTALL && $event->getOperation() instanceof UninstallOperation) {
+      $this->onPrePackageUninstall($event->getOperation());
     }
   }
 
