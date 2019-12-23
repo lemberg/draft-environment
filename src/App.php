@@ -10,7 +10,7 @@ use Composer\EventDispatcher\Event;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Lemberg\Draft\Environment\Config\InstallManager;
 
 /**
  * Draft Environment application.
@@ -18,12 +18,6 @@ use Symfony\Component\Filesystem\Filesystem;
 final class App {
 
   public const PACKAGE_NAME = 'lemberg/draft-environment';
-  private const SETTINGS_FILENAME = 'vm-settings.yml';
-  private const VIRTUAL_MACHINE_FILENAME = 'Vagrantfile';
-  private const CONFIGURATION_FILENAMES = [
-    self::SETTINGS_FILENAME,
-    self::VIRTUAL_MACHINE_FILENAME,
-  ];
 
   /**
    * @var \Composer\Composer
@@ -36,21 +30,21 @@ final class App {
   private $io;
 
   /**
-   * @var string
+   * @var \Lemberg\Draft\Environment\Config\InstallManager
    */
-  private $workingDirectory;
+  private $configInstallManager;
 
   /**
    * Draft Environment app constructor.
    *
    * @param \Composer\Composer $composer
    * @param \Composer\IO\IOInterface $io
-   * @param string $directory
+   * @param \Lemberg\Draft\Environment\Config\InstallManager $configInstallManager
    */
-  public function __construct(Composer $composer, IOInterface $io, string $directory) {
+  public function __construct(Composer $composer, IOInterface $io, InstallManager $configInstallManager) {
     $this->composer = $composer;
     $this->io = $io;
-    $this->workingDirectory = $directory;
+    $this->configInstallManager = $configInstallManager;
   }
 
   /**
@@ -61,18 +55,6 @@ final class App {
   public function handleEvent(Event $event): void {
     if ($event instanceof PackageEvent) {
       $this->handlePackageEvent($event);
-    }
-  }
-
-  /**
-   * Generates and array of file paths to the Draft Environment configuration
-   * files.
-   *
-   * @return \Iterator<int, string>
-   */
-  public function getConfigurationFilepaths(): \Iterator {
-    foreach (static::CONFIGURATION_FILENAMES as $filename) {
-      yield $this->workingDirectory . DIRECTORY_SEPARATOR . $filename;
     }
   }
 
@@ -95,8 +77,7 @@ final class App {
   private function onPrePackageUninstall(UninstallOperation $operation): void {
     // Clean up Draft Environment config files upon package uninstallation.
     if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
-      $fs = new Filesystem();
-      $fs->remove($this->getConfigurationFilepaths());
+      $this->configInstallManager->uninstall();
     }
   }
 

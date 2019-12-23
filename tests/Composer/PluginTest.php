@@ -24,10 +24,29 @@ use PHPUnit\Framework\TestCase;
  *
  * @covers \Lemberg\Draft\Environment\Composer\Plugin
  * @uses \Lemberg\Draft\Environment\App
+ * @uses \Lemberg\Draft\Environment\Config\Config
+ * @uses \Lemberg\Draft\Environment\Config\InstallManager
  */
 final class PluginTest extends TestCase {
 
   use PHPMock;
+
+  /**
+   * @var \Composer\Composer
+   */
+  private $composer;
+
+  /**
+   * @var \Composer\IO\IOInterface
+   */
+  private $io;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp(): void {
+    $this->io = $this->createMock(IOInterface::class);
+  }
 
   /**
    * {@inheritdoc}
@@ -41,12 +60,11 @@ final class PluginTest extends TestCase {
    * event subscribers.
    */
   public function testComposerPlugin(): void {
+    $this->setUpComposerMock(TRUE);
 
     // Ensure that plugin activation does not produce any errors.
-    $io = $this->createMock(IOInterface::class);
-    $composer = $this->createMock(Composer::class);
     $plugin = new Plugin();
-    $plugin->activate($composer, $io);
+    $plugin->activate($this->composer, $this->io);
 
     // Ensure that plugin is subscribed to the correct events.
     $expected = [
@@ -62,7 +80,7 @@ final class PluginTest extends TestCase {
 
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
-    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $composer, $io, FALSE, $policy, $pool, $installedRepo, $request, [$operation], $operation);
+    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $policy, $pool, $installedRepo, $request, [$operation], $operation);
 
     // Ensure that plugin passes events to the app.
     $app = $this->createMock(App::class);
@@ -76,16 +94,68 @@ final class PluginTest extends TestCase {
    * Tests composer plugin throws an exception when getcwd() returns FALSE.
    */
   public function testComposerPluginThrowsExceptionWhenGetcwdReturnsFalse(): void {
+    $this->setUpComposerMock(TRUE);
+
     $getcwd = $this->getFunctionMock('Lemberg\Draft\Environment\Composer', 'getcwd');
     $getcwd->expects(self::once())->willReturn(FALSE);
 
     $this->expectException(\RuntimeException::class);
     $this->expectExceptionMessage('Unable to get the current working directory. Please check if any one of the parent directories does not have the readable or search mode set, even if the current directory does. See https://www.php.net/manual/function.getcwd.php');
 
-    $io = $this->createMock(IOInterface::class);
-    $composer = $this->createMock(Composer::class);
     $plugin = new Plugin();
-    $plugin->activate($composer, $io);
+    $plugin->activate($this->composer, $this->io);
+  }
+
+  /**
+   * Tests composer plugin throws an exception when getcwd() returns FALSE.
+   */
+  public function testComposerPluginThrowsExceptionWhenPackageDoesNotExist(): void {
+    $this->setUpComposerMock(FALSE);
+
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage(sprintf('Package %s is not found in the local repository.', App::PACKAGE_NAME));
+
+    $plugin = new Plugin();
+    $plugin->activate($this->composer, $this->io);
+  }
+
+  /**
+   * Sets up Composer instance mock.
+   *
+   * @param bool $returnPackage
+   *   Boolean indicating whether the local repository should find the package
+   *   or not (causing an exception).
+   */
+  private function setUpComposerMock(bool $returnPackage): void {
+    $findPackageReturnValue = $returnPackage ? new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0') : NULL;
+
+    $this->composer = $this->getMockBuilder(Composer::class)
+      ->setMethods([
+        'getRepositoryManager',
+        'getLocalRepository',
+        'findPackage',
+        'getInstallationManager',
+        'getInstallPath',
+      ])
+      ->getMock();
+    $this->composer->expects(self::any())
+      ->method('getRepositoryManager')
+      ->willReturnSelf();
+    $this->composer->expects(self::any())
+      ->method('getLocalRepository')
+      ->willReturnSelf();
+    $this->composer->expects(self::any())
+      ->method('findPackage')
+      ->with(App::PACKAGE_NAME, '*')
+      ->willReturn($findPackageReturnValue);
+
+    $this->composer->expects(self::any())
+      ->method('getInstallationManager')
+      ->willReturnSelf();
+    $this->composer->expects(self::any())
+      ->method('getInstallPath')
+      ->with($findPackageReturnValue)
+      ->willReturn(sys_get_temp_dir());
   }
 
 }

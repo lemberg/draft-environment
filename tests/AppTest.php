@@ -16,6 +16,7 @@ use Composer\IO\IOInterface;
 use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
 use Lemberg\Draft\Environment\App;
+use Lemberg\Draft\Environment\Config\InstallManager;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -24,6 +25,8 @@ use Symfony\Component\Filesystem\Filesystem;
  * Tests Draft Environment app.
  *
  * @covers \Lemberg\Draft\Environment\App
+ * @uses \Lemberg\Draft\Environment\Config\Config
+ * @uses \Lemberg\Draft\Environment\Config\InstallManager
  */
 final class AppTest extends TestCase {
 
@@ -41,6 +44,11 @@ final class AppTest extends TestCase {
    * @var \Lemberg\Draft\Environment\App
    */
   private $app;
+
+  /**
+   * @var \Lemberg\Draft\Environment\Config\InstallManager
+   */
+  private $configInstallManager;
 
   /**
    *
@@ -72,7 +80,6 @@ final class AppTest extends TestCase {
   protected function setUp(): void {
     $this->io = $this->createMock(IOInterface::class);
     $this->composer = $this->createMock(Composer::class);
-    $this->app = new App($this->composer, $this->io, vfsStream::setup()->url());
 
     // Mock required PackageEvent constructor arguments.
     $this->policy = $this->createMock(PolicyInterface::class);
@@ -80,9 +87,16 @@ final class AppTest extends TestCase {
     $this->request = new Request();
     $this->installedRepo = $this->createMock(CompositeRepository::class);
 
-    // Configuration files must exists before the test execution.
+    // Mock source and target configuration directories.
+    $root = vfsStream::setup()->url();
     $fs = new Filesystem();
-    foreach ($this->app->getConfigurationFilepaths() as $filepath) {
+    $fs->mkdir(["$root/source", "$root/target"]);
+
+    $this->configInstallManager = new InstallManager($this->composer, $this->io, "$root/source", "$root/target");
+    $this->app = new App($this->composer, $this->io, $this->configInstallManager);
+
+    // Configuration files must exists before the test execution.
+    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       $fs->dumpFile($filepath, '');
     }
   }
@@ -97,7 +111,7 @@ final class AppTest extends TestCase {
     $operation = new UninstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $this->app->handleEvent($event);
-    foreach ($this->app->getConfigurationFilepaths() as $filepath) {
+    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
     }
 
@@ -107,7 +121,7 @@ final class AppTest extends TestCase {
     $operation = new InstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $this->app->handleEvent($event);
-    foreach ($this->app->getConfigurationFilepaths() as $filepath) {
+    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
     }
 
@@ -116,7 +130,7 @@ final class AppTest extends TestCase {
     $operation = new UninstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $this->app->handleEvent($event);
-    foreach ($this->app->getConfigurationFilepaths() as $filepath) {
+    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       self::assertFileNotExists($filepath);
     }
   }
