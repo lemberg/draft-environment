@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment\Composer;
 
 use Composer\Composer;
+use Composer\EventDispatcher\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
+use Lemberg\Draft\Environment\Config\Config;
+use Lemberg\Draft\Environment\Config\InstallManager;
 
 /**
  * Composer plugin for configuring Draft Environment.
@@ -26,11 +29,20 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
    * {@inheritdoc}
    */
   public function activate(Composer $composer, IOInterface $io): void {
-    if (($cwd = getcwd()) === FALSE) {
+    /** @var \Composer\Package\Package|NULL $package */
+    $package = $composer->getRepositoryManager()->getLocalRepository()->findPackage(App::PACKAGE_NAME, '*');
+    if (is_null($package)) {
+      throw new \RuntimeException(sprintf('Package %s is not found in the local repository.', App::PACKAGE_NAME));
+    }
+    $sourceDirectory = $composer->getInstallationManager()->getInstallPath($package);
+
+    if (($targetDirectory = getcwd()) === FALSE) {
       throw new \RuntimeException('Unable to get the current working directory. Please check if any one of the parent directories does not have the readable or search mode set, even if the current directory does. See https://www.php.net/manual/function.getcwd.php');
     }
 
-    $this->setApp(new App($composer, $io, $cwd));
+    $config = new Config($sourceDirectory, $targetDirectory);
+    $configInstallManager = new InstallManager($composer, $io, $config);
+    $this->setApp(new App($composer, $io, $configInstallManager));
   }
 
   /**
@@ -40,17 +52,20 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
-      PackageEvents::PRE_PACKAGE_UNINSTALL => 'onPrePackageUninstall',
+      PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
+      PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
+      ScriptEvents::POST_INSTALL_CMD => 'onComposerEvent',
+      ScriptEvents::POST_UPDATE_CMD => 'onComposerEvent',
     ];
   }
 
   /**
-   * Pre package uninstall event callback.
+   * Composer events handler.
    *
-   * @param \Composer\Installer\PackageEvent $event
+   * @param \Composer\EventDispatcher\Event $event
    */
-  public function onPrePackageUninstall(PackageEvent $event): void {
-    $this->app->handle($event);
+  public function onComposerEvent(Event $event): void {
+    $this->app->handleEvent($event);
   }
 
   /**

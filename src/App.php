@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment;
 
 use Composer\Composer;
+use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Operation\UninstallOperation;
+use Composer\EventDispatcher\Event;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use Composer\Script\Event as ScriptEvent;
+use Composer\Script\ScriptEvents;
+use Lemberg\Draft\Environment\Config\InstallManager;
 
 /**
  * Draft Environment application.
@@ -17,12 +21,6 @@ use Symfony\Component\Filesystem\Filesystem;
 final class App {
 
   public const PACKAGE_NAME = 'lemberg/draft-environment';
-  private const SETTINGS_FILENAME = 'vm-settings.yml';
-  private const VIRTUAL_MACHINE_FILENAME = 'Vagrantfile';
-  private const CONFIGURATION_FILENAMES = [
-    self::SETTINGS_FILENAME,
-    self::VIRTUAL_MACHINE_FILENAME,
-  ];
 
   /**
    * @var \Composer\Composer
@@ -35,43 +33,55 @@ final class App {
   private $io;
 
   /**
-   * @var string
+   * @var \Lemberg\Draft\Environment\Config\InstallManager
    */
-  private $workingDirectory;
+  private $configInstallManager;
+
+  /**
+   * Boolean indicating whether the installation process should run.
+   *
+   * @var bool
+   */
+  private $shouldRunInstallation = FALSE;
 
   /**
    * Draft Environment app constructor.
    *
    * @param \Composer\Composer $composer
    * @param \Composer\IO\IOInterface $io
-   * @param string $directory
+   * @param \Lemberg\Draft\Environment\Config\InstallManager $configInstallManager
    */
-  public function __construct(Composer $composer, IOInterface $io, string $directory) {
+  public function __construct(Composer $composer, IOInterface $io, InstallManager $configInstallManager) {
     $this->composer = $composer;
     $this->io = $io;
-    $this->workingDirectory = $directory;
+    $this->configInstallManager = $configInstallManager;
   }
 
   /**
-   * Composer package events handler callback.
+   * Composer events handler.
    *
-   * @param \Composer\Installer\PackageEvent $event
+   * @param \Composer\EventDispatcher\Event $event
    */
-  public function handle(PackageEvent $event): void {
-    if ($event->getName() === PackageEvents::PRE_PACKAGE_UNINSTALL && $event->getOperation() instanceof UninstallOperation) {
-      $this->onPrePackageUninstall($event->getOperation());
+  public function handleEvent(Event $event): void {
+    if ($event instanceof PackageEvent) {
+      $this->handlePackageEvent($event);
+    }
+    elseif ($event instanceof ScriptEvent) {
+      $this->handleScriptEvent($event);
     }
   }
 
   /**
-   * Generates and array of file paths to the Draft Environment configuration
-   * files.
+   * Composer package events handler.
    *
-   * @return \Iterator<int, string>
+   * @param \Composer\Installer\PackageEvent $event
    */
-  public function getConfigurationFilepaths(): \Iterator {
-    foreach (static::CONFIGURATION_FILENAMES as $filename) {
-      yield $this->workingDirectory . DIRECTORY_SEPARATOR . $filename;
+  private function handlePackageEvent(PackageEvent $event): void {
+    if ($event->getName() === PackageEvents::POST_PACKAGE_INSTALL && $event->getOperation() instanceof InstallOperation) {
+      $this->onPostPackageInstall($event->getOperation());
+    }
+    if ($event->getName() === PackageEvents::PRE_PACKAGE_UNINSTALL && $event->getOperation() instanceof UninstallOperation) {
+      $this->onPrePackageUninstall($event->getOperation());
     }
   }
 
@@ -83,9 +93,43 @@ final class App {
   private function onPrePackageUninstall(UninstallOperation $operation): void {
     // Clean up Draft Environment config files upon package uninstallation.
     if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
-      $fs = new Filesystem();
-      $fs->remove($this->getConfigurationFilepaths());
+      $this->configInstallManager->uninstall();
     }
+  }
+
+  /**
+   * Pre package uninstall event callback.
+   *
+   * @param \Composer\DependencyResolver\Operation\InstallOperation $operation
+   */
+  private function onPostPackageInstall(InstallOperation $operation): void {
+    // Clean up Draft Environment config files upon package uninstallation.
+    if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
+      $this->shouldRunInstallation = TRUE;
+    }
+  }
+
+  /**
+   * Composer script events handler.
+   *
+   * @param \Composer\Script\Event $event
+   */
+  private function handleScriptEvent(ScriptEvent $event): void {
+    if ($event->getName() === ScriptEvents::POST_INSTALL_CMD || $event->getName() === ScriptEvents::POST_UPDATE_CMD) {
+      $this->onPostInstallCommand($event);
+    }
+  }
+
+  /**
+   * Post install command event handler.
+   *
+   * @param \Composer\Script\Event $event
+   */
+  private function onPostInstallCommand(ScriptEvent $event): void {
+    if ($this->shouldRunInstallation) {
+      $this->configInstallManager->install();
+    }
+    $this->shouldRunInstallation = FALSE;
   }
 
 }
