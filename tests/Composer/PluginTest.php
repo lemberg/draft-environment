@@ -14,6 +14,7 @@ use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
+use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
 use phpmock\phpunit\PHPMock;
@@ -23,9 +24,6 @@ use PHPUnit\Framework\TestCase;
  * Tests Draft Environment composer plugin.
  *
  * @covers \Lemberg\Draft\Environment\Composer\Plugin
- * @uses \Lemberg\Draft\Environment\App
- * @uses \Lemberg\Draft\Environment\Config\Config
- * @uses \Lemberg\Draft\Environment\Config\InstallManager
  */
 final class PluginTest extends TestCase {
 
@@ -68,7 +66,10 @@ final class PluginTest extends TestCase {
 
     // Ensure that plugin is subscribed to the correct events.
     $expected = [
+      PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
+      ScriptEvents::POST_INSTALL_CMD => 'onComposerEvent',
+      ScriptEvents::POST_UPDATE_CMD => 'onComposerEvent',
     ];
     self::assertSame($expected, Plugin::getSubscribedEvents());
 

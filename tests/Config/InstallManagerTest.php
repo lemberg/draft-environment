@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Tests\Draft\Environment\Config;
 
 use Composer\Composer;
+use Composer\Config as ComposerConfig;
 use Composer\IO\IOInterface;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\InstallManager;
@@ -16,7 +17,6 @@ use Symfony\Component\Filesystem\Filesystem;
  * Tests Draft Environment configuration install manager.
  *
  * @covers \Lemberg\Draft\Environment\Config\InstallManager
- * @uses \Lemberg\Draft\Environment\Config\Config
  */
 final class InstallManagerTest extends TestCase {
 
@@ -44,20 +44,17 @@ final class InstallManagerTest extends TestCase {
    * {@inheritdoc}
    */
   protected function setUp(): void {
+    $this->composer = new Composer();
+    $this->composer->setConfig(new ComposerConfig());
     $this->io = $this->createMock(IOInterface::class);
-    $this->composer = $this->createMock(Composer::class);
 
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
     $fs = new Filesystem();
     $fs->mkdir(["$this->root/source", "$this->root/target"]);
 
-    $this->configInstallManager = new InstallManager($this->composer, $this->io, "$this->root/source", "$this->root/target");
-
-    // Configuration files must exists before the test execution.
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      $fs->dumpFile($filepath, '');
-    }
+    $config = new Config("$this->root/source", "$this->root/target");
+    $this->configInstallManager = new InstallManager($this->composer, $this->io, $config);
   }
 
   /**
@@ -80,14 +77,32 @@ final class InstallManagerTest extends TestCase {
   }
 
   /**
-   * Tests Draft Environment configuration uninstall.
+   * Tests Draft Environment configuration installation.
    */
-  public function testUninstall(): void {
+  public function testInstall(): void {
+    // Configuration files must exists before the test execution.
+    $fs = new Filesystem();
+    foreach ($this->configInstallManager->getConfig()->getSourceConfigFilepaths() as $filepath) {
+      $fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
+    }
+
+    $this->configInstallManager->install();
     foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
     }
-    $this->configInstallManager->uninstall();
+  }
+
+  /**
+   * Tests Draft Environment configuration uninstall.
+   */
+  public function testUninstall(): void {
+    // Configuration files must exists before the test execution.
+    $fs = new Filesystem();
     foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
+      $fs->dumpFile($filepath, '');
+    }
+    $this->configInstallManager->uninstall();
+    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths(FALSE) as $filepath) {
       self::assertFileNotExists($filepath);
     }
   }

@@ -25,6 +25,7 @@
     "require": {
         "php": "^7.2",
         "composer-plugin-api": "^1.1",
+        "nette/robot-loader": "^3.2",
         "symfony/filesystem": "^3.4|^4",
         "symfony/yaml": "^3.4|^4"
     },

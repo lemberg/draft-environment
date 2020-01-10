@@ -3,5 +3,10 @@ parameters:
 	paths:
 		- src
 		- tests
-	excludes_analyse:
-		- src/Configurer.php
+	ergebnis:
+		classesAllowedToBeExtended:
+			- Lemberg\Draft\Environment\Config\Install\Step\AbstractInstallStep
+	ignoreErrors:
+		-
+			message: '#Method Lemberg\\Draft\\Environment\\Config\\Install\\Step\\AbstractInstallStep::getWeight\(\) is not final, but since the containing class is abstract, it should be.#'
+			path: src/Config/Install/Step/AbstractInstallStep.php

@@ -16,10 +16,16 @@ final class Config {
     self::SOURCE_VM_FILENAME,
   ];
   public const TARGET_CONFIG_FILENAME = 'vm-settings.yml';
+  public const TARGET_LOCAL_CONFIG_FILENAME = 'vm-settings.local.yml';
   public const TARGET_VM_FILENAME = 'Vagrantfile';
+  public const TARGET_GITIGNORE = '.gitignore';
   public const TARGET_CONFIGURATION_FILENAMES = [
     self::TARGET_CONFIG_FILENAME,
     self::TARGET_VM_FILENAME,
+    self::TARGET_GITIGNORE,
+  ];
+  public const TARGET_OPTIONAL_CONFIGURATION_FILENAMES = [
+    self::TARGET_LOCAL_CONFIG_FILENAME,
   ];
 
   /**
@@ -63,6 +69,7 @@ final class Config {
    * Returns file path to the given Draft Environment source configuration file.
    *
    * @return string
+   *   File path to a given source configuration file.
    *
    * @throws \InvalidArgumentException
    *   When non-existing Draft Environment source configuration filename has
@@ -75,17 +82,23 @@ final class Config {
       }
     }
 
-    throw new \InvalidArgumentException(sprintf('Non-existing Draft Environment source configuration filename %s has been passed.', htmlspecialchars($filename, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')));
+    throw new \InvalidArgumentException(sprintf("Non-existing Draft Environment source configuration filename '%s' has been passed.", $filename));
   }
 
   /**
    * Generates and array of file paths to the Draft Environment target
    * configuration files.
    *
+   * @param bool $includeGitIgnore
+   *   Whether to include .gitignore file or not.
+   *
    * @return \Iterator<int, string>
    */
-  public function getTargetConfigFilepaths(): \Iterator {
+  public function getTargetConfigFilepaths(bool $includeGitIgnore = TRUE): \Iterator {
     foreach (self::TARGET_CONFIGURATION_FILENAMES as $filename) {
+      if ($filename === self::TARGET_GITIGNORE && !$includeGitIgnore) {
+        continue;
+      }
       yield $this->targetDirectory . DIRECTORY_SEPARATOR . $filename;
     }
   }
@@ -94,19 +107,21 @@ final class Config {
    * Returns file path to the given Draft Environment target configuration file.
    *
    * @return string
+   *   File path to a given source configuration file.
    *
    * @throws \InvalidArgumentException
    *   When non-existing Draft Environment target configuration filename has
    *   been passed.
    */
   public function getTargetConfigFilepath(string $filename): string {
-    foreach (self::TARGET_CONFIGURATION_FILENAMES as $existingFilename) {
+    $allowedFilenames = array_merge(self::TARGET_CONFIGURATION_FILENAMES, self::TARGET_OPTIONAL_CONFIGURATION_FILENAMES);
+    foreach ($allowedFilenames as $existingFilename) {
       if ($filename === $existingFilename) {
         return $this->targetDirectory . DIRECTORY_SEPARATOR . $filename;
       }
     }
 
-    throw new \InvalidArgumentException(sprintf('Non-existing Draft Environment target configuration filename %s has been passed.', htmlspecialchars($filename, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')));
+    throw new \InvalidArgumentException(sprintf("Non-existing Draft Environment target configuration filename '%s' has been passed.", $filename));
   }
 
 }

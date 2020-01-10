@@ -61,7 +61,7 @@ final class ConfigTest extends TestCase {
 
     $this->expectException(\InvalidArgumentException::class);
     $filename = 'this-file-is-not-part-of-the-draft-environment-project.yml';
-    $this->expectExceptionMessage(sprintf('Non-existing Draft Environment source configuration filename %s has been passed.', $filename));
+    $this->expectExceptionMessage(sprintf("Non-existing Draft Environment source configuration filename '%s' has been passed.", $filename));
     $this->config->getSourceConfigFilepath($filename);
   }
 
@@ -69,11 +69,22 @@ final class ConfigTest extends TestCase {
    * Tests the target configuration file path getter.
    */
   public function testTargetConfigFilepathsGetter(): void {
+    // Test including .gitignore.
+    $expected = [
+      "$this->root/target/" . Config::TARGET_CONFIG_FILENAME,
+      "$this->root/target/" . Config::TARGET_VM_FILENAME,
+      "$this->root/target/" . Config::TARGET_GITIGNORE,
+    ];
+    $generator = $this->config->getTargetConfigFilepaths();
+    self::assertInstanceOf(\Generator::class, $generator);
+    self::assertSame($expected, iterator_to_array($generator));
+
+    // Test excluding .gitignore.
     $expected = [
       "$this->root/target/" . Config::TARGET_CONFIG_FILENAME,
       "$this->root/target/" . Config::TARGET_VM_FILENAME,
     ];
-    $generator = $this->config->getTargetConfigFilepaths();
+    $generator = $this->config->getTargetConfigFilepaths(FALSE);
     self::assertInstanceOf(\Generator::class, $generator);
     self::assertSame($expected, iterator_to_array($generator));
   }
@@ -88,7 +99,7 @@ final class ConfigTest extends TestCase {
 
     $this->expectException(\InvalidArgumentException::class);
     $filename = 'this-file-is-not-part-of-the-draft-environment-project.yml';
-    $this->expectExceptionMessage(sprintf('Non-existing Draft Environment target configuration filename %s has been passed.', $filename));
+    $this->expectExceptionMessage(sprintf("Non-existing Draft Environment target configuration filename '%s' has been passed.", $filename));
     $this->config->getTargetConfigFilepath($filename);
   }
 

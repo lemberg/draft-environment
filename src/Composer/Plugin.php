@@ -10,7 +10,9 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
+use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\InstallManager;
 
 /**
@@ -38,7 +40,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
       throw new \RuntimeException('Unable to get the current working directory. Please check if any one of the parent directories does not have the readable or search mode set, even if the current directory does. See https://www.php.net/manual/function.getcwd.php');
     }
 
-    $configInstallManager = new InstallManager($composer, $io, $sourceDirectory, $targetDirectory);
+    $config = new Config($sourceDirectory, $targetDirectory);
+    $configInstallManager = new InstallManager($composer, $io, $config);
     $this->setApp(new App($composer, $io, $configInstallManager));
   }
 
@@ -49,7 +52,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
    */
   public static function getSubscribedEvents(): array {
     return [
+      PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
+      ScriptEvents::POST_INSTALL_CMD => 'onComposerEvent',
+      ScriptEvents::POST_UPDATE_CMD => 'onComposerEvent',
     ];
   }
 
