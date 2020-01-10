@@ -30,19 +30,6 @@ Dramatically increases disk IO on Windows by adding NFS support.
 
 ## How to
 
-1. Add `post-install-cmd` and `post-update-cmd` events handler `Lemberg\\Draft\\Environment\\Configurer::setUp` to the `scripts` property of the root `composer.json` file. Resulting file might look like this:
-
-    ```json
-    "scripts": {
-        "post-install-cmd": [
-            "Lemberg\\Draft\\Environment\\Configurer::setUp"
-        ],
-        "post-update-cmd": [
-            "Lemberg\\Draft\\Environment\\Configurer::setUp"
-        ]
-    },
-    ```
-
 1. Add Draft to the project (as a dev dependency):
 
     ```
