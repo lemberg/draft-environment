@@ -98,9 +98,146 @@ draft_features:
 #  - solr
 
 # Provisioner (Ansible) configuration.
-#
-# Any variable that is being used in any Ansible role can be overridden in this
-# file.
-# For example, in order to install PHP 5.6 instead of default 7.1, specify:
-#
-# php_version: 5.6
+
+# Role: draft (internal) @ self
+
+ssh_default_directory: "{{ vagrant.base_directory }}"
+
+# Role: oefenweb.swapfile @ v2.0.7
+
+# Set swap file size.
+swapfile_size: 2GB
+
+# Role: geerlingguy.mailhog @ 2.1.4
+
+mailhog_install_dir: /opt/mailhog
+mailhog_binary_url: https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64
+mhsendmail_binary_url: https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64
+
+# Path to daemonize, which is used to launch MailHog via init script.
+mailhog_daemonize_bin_path: /usr/sbin/daemonize
+
+# Role: apache2 (internal) @ self
+
+# Web server document root directory
+apache2_document_root: docroot
+
+# Log level to use
+apache2_log_level: error
+
+# Role: T2L.php @ 1.1.2
+
+# PHP version to install. Possible values: 7.2, 7.3 and 7.4
+php_version: 7.1
+
+# Configure PHP.
+php_configuration:
+  PHP:
+    error_reporting: E_ALL
+    error_log: /var/log/draft/php_error.log
+    display_errors: "On"
+    display_startup_errors: "On"
+    memory_limit: 256M
+    output_buffering: "Off"
+    upload_max_filesize: 64M
+    post_max_size: 512M
+    # Requires MailHog.
+    sendmail_path: "{{ mailhog_install_dir }}/mhsendmail"
+
+# Configure PHP CLI.
+php_cli_configuration: {}
+
+# PHP extensions to install.
+php_extensions:
+  - curl
+  - gd
+  - json
+  - mbstring
+  - mysql
+  - sqlite3
+  - xdebug
+  - xml
+  - zip
+
+# Configure PHP extensions.
+php_extensions_configuration:
+  opcache:
+    opcache.error_log: /var/log/draft/php_opcache_error.log
+  xdebug:
+    xdebug.remote_enable: "On"
+    xdebug.remote_connect_back: "On"
+    xdebug.remote_log: /var/log/draft/php_xdebug_remote.log
+
+# Web server daemon to restart (defaults to Apache 2).
+php_web_server_daemon: apache2
+
+# Boolean indicating whether to restart web server or not.
+php_restart_web_server: true
+
+# Role: T2L.composer @ 2.0.2
+
+# Composer installation directory.
+composer_install_dir: /usr/local/bin
+
+# Composer executable filename.
+composer_filename: composer
+
+# Composer version.
+composer_version: ""
+
+# Keep Composer up-to-date.
+composer_keep_updated: treu
+
+# PHP executable name.
+composer_php_executable: php
+
+# Role: T2L.java @ 1.1.0
+
+# Open JDK version(s) and package type (jre or jdk).
+# Currently supported versions are 6-11 (however not every Java version is
+# supported for every Ubuntu version).
+java_openjdk_packages:
+  - version: 8
+    type: jre
+
+# Oracle Java version(s).
+# Currently supported versions are 8 and 11.
+java_oracle_packages: []
+#  - version: 8
+
+# Java default alternative. Responsible for setting JAVA_HOME as well.
+java_default_alternative:
+  provider: openjdk
+  version: 8
+
+# Role: T2L.solr @ 2.0.1
+
+# Solr user and group. Defaults to solr:solr.
+solr_user: solr
+solr_group: "{{ solr_user }}"
+
+# Solr version to install. Minimum supported version is 5.0.0.
+solr_version: 6.6.5
+
+# Port Solr should bind to.
+solr_port: 8983
+
+# Download Solr here.
+solr_download_dir: /tmp
+
+# Solr install directory.
+solr_install_dir: /opt
+
+# Solr data directory.
+solr_data_dir: /var/solr
+
+# Remove downloaded archive and extracted files.
+solr_cleanup_downloads: true
+
+# Remove downloaded GPG keys file and .asc signature file.
+solr_cleanup_gpg: true
+
+# Solr cores to configure.
+solr_cores:
+  - name: drupal
+#    conf_path: /var/www/project/config/solr
