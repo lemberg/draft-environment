@@ -16,6 +16,25 @@
         password: $6$4kot6S9fS2oGx$gUxPU4xvSSoMku2OHTwPtCDLNCU4OszJMv6616/1DmaLel15k5hNha451ce4tP6hIMd2H.suCv8cb/NNASdPd0
         uid: 1000
 
+    # Some keys in the 'vagrant' dict are being populated by the Vagrant.
+    # Molecule uses Docker under the hood. Let's fill the gap.
+    - name: Add missing variables
+      set_fact:
+        vagrant: "{{ vagrant | combine(overrides, recursive=true) }}"
+        draft_features:
+          - mailhog
+          - git_config
+          - apache2
+          - mysql
+          - php
+          - composer
+          - java
+          - solr
+      vars:
+        overrides:
+          hostname: molecule
+          ip_address: 10.10.10.10
+
   roles:
     - ../../provisioning/roles/draft
     - ../../provisioning/roles/git_config
@@ -27,8 +46,4 @@
     - T2L.java
     - { role: T2L.solr, solr_cleanup_downloads: false, solr_cleanup_gpg: false }
   vars_files:
-    - ../../provisioning/vars/swapfile.yml
-    - ../../provisioning/vars/php.yml
-    - ../../provisioning/vars/solr.yml
-    - ../../provisioning/vars/mailhog.yml
-    - vm-settings.yml
+    - ../../default.vm-settings.yml
