@@ -78,8 +78,8 @@ ansible:
   #     installs the latest available Ansible version within the given range
   #     constraint. This is the default option.
   #
-  # This project has been successfully tested with Ansible 2.6.
-  version: '2.6.*'
+  # This project has been successfully tested with Ansible 2.9.
+  version: '2.9.*'
 
 # List of features to install. Some roles depend on each other, be careful.
 draft_features:
@@ -103,16 +103,18 @@ draft_features:
 
 ssh_default_directory: '{{ vagrant.base_directory }}'
 
-# Role: oefenweb.swapfile @ v2.0.7
+# Role: oefenweb.swapfile @ v2.0.24
 
 # Set swap file size.
 swapfile_size: 2GB
 
-# Role: geerlingguy.mailhog @ 2.1.4
+# Role: geerlingguy.mailhog @ 2.2.0
 
 mailhog_install_dir: /opt/mailhog
-mailhog_binary_url: 'https://github.com/mailhog/MailHog/releases/download/v1.0.0/MailHog_linux_amd64'
-mhsendmail_binary_url: 'https://github.com/mailhog/mhsendmail/releases/download/v0.2.0/mhsendmail_linux_amd64'
+mailhog_version: 1.0.0
+mailhog_binary_url: "https://github.com/mailhog/MailHog/releases/download/v{{ mailhog_version }}/MailHog_linux_amd64"
+mhsendmail_version: 0.2.0
+mhsendmail_binary_url: "https://github.com/mailhog/mhsendmail/releases/download/v{{ mhsendmail_version }}/mhsendmail_linux_amd64"
 
 # Path to daemonize, which is used to launch MailHog via init script.
 mailhog_daemonize_bin_path: /usr/sbin/daemonize
@@ -125,10 +127,10 @@ apache2_document_root: docroot
 # Log level to use
 apache2_log_level: error
 
-# Role: T2L.php @ 1.1.2
+# Role: T2L.php @ 1.2.1
 
 # PHP version to install. Possible values: 7.2, 7.3 and 7.4
-php_version: '7.1'
+php_version: '7.3'
 
 # Configure PHP.
 php_configuration:
@@ -193,10 +195,10 @@ composer_keep_updated: true
 # PHP executable name.
 composer_php_executable: php
 
-# Role: T2L.java @ 1.1.0
+# Role: T2L.java @ 1.2.0
 
 # Open JDK version(s) and package type (jre or jdk).
-# Currently supported versions are 6-11 (however not every Java version is
+# Currently supported versions are 6-13 (however not every Java version is
 # supported for every Ubuntu version).
 java_openjdk_packages:
   -
@@ -204,23 +206,23 @@ java_openjdk_packages:
     type: jre
 
 # Oracle Java version(s).
-# Currently supported versions are 8 and 11.
+# Currently supported version is 13.
 java_oracle_packages: []
-#  - version: 8
+#  - version: 13
 
 # Java default alternative. Responsible for setting JAVA_HOME as well.
 java_default_alternative:
   provider: openjdk
   version: 8
 
-# Role: T2L.solr @ 2.0.1
+# Role: T2L.solr @ 2.1.0
 
 # Solr user and group. Defaults to solr:solr.
 solr_user: solr
 solr_group: '{{ solr_user }}'
 
 # Solr version to install. Minimum supported version is 5.0.0.
-solr_version: 6.6.5
+solr_version: 7.7.2
 
 # Port Solr should bind to.
 solr_port: 8983

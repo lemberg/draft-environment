@@ -121,7 +121,7 @@ jobs:
 
       install:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
-        - pip install ansible==2.6.* docker molecule
+        - pip install ansible==2.9.* docker molecule
 
       script:
         - molecule test

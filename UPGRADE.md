@@ -38,7 +38,7 @@ TBD
 
     ```
     ansible:
-      version: 2.6.*
+      version: 2.9.*
     ```
 
 - Add new variable `virtualbox.disk_size` to the `vm-settings.yml` file in order to set VirtualBox disk size:
@@ -51,6 +51,8 @@ TBD
 - If `solr_cores` variable was overwritten, them convert it to the new format, see [UPGRADE.md 1.x.x -> 2.0.x](https://github.com/T2L/ansible-role-solr/blob/2.0.0/UPGRADE.md#1xx---20x)
 
 - Remove `Lemberg\\Draft\\Environment\\Configurer::setUp` from your `composer.json` scripts section
+
+- `ggerlingguy.mailhog@2.2.0` role has introduced new variables containing mailhog and mhsendmail versions. Convert your `mailhog_binary_url` and `mhsendmail_binary_url` variables to reflect this change. See the [original commit](https://github.com/geerlingguy/ansible-role-mailhog/commit/d8e1c265820c374b7fa772f5b8f450364b1e13a7)
 
 ## Then run
 
