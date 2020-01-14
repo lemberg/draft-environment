@@ -52,6 +52,8 @@ TBD
 
 - Remove `Lemberg\\Draft\\Environment\\Configurer::setUp` from your `composer.json` scripts section
 
+- `ggerlingguy.mailhog@2.2.0` role has introduced new variables containing mailhog and mhsendmail versions. Convert your `mailhog_binary_url` and `mhsendmail_binary_url` variables to reflect this change. See the [original commit](https://github.com/geerlingguy/ansible-role-mailhog/commit/d8e1c265820c374b7fa772f5b8f450364b1e13a7)
+
 ## Then run
 
 ```
