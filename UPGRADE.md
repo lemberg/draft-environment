@@ -38,7 +38,7 @@ TBD
 
     ```
     ansible:
-      version: 2.6.*
+      version: 2.9.*
     ```
 
 - Add new variable `virtualbox.disk_size` to the `vm-settings.yml` file in order to set VirtualBox disk size:
