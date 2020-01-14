@@ -6,6 +6,7 @@ namespace Lemberg\Draft\Environment\Config;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
+use Consolidation\Comments\Comments;
 use Lemberg\Draft\Environment\Config\Install\InstallConfigStepInterface;
 use Lemberg\Draft\Environment\Config\Install\InstallInitStepInterface;
 use Lemberg\Draft\Environment\Config\Install\Step\InitConfig;
@@ -13,6 +14,7 @@ use Nette\Loaders\RobotLoader;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Draft Environment configuration installer.
@@ -94,8 +96,12 @@ final class InstallManager {
     }
 
     $yaml = new Dumper(2);
-    $alteredContent = $yaml->dump($config, PHP_INT_MAX);
-    $this->fs->dumpFile($this->config->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME), $alteredContent);
+    $alteredContent = $yaml->dump($config, PHP_INT_MAX, 0, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE);
+
+    $commentManager = new Comments();
+    $commentManager->collect(explode("\n", $originalContent));
+    $alteredWithComments = $commentManager->inject(explode("\n", $alteredContent));
+    $this->fs->dumpFile($this->config->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME), implode("\n", $alteredWithComments));
 
     $message = <<<HERE
 <info>Unfortunately, the interactive installer has quite limited functionality at the moment</info>
