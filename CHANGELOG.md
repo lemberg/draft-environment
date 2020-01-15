@@ -1,5 +1,6 @@
 ## Draft Environment 3.x.x
 
+- [GH-90](https://github.com/lemberg/draft-environment/issues/90) - Replaced internal MySQL role with [geerlingguy.mysql @ 2.9.5](https://github.com/geerlingguy/ansible-role-mysql) Ansible role
 - [GH-83](https://github.com/lemberg/draft-environment/issues/83) - Added configuration update manager
 - [GH-92](https://github.com/lemberg/draft-environment/issues/92) - Added mod_expires and mod_headers for Apache2
 - [GH-117](https://github.com/lemberg/draft-environment/issues/117) - Replaced Configurer with Composer event handler
