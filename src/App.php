@@ -13,7 +13,7 @@ use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Script\Event as ScriptEvent;
 use Composer\Script\ScriptEvents;
-use Lemberg\Draft\Environment\Config\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 
 /**
  * Draft Environment application.
@@ -33,7 +33,7 @@ final class App {
   private $io;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\InstallManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\InstallManager
    */
   private $configInstallManager;
 
@@ -49,7 +49,7 @@ final class App {
    *
    * @param \Composer\Composer $composer
    * @param \Composer\IO\IOInterface $io
-   * @param \Lemberg\Draft\Environment\Config\InstallManager $configInstallManager
+   * @param \Lemberg\Draft\Environment\Config\Manager\InstallManager $configInstallManager
    */
   public function __construct(Composer $composer, IOInterface $io, InstallManager $configInstallManager) {
     $this->composer = $composer;

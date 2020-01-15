@@ -13,7 +13,7 @@ use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
-use Lemberg\Draft\Environment\Config\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 
 /**
  * Composer plugin for configuring Draft Environment.

@@ -5,8 +5,14 @@ parameters:
 		- tests
 	ergebnis:
 		classesAllowedToBeExtended:
+			- Lemberg\Draft\Environment\Config\Manager\AbstractConfigManager
 			- Lemberg\Draft\Environment\Config\Install\Step\AbstractInstallStep
 	ignoreErrors:
 		-
-			message: '#Method Lemberg\\Draft\\Environment\\Config\\Install\\Step\\AbstractInstallStep::getWeight\(\) is not final, but since the containing class is abstract, it should be.#'
-			path: src/Config/Install/Step/AbstractInstallStep.php
+			message: '#Method [A-Za-z0-9\\]+::[A-Za-z0-9\(\)]+ is not final, but since the containing class is abstract, it should be.#'
+			paths:
+				- src/Config/Install/Step/AbstractInstallStep.php
+		-
+			message: '#Method [A-Za-z0-9\\]+::[A-Za-z0-9\(\)]+ is protected, but since the containing class is final, it can be private.#'
+			paths:
+				- src/Config/Config.php

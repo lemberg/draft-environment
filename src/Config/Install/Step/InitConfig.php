@@ -29,20 +29,25 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
    * {@inheritdoc}
    */
   public function install(): void {
+    $config = $this->configInstallManager->getConfig();
+
+    $sourceConfigFilepath = $config->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME);
+    $targetConfigFilepath = $config->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+
+    $sourceVmFilepath = $config->getSourceConfigFilepath(Config::SOURCE_VM_FILENAME);
+    $targetVmFilepath = $config->getTargetConfigFilepath(Config::TARGET_VM_FILENAME);
+
     // Copy default configuration and Vagrantfile to the project's root
     // directory.
-    $this->fs->copy($this->config->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME), $this->config->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME));
-    $this->fs->copy($this->config->getSourceConfigFilepath(Config::SOURCE_VM_FILENAME), $this->config->getTargetConfigFilepath(Config::TARGET_VM_FILENAME));
+    $this->fs->copy($sourceConfigFilepath, $targetConfigFilepath);
+    $this->fs->copy($sourceVmFilepath, $targetVmFilepath);
 
     // Adjust path to the Draft Environment package if non-standard Composer
     // vendor directory is being used.
     $vendorDir = trim($this->composer->getConfig()->get('vendor-dir', ComposerConfig::RELATIVE_PATHS), DIRECTORY_SEPARATOR);
     if ($vendorDir !== 'vendor') {
-      $vagrantfile = file_get_contents($this->config->getTargetConfigFilepath(Config::TARGET_VM_FILENAME));
-      if ($vagrantfile === FALSE) {
-        throw new \RuntimeException(sprintf('Draft Environment Composer plugin was not able to read Vagrantfile at %s', $this->config->getTargetConfigFilepath(Config::TARGET_VM_FILENAME)));
-      }
-      $this->fs->dumpFile($this->config->getTargetConfigFilepath(Config::TARGET_VM_FILENAME), str_replace('/vendor/', "/$vendorDir/", $vagrantfile));
+      $vagrantfile = $this->readFile('Vagrantfile', $targetVmFilepath);
+      $this->writeFile($targetVmFilepath, str_replace('/vendor/', "/$vendorDir/", $vagrantfile));
     }
 
     // Add Draft Environment local overrides and Vagrant VM data directory
@@ -52,12 +57,11 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
     // already autoloaded. Composer itself allows for pretty old
     // symfony/filesystem version, thus Filesystem::appendToFile()
     // might not be available.
+    $targetGitIgnore = $config->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
+
     $gitIgnoreContent = '';
-    if ($this->fs->exists($this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE))) {
-      $gitIgnoreContent = file_get_contents($this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE));
-      if ($gitIgnoreContent === FALSE) {
-        throw new \RuntimeException(sprintf("Draft Environment Composer plugin was not able to read .gitignore at '%s'", $this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE)));
-      }
+    if ($this->fs->exists($targetGitIgnore)) {
+      $gitIgnoreContent = $this->readFile('.gitignore', $targetGitIgnore);
     }
     if (strpos($gitIgnoreContent, '.vagrant') === FALSE) {
       $gitIgnoreContent .= self::GITIGNORE_VAGRANT_LINE;
@@ -65,7 +69,7 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
     if (strpos($gitIgnoreContent, Config::TARGET_LOCAL_CONFIG_FILENAME) === FALSE) {
       $gitIgnoreContent .= self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE;
     }
-    $this->fs->dumpFile($this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE), $gitIgnoreContent);
+    $this->writeFile($targetGitIgnore, $gitIgnoreContent);
 
     $this->addMessage($this->getMessageText('added'));
   }
@@ -74,25 +78,25 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
    * {@inheritdoc}
    */
   public function uninstall(): void {
+    $config = $this->configInstallManager->getConfig();
+
     // Remove Draft Environment configuration files, except .gitignore.
-    foreach ($this->config->getTargetConfigFilepaths(FALSE) as $filepath) {
+    foreach ($config->getTargetConfigFilepaths(FALSE) as $filepath) {
       $this->fs->remove($filepath);
     }
 
     // Clean up .gitignore.
-    $gitIgnoreContent = file_get_contents($this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE));
-    if ($gitIgnoreContent === FALSE) {
-      throw new \RuntimeException(sprintf("Draft Environment Composer plugin was not able to read .gitignore at '%s'", $this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE)));
-    }
+    $targetGitIgnore = $config->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
+    $gitIgnoreContent = $this->readFile('.gitignore', $targetGitIgnore);
     $gitIgnoreContent = str_replace(self::GITIGNORE_VAGRANT_LINE, '', $gitIgnoreContent);
     $gitIgnoreContent = str_replace(self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE, '', $gitIgnoreContent);
 
     // Check if those where the only lines in the .gitignore.
     if (preg_replace('/\R+/m', '', $gitIgnoreContent) === '') {
-      $this->fs->remove($this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE));
+      $this->fs->remove($targetGitIgnore);
     }
     else {
-      $this->fs->dumpFile($this->config->getTargetConfigFilepath(Config::TARGET_GITIGNORE), $gitIgnoreContent);
+      $this->writeFile($targetGitIgnore, $gitIgnoreContent);
     }
 
     $this->addMessage($this->getMessageText('removed'));
