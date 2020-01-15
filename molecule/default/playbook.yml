@@ -39,7 +39,7 @@
     - ../../provisioning/roles/draft
     - ../../provisioning/roles/git_config
     - ../../provisioning/roles/apache2
-    - ../../provisioning/roles/mysql
+    - geerlingguy.mysql
     - geerlingguy.mailhog
     - T2L.php
     - T2L.composer

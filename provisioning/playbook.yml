@@ -8,7 +8,7 @@
     - { role: geerlingguy.mailhog, when: "'mailhog' in draft_features" }
     - { role: git_config, when: "'git_config' in draft_features" }
     - { role: apache2, when: "'apache2' in draft_features" }
-    - { role: mysql, when: "'mysql' in draft_features" }
+    - { role: geerlingguy.mysql, when: "'mysql' in draft_features" }
     - { role: T2L.php, when: "'php' in draft_features" }
     - { role: T2L.composer, when: "'composer' in draft_features" }
     - { role: T2L.java, when: "'java' in draft_features" }
