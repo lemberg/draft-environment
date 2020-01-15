@@ -7,11 +7,13 @@ parameters:
 		classesAllowedToBeExtended:
 			- Lemberg\Draft\Environment\Config\Manager\AbstractConfigManager
 			- Lemberg\Draft\Environment\Config\Install\Step\AbstractInstallStep
+			- Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
 	ignoreErrors:
 		-
 			message: '#Method [A-Za-z0-9\\]+::[A-Za-z0-9\(\)]+ is not final, but since the containing class is abstract, it should be.#'
 			paths:
 				- src/Config/Install/Step/AbstractInstallStep.php
+				- src/Config/Update/Step/AbstractUpdateStep.php
 		-
 			message: '#Method [A-Za-z0-9\\]+::[A-Za-z0-9\(\)]+ is protected, but since the containing class is final, it can be private.#'
 			paths:

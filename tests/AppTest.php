@@ -21,6 +21,7 @@ use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -51,6 +52,11 @@ final class AppTest extends TestCase {
    * @var \Lemberg\Draft\Environment\Config\Manager\InstallManager
    */
   private $configInstallManager;
+
+  /**
+   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManager
+   */
+  private $configUpdateManager;
 
   /**
    *
@@ -97,7 +103,8 @@ final class AppTest extends TestCase {
 
     $config = new Config("$root/source", "$root/target");
     $this->configInstallManager = new InstallManager($this->composer, $this->io, $config);
-    $this->app = new App($this->composer, $this->io, $this->configInstallManager);
+    $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $config);
+    $this->app = new App($this->composer, $this->io, $this->configInstallManager, $this->configUpdateManager);
   }
 
   /**
