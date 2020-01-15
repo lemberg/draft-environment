@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment\Config;
 
 /**
- *
- * @author roman
+ * Implements Config getter and setter.
  */
 trait ConfigAwareTrait {
 

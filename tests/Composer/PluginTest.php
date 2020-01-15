@@ -67,6 +67,7 @@ final class PluginTest extends TestCase {
     // Ensure that plugin is subscribed to the correct events.
     $expected = [
       PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
+      PackageEvents::POST_PACKAGE_UPDATE => 'onComposerEvent',
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
       ScriptEvents::POST_INSTALL_CMD => 'onComposerEvent',
       ScriptEvents::POST_UPDATE_CMD => 'onComposerEvent',

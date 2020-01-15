@@ -13,7 +13,8 @@ use Composer\Plugin\PluginInterface;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
-use Lemberg\Draft\Environment\Config\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
 
 /**
  * Composer plugin for configuring Draft Environment.
@@ -42,7 +43,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
 
     $config = new Config($sourceDirectory, $targetDirectory);
     $configInstallManager = new InstallManager($composer, $io, $config);
-    $this->setApp(new App($composer, $io, $configInstallManager));
+    $configUpdateManager = new UpdateManager($composer, $io, $config);
+    $this->setApp(new App($composer, $io, $configInstallManager, $configUpdateManager));
   }
 
   /**
@@ -53,6 +55,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
   public static function getSubscribedEvents(): array {
     return [
       PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
+      PackageEvents::POST_PACKAGE_UPDATE => 'onComposerEvent',
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
       ScriptEvents::POST_INSTALL_CMD => 'onComposerEvent',
       ScriptEvents::POST_UPDATE_CMD => 'onComposerEvent',

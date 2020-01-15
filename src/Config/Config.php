@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config;
 
+use Consolidation\Comments\Comments;
+use Lemberg\Draft\Environment\Helper\FileReaderTrait;
+use Symfony\Component\Yaml\Dumper;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml;
+
 /**
  * Draft Environment configuration helper.
  */
 final class Config {
+
+  use FileReaderTrait;
 
   public const SOURCE_CONFIG_FILENAME = 'default.vm-settings.yml';
   public const SOURCE_VM_FILENAME = 'Vagrantfile.proxy';
@@ -51,6 +59,7 @@ final class Config {
   public function __construct(string $sourceDirectory, string $targetDirectory) {
     $this->sourceDirectory = $sourceDirectory;
     $this->targetDirectory = $targetDirectory;
+    $this->initFileSystem();
   }
 
   /**
@@ -122,6 +131,49 @@ final class Config {
     }
 
     throw new \InvalidArgumentException(sprintf("Non-existing Draft Environment target configuration filename '%s' has been passed.", $filename));
+  }
+
+  /**
+   * Reads and returns raw configuration from a given source file.
+   *
+   * @param string $source
+   *
+   * @return string
+   */
+  public function readConfigFromTheFile(string $source): string {
+    return $this->readFile('config', $source);
+  }
+
+  /**
+   * Reads, parses and returns configuration from a given source file.
+   *
+   * @param string $source
+   *
+   * @return array<string, array>
+   */
+  public function readAndParseConfigFromTheFile(string $source): array {
+    $content = $this->readConfigFromTheFile($source);
+    $parser = new Parser();
+    return $parser->parse($content);
+  }
+
+  /**
+   * Dumps and writes configuration to a given file.
+   *
+   * @param string $source
+   * @param string $target
+   * @param array<int|string,array> $config
+   */
+  public function writeConfigToTheFile(string $source, string $target, array $config): void {
+    $yaml = new Dumper(2);
+    $alteredContent = $yaml->dump($config, PHP_INT_MAX, 0, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE);
+
+    $originalContent = $this->readConfigFromTheFile($source);
+
+    $commentManager = new Comments();
+    $commentManager->collect(explode("\n", $originalContent));
+    $alteredWithComments = $commentManager->inject(explode("\n", $alteredContent));
+    $this->writeFile($target, implode("\n", $alteredWithComments));
   }
 
 }

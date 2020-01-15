@@ -27,6 +27,8 @@
     <exclude name="Drupal.Commenting.FunctionComment.MissingParamComment"/>
     <!--Ignore "Description for the @return value is missing". -->
     <exclude name="Drupal.Commenting.FunctionComment.MissingReturnComment"/>
+    <!--Ignore "Expected "%s" but found "%s" for parameter type". -->
+    <exclude name="Drupal.Commenting.FunctionComment.IncorrectParamVarName"/>
   </rule>
 
 </ruleset>

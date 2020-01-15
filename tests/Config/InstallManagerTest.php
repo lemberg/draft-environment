@@ -8,7 +8,7 @@ use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\IO\IOInterface;
 use Lemberg\Draft\Environment\Config\Config;
-use Lemberg\Draft\Environment\Config\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -16,7 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Tests Draft Environment configuration install manager.
  *
- * @covers \Lemberg\Draft\Environment\Config\InstallManager
+ * @covers \Lemberg\Draft\Environment\Config\Manager\InstallManager
  */
 final class InstallManagerTest extends TestCase {
 
@@ -36,7 +36,7 @@ final class InstallManagerTest extends TestCase {
   private $root;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\InstallManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\InstallManager
    */
   private $configInstallManager;
 

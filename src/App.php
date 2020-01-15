@@ -7,13 +7,15 @@ namespace Lemberg\Draft\Environment;
 use Composer\Composer;
 use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Operation\UninstallOperation;
+use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\EventDispatcher\Event;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Script\Event as ScriptEvent;
 use Composer\Script\ScriptEvents;
-use Lemberg\Draft\Environment\Config\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
 
 /**
  * Draft Environment application.
@@ -33,9 +35,14 @@ final class App {
   private $io;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\InstallManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\InstallManager
    */
   private $configInstallManager;
+
+  /**
+   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManager
+   */
+  private $configUpdateManager;
 
   /**
    * Boolean indicating whether the installation process should run.
@@ -49,12 +56,14 @@ final class App {
    *
    * @param \Composer\Composer $composer
    * @param \Composer\IO\IOInterface $io
-   * @param \Lemberg\Draft\Environment\Config\InstallManager $configInstallManager
+   * @param \Lemberg\Draft\Environment\Config\Manager\InstallManager $configInstallManager
+   * @param \Lemberg\Draft\Environment\Config\Manager\UpdateManager $configUpdateManager
    */
-  public function __construct(Composer $composer, IOInterface $io, InstallManager $configInstallManager) {
+  public function __construct(Composer $composer, IOInterface $io, InstallManager $configInstallManager, UpdateManager $configUpdateManager) {
     $this->composer = $composer;
     $this->io = $io;
     $this->configInstallManager = $configInstallManager;
+    $this->configUpdateManager = $configUpdateManager;
   }
 
   /**
@@ -80,8 +89,35 @@ final class App {
     if ($event->getName() === PackageEvents::POST_PACKAGE_INSTALL && $event->getOperation() instanceof InstallOperation) {
       $this->onPostPackageInstall($event->getOperation());
     }
+    if ($event->getName() === PackageEvents::POST_PACKAGE_UPDATE && $event->getOperation() instanceof UpdateOperation) {
+      $this->onPostPackageUpdate($event->getOperation());
+    }
     if ($event->getName() === PackageEvents::PRE_PACKAGE_UNINSTALL && $event->getOperation() instanceof UninstallOperation) {
       $this->onPrePackageUninstall($event->getOperation());
+    }
+  }
+
+  /**
+   * Post package install event callback.
+   *
+   * @param \Composer\DependencyResolver\Operation\InstallOperation $operation
+   */
+  private function onPostPackageInstall(InstallOperation $operation): void {
+    // Clean up Draft Environment config files upon package uninstallation.
+    if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
+      $this->shouldRunInstallation = TRUE;
+    }
+  }
+
+  /**
+   * Post package update event callback.
+   *
+   * @param \Composer\DependencyResolver\Operation\UpdateOperation $operation
+   */
+  private function onPostPackageUpdate(UpdateOperation $operation): void {
+    // Clean up Draft Environment config files upon package uninstallation.
+    if ($operation->getTargetPackage()->getName() === self::PACKAGE_NAME) {
+      $this->configUpdateManager->update();
     }
   }
 
@@ -94,18 +130,6 @@ final class App {
     // Clean up Draft Environment config files upon package uninstallation.
     if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
       $this->configInstallManager->uninstall();
-    }
-  }
-
-  /**
-   * Pre package uninstall event callback.
-   *
-   * @param \Composer\DependencyResolver\Operation\InstallOperation $operation
-   */
-  private function onPostPackageInstall(InstallOperation $operation): void {
-    // Clean up Draft Environment config files upon package uninstallation.
-    if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
-      $this->shouldRunInstallation = TRUE;
     }
   }
 

@@ -1,5 +1,6 @@
 ## Draft Environment 3.x.x
 
+- [GH-83](https://github.com/lemberg/draft-environment/issues/83) - Added configuration update manager
 - [GH-92](https://github.com/lemberg/draft-environment/issues/92) - Added mod_expires and mod_headers for Apache2
 - [GH-117](https://github.com/lemberg/draft-environment/issues/117) - Replaced Configurer with Composer event handler
 - [GH-94](https://github.com/lemberg/draft-environment/issues/94) - Converted project to a composer-plugin. Clean up Draft Environment config files upon package uninstallation
