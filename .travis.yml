@@ -114,7 +114,7 @@ jobs:
 
       python: 3.6
 
-      env: MOLECULE_PLATFORM=ubuntu:16.04
+      env: MOLECULE_PLATFORM=ubuntu1604
 
       before_install:
         - composer self-update
@@ -128,7 +128,7 @@ jobs:
 
     - <<: *Molecule
 
-      env: MOLECULE_PLATFORM=ubuntu:18.04
+      env: MOLECULE_PLATFORM=ubuntu1804
 
     - &CodeCoverage
 
