@@ -35,9 +35,9 @@ final class UpdateManager extends AbstractConfigManager {
 
       $configObject->writeConfigToTheFile($targetConfigFilepath, $targetConfigFilepath, $config);
 
-      end($this->steps);
-      /** @var int $lastAppliedUpdateWeight */
-      $lastAppliedUpdateWeight = key($this->steps);
+      /** @var \Lemberg\Draft\Environment\Config\Update\UpdateStepInterface $lastStep */
+      $lastStep = end($this->steps);
+      $lastAppliedUpdateWeight = $lastStep->getWeight();
       $this->setLastAppliedUpdateWeight($lastAppliedUpdateWeight);
     }
   }
