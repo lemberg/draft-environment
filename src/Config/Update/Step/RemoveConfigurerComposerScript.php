@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config\Update\Step;
 
+use Composer\Factory;
+use Composer\Json\JsonFile;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
 
@@ -29,6 +31,19 @@ final class RemoveConfigurerComposerScript extends AbstractUpdateStep implements
     $this->removeScript(ScriptEvents::POST_INSTALL_CMD, $scripts);
     $this->removeScript(ScriptEvents::POST_UPDATE_CMD, $scripts);
     $rootPackage->setScripts($scripts);
+    $this->composer->setPackage($rootPackage);
+
+    // Composer won't update composer.json automatically. Do it manually.
+    $file = Factory::getComposerFile();
+    $json = new JsonFile($file);
+    $composerDefinition = $json->read();
+    if (count($scripts) > 0) {
+      $composerDefinition['scripts'] = $scripts;
+    }
+    else {
+      unset($composerDefinition['scripts']);
+    }
+    $json->write($composerDefinition);
   }
 
   /**
@@ -38,16 +53,23 @@ final class RemoveConfigurerComposerScript extends AbstractUpdateStep implements
    * @param array<string,array> $scripts
    */
   private function removeScript(string $event, array &$scripts): void {
-    if (array_key_exists($event, $scripts)) {
-      $key = NULL;
-      foreach ($scripts[$event] as $i => $listener) {
-        if ($listener === 'Lemberg\\Draft\\Environment\\Configurer::setUp') {
-          $key = $i;
-        }
+    if (!array_key_exists($event, $scripts)) {
+      return;
+    }
+
+    $key = NULL;
+    foreach ($scripts[$event] as $i => $listener) {
+      if ($listener === 'Lemberg\Draft\Environment\Configurer::setUp') {
+        $key = $i;
       }
-      if (!is_null($key)) {
-        unset($scripts[$event][$key]);
-      }
+    }
+    if (is_null($key)) {
+      return;
+    }
+
+    unset($scripts[$event][$key]);
+    if (count($scripts[$event]) === 0) {
+      unset($scripts[$event]);
     }
   }
 
