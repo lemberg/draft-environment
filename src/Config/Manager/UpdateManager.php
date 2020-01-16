@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment\Config\Manager;
 
 use Lemberg\Draft\Environment\App;
+use Lemberg\Draft\Environment\Config\AbstractStepInterface;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
 
@@ -48,9 +49,9 @@ final class UpdateManager extends AbstractConfigManager {
   private function filterSteps(): void {
     $lastAppliedUpdateWeight = $this->getLastAppliedUpdateWeight();
 
-    $this->steps = array_filter($this->steps, function (int $weight) use ($lastAppliedUpdateWeight): bool {
-      return $weight > $lastAppliedUpdateWeight;
-    }, ARRAY_FILTER_USE_KEY);
+    $this->steps = array_filter($this->steps, function (AbstractStepInterface $step) use ($lastAppliedUpdateWeight): bool {
+      return $step->getWeight() > $lastAppliedUpdateWeight;
+    });
   }
 
   /**
