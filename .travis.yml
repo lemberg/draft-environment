@@ -35,9 +35,9 @@ jobs:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       script:
-        - ./bin/phpcs
-        - ./bin/phpstan analyse
-        - ./bin/phpunit
+        - ./vendor/bin/phpcs
+        - ./vendor/bin/phpstan analyse
+        - ./vendor/bin/phpunit
 
     - <<: *PHP
 
@@ -153,7 +153,7 @@ jobs:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       script:
-        - ./bin/phpunit --coverage-clover=coverage.xml
+        - ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
       after_success:
         - bash <(curl -s https://codecov.io/bash)

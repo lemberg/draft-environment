@@ -10,9 +10,6 @@
 # Ignore logs.
 /logs
 
-# Ignore binaries.
-/bin
-
 # Ignore Composer-managed dependencies.
 /vendor
 
