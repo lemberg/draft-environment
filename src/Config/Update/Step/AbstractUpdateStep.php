@@ -8,15 +8,16 @@ use Composer\Composer;
 use Composer\IO\IOInterface;
 use Lemberg\Draft\Environment\Config\AbstractStepInterface;
 use Lemberg\Draft\Environment\Config\Manager\ManagerInterface;
-use Lemberg\Draft\Environment\Helper\FileReaderTrait;
 use Lemberg\Draft\Environment\Messanger\MessangerTrait;
+use Lemberg\Draft\Environment\Utility\Filesystem;
+use Lemberg\Draft\Environment\Utility\FilesystemAwareTrait;
 
 /**
  * Default implementation of the update step.
  */
 abstract class AbstractUpdateStep implements AbstractStepInterface {
 
-  use FileReaderTrait;
+  use FilesystemAwareTrait;
   use MessangerTrait;
 
   /**
@@ -41,7 +42,7 @@ abstract class AbstractUpdateStep implements AbstractStepInterface {
     $this->composer = $composer;
     $this->io = $io;
     $this->configUpdateManager = $configManager;
-    $this->initFileSystem();
+    $this->setFilesystem(new Filesystem());
   }
 
 }

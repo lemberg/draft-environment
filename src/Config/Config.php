@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment\Config;
 
 use Consolidation\Comments\Comments;
-use Lemberg\Draft\Environment\Helper\FileReaderTrait;
+use Lemberg\Draft\Environment\Utility\Filesystem;
+use Lemberg\Draft\Environment\Utility\FilesystemAwareTrait;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
@@ -15,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 final class Config {
 
-  use FileReaderTrait;
+  use FilesystemAwareTrait;
 
   public const SOURCE_CONFIG_FILENAME = 'default.vm-settings.yml';
   public const SOURCE_VM_FILENAME = 'Vagrantfile.proxy';
@@ -59,7 +60,7 @@ final class Config {
   public function __construct(string $sourceDirectory, string $targetDirectory) {
     $this->sourceDirectory = $sourceDirectory;
     $this->targetDirectory = $targetDirectory;
-    $this->initFileSystem();
+    $this->setFilesystem(new Filesystem());
   }
 
   /**
@@ -141,7 +142,7 @@ final class Config {
    * @return string
    */
   public function readConfigFromTheFile(string $source): string {
-    return $this->readFile('config', $source);
+    return $this->getFilesystem()->loadFile('config', $source);
   }
 
   /**
@@ -173,7 +174,7 @@ final class Config {
     $commentManager = new Comments();
     $commentManager->collect(explode("\n", $originalContent));
     $alteredWithComments = $commentManager->inject(explode("\n", $alteredContent));
-    $this->writeFile($target, implode("\n", $alteredWithComments));
+    $this->getFilesystem()->dumpFile($target, implode("\n", $alteredWithComments));
   }
 
 }

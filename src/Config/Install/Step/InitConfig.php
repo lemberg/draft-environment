@@ -30,6 +30,7 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
    */
   public function install(): void {
     $config = $this->configInstallManager->getConfig();
+    $fs = $this->getFilesystem();
 
     $sourceConfigFilepath = $config->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME);
     $targetConfigFilepath = $config->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
@@ -39,15 +40,15 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
 
     // Copy default configuration and Vagrantfile to the project's root
     // directory.
-    $this->fs->copy($sourceConfigFilepath, $targetConfigFilepath);
-    $this->fs->copy($sourceVmFilepath, $targetVmFilepath);
+    $fs->copy($sourceConfigFilepath, $targetConfigFilepath);
+    $fs->copy($sourceVmFilepath, $targetVmFilepath);
 
     // Adjust path to the Draft Environment package if non-standard Composer
     // vendor directory is being used.
     $vendorDir = trim($this->composer->getConfig()->get('vendor-dir', ComposerConfig::RELATIVE_PATHS), DIRECTORY_SEPARATOR);
     if ($vendorDir !== 'vendor') {
-      $vagrantfile = $this->readFile('Vagrantfile', $targetVmFilepath);
-      $this->writeFile($targetVmFilepath, str_replace('/vendor/', "/$vendorDir/", $vagrantfile));
+      $vagrantfile = $fs->loadFile('Vagrantfile', $targetVmFilepath);
+      $fs->dumpFile($targetVmFilepath, str_replace('/vendor/', "/$vendorDir/", $vagrantfile));
     }
 
     // Add Draft Environment local overrides and Vagrant VM data directory
@@ -60,8 +61,8 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
     $targetGitIgnore = $config->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
 
     $gitIgnoreContent = '';
-    if ($this->fs->exists($targetGitIgnore)) {
-      $gitIgnoreContent = $this->readFile('.gitignore', $targetGitIgnore);
+    if ($fs->exists($targetGitIgnore)) {
+      $gitIgnoreContent = $fs->loadFile('.gitignore', $targetGitIgnore);
     }
     if (strpos($gitIgnoreContent, '.vagrant') === FALSE) {
       $gitIgnoreContent .= self::GITIGNORE_VAGRANT_LINE;
@@ -69,7 +70,7 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
     if (strpos($gitIgnoreContent, Config::TARGET_LOCAL_CONFIG_FILENAME) === FALSE) {
       $gitIgnoreContent .= self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE;
     }
-    $this->writeFile($targetGitIgnore, $gitIgnoreContent);
+    $fs->dumpFile($targetGitIgnore, $gitIgnoreContent);
 
     $this->addMessage($this->getMessageText('added'));
   }
@@ -79,24 +80,25 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
    */
   public function uninstall(): void {
     $config = $this->configInstallManager->getConfig();
+    $fs = $this->getFilesystem();
 
     // Remove Draft Environment configuration files, except .gitignore.
     foreach ($config->getTargetConfigFilepaths(FALSE) as $filepath) {
-      $this->fs->remove($filepath);
+      $fs->remove($filepath);
     }
 
     // Clean up .gitignore.
     $targetGitIgnore = $config->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
-    $gitIgnoreContent = $this->readFile('.gitignore', $targetGitIgnore);
+    $gitIgnoreContent = $fs->loadFile('.gitignore', $targetGitIgnore);
     $gitIgnoreContent = str_replace(self::GITIGNORE_VAGRANT_LINE, '', $gitIgnoreContent);
     $gitIgnoreContent = str_replace(self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE, '', $gitIgnoreContent);
 
     // Check if those where the only lines in the .gitignore.
     if (preg_replace('/\R+/m', '', $gitIgnoreContent) === '') {
-      $this->fs->remove($targetGitIgnore);
+      $fs->remove($targetGitIgnore);
     }
     else {
-      $this->writeFile($targetGitIgnore, $gitIgnoreContent);
+      $fs->dumpFile($targetGitIgnore, $gitIgnoreContent);
     }
 
     $this->addMessage($this->getMessageText('removed'));
