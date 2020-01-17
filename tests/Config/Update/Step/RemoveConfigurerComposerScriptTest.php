@@ -14,9 +14,9 @@ use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
 use Lemberg\Draft\Environment\Config\Update\Step\RemoveConfigurerComposerScript;
+use Lemberg\Draft\Environment\Utility\Filesystem;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Tests Draft Environment configuration install manager.
@@ -57,8 +57,8 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
 
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
-    $fs = new Filesystem();
     $wd = sys_get_temp_dir() . '/draft-environment';
+    $fs = new Filesystem();
     $fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
     chdir($wd);
 
