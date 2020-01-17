@@ -15,7 +15,7 @@ use Composer\IO\IOInterface;
 use Composer\Script\Event as ScriptEvent;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\Config\Manager\InstallManager;
-use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
+use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
 
 /**
  * Draft Environment application.
@@ -40,7 +40,7 @@ final class App {
   private $configInstallManager;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
    */
   private $configUpdateManager;
 
@@ -57,9 +57,9 @@ final class App {
    * @param \Composer\Composer $composer
    * @param \Composer\IO\IOInterface $io
    * @param \Lemberg\Draft\Environment\Config\Manager\InstallManager $configInstallManager
-   * @param \Lemberg\Draft\Environment\Config\Manager\UpdateManager $configUpdateManager
+   * @param \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface $configUpdateManager
    */
-  public function __construct(Composer $composer, IOInterface $io, InstallManager $configInstallManager, UpdateManager $configUpdateManager) {
+  public function __construct(Composer $composer, IOInterface $io, InstallManager $configInstallManager, UpdateManagerInterface $configUpdateManager) {
     $this->composer = $composer;
     $this->io = $io;
     $this->configInstallManager = $configInstallManager;
@@ -105,6 +105,8 @@ final class App {
   private function onPostPackageInstall(InstallOperation $operation): void {
     // Clean up Draft Environment config files upon package uninstallation.
     if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
+      // Run installation later (during post command phase) in order to have
+      // nice console output.
       $this->shouldRunInstallation = TRUE;
     }
   }
@@ -152,6 +154,10 @@ final class App {
   private function onPostInstallCommand(ScriptEvent $event): void {
     if ($this->shouldRunInstallation) {
       $this->configInstallManager->install();
+      // Fresh installation should mark all available updates as already
+      // applied.
+      $lastAvailableWeight = $this->configUpdateManager->getLastAvailableUpdateWeight();
+      $this->configUpdateManager->setLastAppliedUpdateWeight($lastAvailableWeight);
     }
     $this->shouldRunInstallation = FALSE;
   }

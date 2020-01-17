@@ -12,10 +12,10 @@ use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
 /**
  * Draft Environment configuration update manager.
  */
-final class UpdateManager extends AbstractConfigManager {
+final class UpdateManager extends AbstractConfigManager implements UpdateManagerInterface {
 
   /**
-   * Updates the Draft Environment.
+   * {@inheritdoc}
    */
   public function update(): void {
     $this->discoverSteps(UpdateStepInterface::class, __DIR__ . '/../Update');
@@ -36,11 +36,41 @@ final class UpdateManager extends AbstractConfigManager {
 
       $configObject->writeConfigToTheFile($targetConfigFilepath, $targetConfigFilepath, $config);
 
-      /** @var \Lemberg\Draft\Environment\Config\Update\UpdateStepInterface $lastStep */
-      $lastStep = end($this->steps);
-      $lastAppliedUpdateWeight = $lastStep->getWeight();
+      $lastAppliedUpdateWeight = $this->getLastUpdateWeightFromTheSteps();
       $this->setLastAppliedUpdateWeight($lastAppliedUpdateWeight);
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLastAppliedUpdateWeight(): int {
+    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
+    /** @var \Composer\Package\Package $localPackage */
+    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
+    return $localPackage->getExtra()['draft-environment-last-update-weight'] ?? 0;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setLastAppliedUpdateWeight(int $weight): void {
+    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
+    /** @var \Composer\Package\Package $localPackage */
+    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
+    $extra = $localPackage->getExtra();
+    $extra['draft-environment-last-update-weight'] = $weight;
+    $localPackage->setExtra($extra);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getLastAvailableUpdateWeight(): int {
+    $this->discoverSteps(UpdateStepInterface::class, __DIR__ . '/../Update');
+    $this->sortSteps();
+
+    return $this->getLastUpdateWeightFromTheSteps();
   }
 
   /**
@@ -55,29 +85,14 @@ final class UpdateManager extends AbstractConfigManager {
   }
 
   /**
-   * Get the last update weight from the local repository.
+   * Get the weight of the last step.
    *
    * @return int
    */
-  private function getLastAppliedUpdateWeight(): int {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    return $localPackage->getExtra()['draft_environment_last_update_weight'] ?? 0;
-  }
-
-  /**
-   * Set the last update weight in the local repository.
-   *
-   * @param int $weight
-   */
-  public function setLastAppliedUpdateWeight(int $weight): void {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    $extra = $localPackage->getExtra();
-    $extra['draft_environment_last_update_weight'] = $weight;
-    $localPackage->setExtra($extra);
+  private function getLastUpdateWeightFromTheSteps(): int {
+    /** @var \Lemberg\Draft\Environment\Config\Update\UpdateStepInterface $lastStep */
+    $lastStep = end($this->steps);
+    return $lastStep->getWeight();
   }
 
 }

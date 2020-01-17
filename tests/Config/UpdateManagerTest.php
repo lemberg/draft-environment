@@ -119,4 +119,20 @@ final class UpdateManagerTest extends TestCase {
     $configObject->readAndParseConfigFromTheFile($configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME));
   }
 
+  /**
+   * Tests the last applied update weight getter and setter.
+   */
+  public function testGetAndSetLastAppliedUpdateWeight(): void {
+    self::assertSame(0, $this->configUpdateManager->getLastAppliedUpdateWeight());
+    $this->configUpdateManager->setLastAppliedUpdateWeight(4);
+    self::assertSame(4, $this->configUpdateManager->getLastAppliedUpdateWeight());
+  }
+
+  /**
+   * Tests the last available update weight getter.
+   */
+  public function testGetLastAvailableUpdateWeight(): void {
+    self::assertSame(2, $this->configUpdateManager->getLastAvailableUpdateWeight());
+  }
+
 }
