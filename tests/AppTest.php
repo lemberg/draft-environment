@@ -8,6 +8,7 @@ use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Operation\UninstallOperation;
+use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\DependencyResolver\PolicyInterface;
 use Composer\DependencyResolver\Pool;
 use Composer\DependencyResolver\Request;
@@ -164,6 +165,52 @@ final class AppTest extends TestCase {
     foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths(FALSE) as $filepath) {
       self::assertFileNotExists($filepath);
     }
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
+   */
+  public function testComposerPostPackageUpdateEventHandlerDoesNotRunWithOtherPackages(): void {
+    // Update must not run when any package other than
+    // "lemberg/draft-environment" is being updated.
+    $initial = new Package('dummy', '1.0.0.0', '^1.0');
+    $target = new Package('dummy', '1.2.0.0', '^1.0');
+    $operation = new UpdateOperation($initial, $target);
+    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configUpdateManager
+      ->expects(self::never())
+      ->method('update');
+    $this->app->handleEvent($event);
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
+   */
+  public function testComposerPostPackageUpdateEventHandlerDoesNotRunWithOtherEvents(): void {
+    // Update must not run when other than
+    // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
+    $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($initial);
+    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configUpdateManager
+      ->expects(self::never())
+      ->method('update');
+    $this->app->handleEvent($event);
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
+   */
+  public function testComposerPostPackageUpdateEventHandlerDoesRun(): void {
+    // Update must run when "lemberg/draft-environment" is being updated.
+    $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
+    $operation = new UpdateOperation($initial, $target);
+    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configUpdateManager
+      ->expects(self::once())
+      ->method('update');
+    $this->app->handleEvent($event);
   }
 
   /**
