@@ -21,6 +21,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Tests Draft Environment configuration install manager.
  *
+ * @covers \Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\RemoveConfigurerComposerScript
  */
 final class RemoveConfigurerComposerScriptTest extends TestCase {
