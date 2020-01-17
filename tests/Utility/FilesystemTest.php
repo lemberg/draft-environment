@@ -55,6 +55,7 @@ final class FilesystemTest extends TestCase {
    * Tests ::loadFile().
    *
    * @runInSeparateProcess
+   * @preserveGlobalState disabled
    */
   public function testLoadFileThrowsExceptionWhenFileCannotBeRead(): void {
     $filename = 'text file';
