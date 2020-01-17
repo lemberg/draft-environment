@@ -15,7 +15,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Draft Environment configuration install manager.
+ * Tests init configuration install step.
  *
  * @covers \Lemberg\Draft\Environment\Config\Install\Step\AbstractInstallStep
  * @covers \Lemberg\Draft\Environment\Config\Install\Step\InitConfig
@@ -199,7 +199,7 @@ final class InitConfigTest extends TestCase {
   }
 
   /**
-   * Data provider for ::testUnnstallProcessGitIgnore().
+   * Data provider for ::testUnistallProcessGitIgnore().
    *
    * @return array<int,array<int,bool|string>>
    */

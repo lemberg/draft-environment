@@ -19,7 +19,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Draft Environment configuration install manager.
+ * Tests remove composer scripts update step.
  *
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\RemoveConfigurerComposerScript

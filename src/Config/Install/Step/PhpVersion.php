@@ -7,7 +7,7 @@ namespace Lemberg\Draft\Environment\Config\Install\Step;
 use Lemberg\Draft\Environment\Config\Install\InstallConfigStepInterface;
 
 /**
- * Configures project name (will be used as a host name as well).
+ * Configures PHP version.
  */
 final class PhpVersion extends AbstractInstallStep implements InstallConfigStepInterface {
 

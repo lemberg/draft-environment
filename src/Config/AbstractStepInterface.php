@@ -10,7 +10,7 @@ use Lemberg\Draft\Environment\Config\Manager\ManagerInterface;
 use Lemberg\Draft\Environment\Messanger\MessangerInterface;
 
 /**
- * Abstract installation/uninstall step.
+ * Abstract installation/update/uninstall step.
  */
 interface AbstractStepInterface extends MessangerInterface {
 

@@ -105,9 +105,9 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
   }
 
   /**
+   * Generates step message based on a given verb.
    *
    * @param string $verb
-   *
    *
    * @return string
    *   Install or uninstall message text.

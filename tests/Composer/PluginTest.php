@@ -109,7 +109,7 @@ final class PluginTest extends TestCase {
   }
 
   /**
-   * Tests composer plugin throws an exception when getcwd() returns FALSE.
+   * Tests composer plugin throws an exception when package does not exist.
    */
   public function testComposerPluginThrowsExceptionWhenPackageDoesNotExist(): void {
     $this->setUpComposerMock(FALSE);
