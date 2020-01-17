@@ -7,8 +7,6 @@ namespace Lemberg\Tests\Draft\Environment\Config\Install\Step;
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\IO\IOInterface;
-use Composer\Package\RootPackage;
-use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 use Lemberg\Draft\Environment\Config\Install\Step\InitConfig;
@@ -55,18 +53,14 @@ final class InitConfigTest extends TestCase {
   protected function setUp(): void {
     $this->composer = new Composer();
     $this->composer->setConfig(new ComposerConfig());
-    $package = new RootPackage(App::PACKAGE_NAME, '^3.0', '3.0.0.0');
-    $this->composer->setPackage($package);
     $this->io = $this->createMock(IOInterface::class);
 
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
     $this->fs = new Filesystem();
-    $wd = sys_get_temp_dir() . '/draft-environment';
-    $this->fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
-    chdir($wd);
+    $this->fs->mkdir(["$this->root/target"]);
 
-    $configObject = new Config("$this->root/source", "$this->root/target");
+    $configObject = new Config('.', "$this->root/target");
     $this->configInstallManager = new InstallManager($this->composer, $this->io, $configObject);
   }
 
@@ -84,15 +78,31 @@ final class InitConfigTest extends TestCase {
   final public function testInstall(): void {
     $step = new InitConfig($this->composer, $this->io, $this->configInstallManager);
 
-    foreach ($this->configInstallManager->getConfig()->getSourceConfigFilepaths() as $filepath) {
-      $this->fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
-    }
-
     $step->install();
 
     foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
     }
+  }
+
+  /**
+   * Tests that install can detect custom vendor directory.
+   *
+   * @param string $vendorDir
+   *
+   * @testWith ["vendor"]
+   *           ["vendor-custom"]
+   */
+  final public function testInstallDetectsCustomVendorDir(string $vendorDir): void {
+    $composerConfig = $this->composer->getConfig();
+    $composerConfig->merge(['config' => ['vendor-dir' => $vendorDir]]);
+    $this->composer->setConfig($composerConfig);
+
+    $step = new InitConfig($this->composer, $this->io, $this->configInstallManager);
+    $step->install();
+
+    $configObject = $this->configInstallManager->getConfig();
+    self::assertContains('load File.dirname(__FILE__) + "/' . $vendorDir . '/lemberg/draft-environment/Vagrantfile"', file_get_contents($configObject->getTargetConfigFilepath(Config::TARGET_VM_FILENAME)));
   }
 
   /**
