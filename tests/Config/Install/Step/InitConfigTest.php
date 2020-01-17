@@ -162,14 +162,15 @@ final class InitConfigTest extends TestCase {
    */
   final public function testUninstall(): void {
     $step = new InitConfig($this->composer, $this->io, $this->configInstallManager);
+    $configObject = $this->configInstallManager->getConfig();
 
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
       $this->fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
     }
 
     $step->uninstall();
 
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths(FALSE) as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths(FALSE) as $filepath) {
       self::assertFileNotExists($filepath);
     }
   }

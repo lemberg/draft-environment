@@ -31,7 +31,7 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
     $defaultConfig = $configObject->readAndParseConfigFromTheFile($sourceConfigFilepath);
     $config = array_merge($defaultConfig, $config);
 
-    $this->configUpdateManager->getConfig()->writeConfigToTheFile($sourceConfigFilepath, $targetConfigFilepath, $config);
+    $configObject->writeConfigToTheFile($sourceConfigFilepath, $targetConfigFilepath, $config);
   }
 
 }

@@ -106,22 +106,23 @@ final class InstallManagerTest extends TestCase {
    * Tests Draft Environment configuration installation.
    */
   public function testInstall(): void {
+    $configObject = $this->configInstallManager->getConfig();
     // Configuration files must exists before the test execution.
-    foreach ($this->configInstallManager->getConfig()->getSourceConfigFilepaths() as $filepath) {
+    foreach ($configObject->getSourceConfigFilepaths() as $filepath) {
       $this->fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
     }
 
     // Run the installation and check that configuration files exist after that.
     $this->configInstallManager->install();
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
     }
 
     // Remove target configuration and run installation for the 2nd time. It
     // should not run (i.e. files should not be created).
-    $this->fs->remove($this->configInstallManager->getConfig()->getTargetConfigFilepaths());
+    $this->fs->remove($configObject->getTargetConfigFilepaths());
     $this->configInstallManager->install();
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
       self::assertFileNotExists($filepath);
     }
   }
@@ -130,12 +131,13 @@ final class InstallManagerTest extends TestCase {
    * Tests Draft Environment configuration uninstall.
    */
   public function testUninstall(): void {
+    $configObject = $this->configInstallManager->getConfig();
     // Configuration files must exists before the test execution.
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
       $this->fs->dumpFile($filepath, '');
     }
     $this->configInstallManager->uninstall();
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths(FALSE) as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths(FALSE) as $filepath) {
       self::assertFileNotExists($filepath);
     }
   }
