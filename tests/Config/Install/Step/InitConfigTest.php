@@ -15,7 +15,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Draft Environment configuration install manager.
+ * Tests init configuration install step.
  *
  * @covers \Lemberg\Draft\Environment\Config\Install\Step\AbstractInstallStep
  * @covers \Lemberg\Draft\Environment\Config\Install\Step\InitConfig
@@ -162,14 +162,15 @@ final class InitConfigTest extends TestCase {
    */
   final public function testUninstall(): void {
     $step = new InitConfig($this->composer, $this->io, $this->configInstallManager);
+    $configObject = $this->configInstallManager->getConfig();
 
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
       $this->fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
     }
 
     $step->uninstall();
 
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths(FALSE) as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths(FALSE) as $filepath) {
       self::assertFileNotExists($filepath);
     }
   }
@@ -198,7 +199,7 @@ final class InitConfigTest extends TestCase {
   }
 
   /**
-   * Data provider for ::testUnnstallProcessGitIgnore().
+   * Data provider for ::testUnistallProcessGitIgnore().
    *
    * @return array<int,array<int,bool|string>>
    */

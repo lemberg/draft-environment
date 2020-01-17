@@ -318,7 +318,6 @@ final class AppTest extends TestCase {
   }
 
   /**
-   *
    * @return array<int,array<int,string>>
    */
   public function composerPostInstallOrUpdateCommandEventHandlerDataProvider(): array {

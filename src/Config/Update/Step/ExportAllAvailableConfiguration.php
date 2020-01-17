@@ -8,7 +8,7 @@ use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
 
 /**
- * Removes unneeded Composer Configurer::setUp script.
+ * Merges all available Ansible variables with existing VM configuration.
  */
 final class ExportAllAvailableConfiguration extends AbstractUpdateStep implements UpdateStepInterface {
 
@@ -31,7 +31,7 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
     $defaultConfig = $configObject->readAndParseConfigFromTheFile($sourceConfigFilepath);
     $config = array_merge($defaultConfig, $config);
 
-    $this->configUpdateManager->getConfig()->writeConfigToTheFile($sourceConfigFilepath, $targetConfigFilepath, $config);
+    $configObject->writeConfigToTheFile($sourceConfigFilepath, $targetConfigFilepath, $config);
   }
 
 }

@@ -29,14 +29,14 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
    * {@inheritdoc}
    */
   public function install(): void {
-    $config = $this->configInstallManager->getConfig();
+    $configObject = $this->configInstallManager->getConfig();
     $fs = $this->getFilesystem();
 
-    $sourceConfigFilepath = $config->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME);
-    $targetConfigFilepath = $config->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+    $sourceConfigFilepath = $configObject->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME);
+    $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
 
-    $sourceVmFilepath = $config->getSourceConfigFilepath(Config::SOURCE_VM_FILENAME);
-    $targetVmFilepath = $config->getTargetConfigFilepath(Config::TARGET_VM_FILENAME);
+    $sourceVmFilepath = $configObject->getSourceConfigFilepath(Config::SOURCE_VM_FILENAME);
+    $targetVmFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_VM_FILENAME);
 
     // Copy default configuration and Vagrantfile to the project's root
     // directory.
@@ -58,7 +58,7 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
     // already autoloaded. Composer itself allows for pretty old
     // symfony/filesystem version, thus Filesystem::appendToFile()
     // might not be available.
-    $targetGitIgnore = $config->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
+    $targetGitIgnore = $configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
 
     $gitIgnoreContent = '';
     if ($fs->exists($targetGitIgnore)) {
@@ -79,16 +79,16 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
    * {@inheritdoc}
    */
   public function uninstall(): void {
-    $config = $this->configInstallManager->getConfig();
+    $configObject = $this->configInstallManager->getConfig();
     $fs = $this->getFilesystem();
 
     // Remove Draft Environment configuration files, except .gitignore.
-    foreach ($config->getTargetConfigFilepaths(FALSE) as $filepath) {
+    foreach ($configObject->getTargetConfigFilepaths(FALSE) as $filepath) {
       $fs->remove($filepath);
     }
 
     // Clean up .gitignore.
-    $targetGitIgnore = $config->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
+    $targetGitIgnore = $configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
     $gitIgnoreContent = $fs->loadFile('.gitignore', $targetGitIgnore);
     $gitIgnoreContent = str_replace([self::GITIGNORE_VAGRANT_LINE, trim(self::GITIGNORE_VAGRANT_LINE)], '', $gitIgnoreContent);
     $gitIgnoreContent = str_replace([self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE, trim(self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE)], '', $gitIgnoreContent);
@@ -105,9 +105,9 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
   }
 
   /**
+   * Generates step message based on a given verb.
    *
    * @param string $verb
-   *
    *
    * @return string
    *   Install or uninstall message text.

@@ -2,10 +2,25 @@
 
 - [GH-90](https://github.com/lemberg/draft-environment/issues/90) - Replaced internal MySQL role with [geerlingguy.mysql @ 2.9.5](https://github.com/geerlingguy/ansible-role-mysql) Ansible role
 - [GH-83](https://github.com/lemberg/draft-environment/issues/83) - Added configuration update manager
+- [GH-119](https://github.com/lemberg/draft-environment/issues/119) - Updated all project dependencies, including supported Ansible version (2.9), Composer packages and Ansible Roles:
+    * oefenweb.swapfile (v2.0.7 => v2.0.24)
+    * geerlingguy.mailhog (2.1.4 => 2.2.0)
+    * T2L.php (1.1.2 => 1.2.1)
+    * T2L.java (1.1.0 => 1.2.0)
+    * T2L.solr (2.0.1 => 2.1.0)
+
+    Bump minimum supported PHP version to 7.2
+
+    Bump the following defaults:
+
+    * PHP version: 7.3
+    * Solr version: 7.7.2
+
+- [GH-84](https://github.com/lemberg/draft-environment/issues/84) - Exported all available Ansible role variables to the [default.vm-settings.yml](/default.vm-settings.yml)
 - [GH-92](https://github.com/lemberg/draft-environment/issues/92) - Added mod_expires and mod_headers for Apache2
 - [GH-117](https://github.com/lemberg/draft-environment/issues/117) - Replaced Configurer with Composer event handler
-- [GH-94](https://github.com/lemberg/draft-environment/issues/94) - Converted project to a composer-plugin. Clean up Draft Environment config files upon package uninstallation
-- [GH-96](https://github.com/lemberg/draft-environment/issues/96) - Added vagrant-disksize plugin, which allows to alter VirtualBox disk size. By default VirtualBox disk size is capped at 10Gb, which is fine for most of the projects, unless project has huge database. Introduced new variable `virtualbox.disk_size` (defaults to `10Gb`)
+- [GH-94](https://github.com/lemberg/draft-environment/issues/94) - Converted project to a composer-plugin. Clean up Draft Environment configuration files upon package uninstall
+- [GH-96](https://github.com/lemberg/draft-environment/issues/96) - Added vagrant-disksize plugin, which allows to alter VirtualBox disk size. By default VirtualBox disk size is capped at 10GB, which is fine for most of the projects, unless project has huge database. Introduced new variable `virtualbox.disk_size` (defaults to `10GB`)
 - [GH-104](https://github.com/lemberg/draft-environment/issues/104) - Bump minimum supported Vagrant version to 2.2.6
 - [GH-106](https://github.com/lemberg/draft-environment/issues/106) - Converted tests to support Molecule 2
 

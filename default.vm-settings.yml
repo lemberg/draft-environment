@@ -67,7 +67,7 @@ virtualbox:
   cpuexecutioncap: 100
   # VirtualBox disk size (added by vagrant-disksize plugin).
   # See https://github.com/sprotheroe/vagrant-disksize
-  disk_size: 10Gb
+  disk_size: 10GB
 
 # Ansible local configuration.
 ansible:

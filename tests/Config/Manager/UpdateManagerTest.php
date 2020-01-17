@@ -14,9 +14,9 @@ use Composer\Repository\RepositoryManager;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
+use Lemberg\Draft\Environment\Utility\Filesystem;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Tests Draft Environment configuration update manager.
@@ -40,6 +40,11 @@ final class UpdateManagerTest extends TestCase {
    * @var string
    */
   private $root;
+
+  /**
+   * @var \Lemberg\Draft\Environment\Utility\Filesystem
+   */
+  private $fs;
 
   /**
    * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
@@ -75,8 +80,8 @@ final class UpdateManagerTest extends TestCase {
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
     $wd = sys_get_temp_dir() . '/draft-environment';
-    $fs = new Filesystem();
-    $fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
+    $this->fs = new Filesystem();
+    $this->fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
     chdir($wd);
 
     // Dump empty composer.json.
@@ -115,11 +120,10 @@ final class UpdateManagerTest extends TestCase {
     $configObject = $this->configUpdateManager->getConfig();
 
     // Configuration files must exists before the test execution.
-    $fs = new Filesystem();
     foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
-      $fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
+      $this->fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
     }
-    $fs->dumpFile($configObject->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME), 'phpunit: ' . __CLASS__);
+    $this->fs->dumpFile($configObject->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME), 'phpunit: ' . __CLASS__);
 
     $this->configUpdateManager->update();
     foreach ($configObject->getTargetConfigFilepaths() as $filepath) {

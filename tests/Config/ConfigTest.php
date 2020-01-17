@@ -10,7 +10,7 @@ use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests Draft Environment configuration install manager.
+ * Tests configuration class.
  *
  * @covers \Lemberg\Draft\Environment\Config\Config
  */
@@ -46,7 +46,7 @@ final class ConfigTest extends TestCase {
   }
 
   /**
-   * Tests the source configuration file paths getter.
+   * Tests ::getSourceConfigFilepaths().
    */
   public function testSourceConfigFilepathsGetter(): void {
     $expected = [
@@ -59,7 +59,7 @@ final class ConfigTest extends TestCase {
   }
 
   /**
-   * Tests a single source configuration file path getter.
+   * Tests ::getSourceConfigFilepath().
    */
   public function testSourceConfigFilepathGetter(): void {
     $expected = "$this->root/source/" . Config::SOURCE_CONFIG_FILENAME;
@@ -73,7 +73,7 @@ final class ConfigTest extends TestCase {
   }
 
   /**
-   * Tests the target configuration file path getter.
+   * Tests ::getTargetConfigFilepaths().
    */
   public function testTargetConfigFilepathsGetter(): void {
     // Test including .gitignore.
@@ -97,7 +97,7 @@ final class ConfigTest extends TestCase {
   }
 
   /**
-   * Tests a single target configuration file path getter.
+   * Tests ::getTargetConfigFilepath().
    */
   public function testTargetConfigFilepathGetter(): void {
     $expected = "$this->root/target/" . Config::TARGET_CONFIG_FILENAME;
