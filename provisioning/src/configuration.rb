@@ -113,7 +113,7 @@ class Configuration
     # Set hostname if it's not defined.
     if self.get("vagrant.hostname").length == 0
       require 'securerandom'
-      self.set("virtualbox.hostname", "draft-env-" + SecureRandom.hex(6))
+      self.set("vagrant.hostname", "draft." + Time.now.to_i.to_s)
     end
     # Set VirtualBox machine name to match Vagrant host name if it's empty.
     if self.get("virtualbox.name").length == 0
