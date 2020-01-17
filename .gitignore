@@ -1,14 +1,8 @@
 # Ignore Vagrant virtual machine data.
 /.vagrant
 
-# Ignore Molecule directory.
-**/.molecule
-
-# Ignore documents root folder.
+# Ignore default documents root folder.
 /docroot
-
-# Ignore logs.
-/logs
 
 # Ignore Composer-managed dependencies.
 /vendor
