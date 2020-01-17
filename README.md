@@ -74,7 +74,3 @@ Everybody loves documentation. We do too! [Check this out](/docs).
 ## Changelog
 
 Changelog can be found here [CHANGELOG.md](/CHANGELOG.md)
-
-## Upgrade
-
-Upgrade instructions can be found here [UPGRADE.md](/UPGRADE.md)
