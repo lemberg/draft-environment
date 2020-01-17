@@ -48,7 +48,7 @@ final class UpdateManager extends AbstractConfigManager implements UpdateManager
     $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
     /** @var \Composer\Package\Package $localPackage */
     $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    return $localPackage->getExtra()['draft-environment-last-update-weight'] ?? 0;
+    return $localPackage->getExtra()['draft-environment']['last-update-weight'] ?? 0;
   }
 
   /**
@@ -59,7 +59,7 @@ final class UpdateManager extends AbstractConfigManager implements UpdateManager
     /** @var \Composer\Package\Package $localPackage */
     $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
     $extra = $localPackage->getExtra();
-    $extra['draft-environment-last-update-weight'] = $weight;
+    $extra['draft-environment']['last-update-weight'] = $weight;
     $localPackage->setExtra($extra);
   }
 
