@@ -36,14 +36,6 @@
         "symfony/filesystem": "^3.4|^4",
         "symfony/yaml": "^3.4|^4"
     },
-    "scripts": {
-        "post-install-cmd": [
-            "Lemberg\\Draft\\Environment\\Configurer::setUp"
-        ],
-        "post-update-cmd": [
-            "Lemberg\\Draft\\Environment\\Configurer::setUp"
-        ]
-    },
     "autoload-dev": {
         "psr-4": {
             "Lemberg\\Tests\\Draft\\Environment\\": "tests/"
