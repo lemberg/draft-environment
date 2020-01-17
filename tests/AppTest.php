@@ -15,13 +15,15 @@ use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
+use Composer\Package\RootPackage;
 use Composer\Repository\CompositeRepository;
+use Composer\Repository\RepositoryManager;
 use Composer\Script\Event as ScriptEvent;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\InstallManager;
-use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
+use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -54,7 +56,7 @@ final class AppTest extends TestCase {
   private $configInstallManager;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface|\PHPUnit\Framework\MockObject\MockObject
    */
   private $configUpdateManager;
 
@@ -88,6 +90,23 @@ final class AppTest extends TestCase {
   protected function setUp(): void {
     $this->composer = new Composer();
     $this->composer->setConfig(new ComposerConfig());
+    $package = new RootPackage(App::PACKAGE_NAME, '^3.0', '3.0.0.0');
+    $this->composer->setPackage($package);
+    $manager = $this->getMockBuilder(RepositoryManager::class)
+      ->disableOriginalConstructor()
+      ->setMethods([
+        'getLocalRepository',
+        'findPackage',
+      ])
+      ->getMock();
+    $manager->expects(self::any())
+      ->method('getLocalRepository')
+      ->willReturnSelf();
+    $manager->expects(self::any())
+      ->method('findPackage')
+      ->with(App::PACKAGE_NAME, '*')
+      ->willReturn($package);
+    $this->composer->setRepositoryManager($manager);
     $this->io = $this->createMock(IOInterface::class);
 
     // Mock required PackageEvent constructor arguments.
@@ -103,7 +122,7 @@ final class AppTest extends TestCase {
 
     $config = new Config("$root/source", "$root/target");
     $this->configInstallManager = new InstallManager($this->composer, $this->io, $config);
-    $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $config);
+    $this->configUpdateManager = $this->createMock(UpdateManagerInterface::class);
     $this->app = new App($this->composer, $this->io, $this->configInstallManager, $this->configUpdateManager);
   }
 
@@ -192,21 +211,18 @@ final class AppTest extends TestCase {
       self::assertFileNotExists($filepath);
     }
 
+    // Ensure that install manager has marked all available updates as already
+    // applied.
+    $this->configUpdateManager
+      ->expects(self::once())
+      ->method('setLastAppliedUpdateWeight');
+
     // Installation process should be triggered by the
     // PackageEvents::POST_PACKAGE_INSTALL only.
     $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
     foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
-    }
-
-    // Clean up target configuration.
-    $fs->remove($this->configInstallManager->getConfig()->getTargetConfigFilepaths());
-
-    // Install should not run on every ScriptEvents::POST_UPDATE_CMD dispatch.
-    $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileNotExists($filepath);
     }
   }
 

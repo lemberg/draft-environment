@@ -31,14 +31,10 @@ abstract class AbstractConfigManager implements ManagerInterface {
   /**
    * @var \Lemberg\Draft\Environment\Config\AbstractStepInterface[]
    */
-  protected $steps;
+  protected $steps = [];
 
   /**
-   * Draft Environment configuration manager constructor.
-   *
-   * @param \Composer\Composer $composer
-   * @param \Composer\IO\IOInterface $io
-   * @param \Lemberg\Draft\Environment\Config\Config $config
+   * {@inheritdoc}
    */
   final public function __construct(Composer $composer, IOInterface $io, Config $config) {
     $this->composer = $composer;
