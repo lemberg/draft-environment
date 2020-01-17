@@ -174,4 +174,73 @@ final class InitConfigTest extends TestCase {
     }
   }
 
+  /**
+   * Tests that uninstall can process .gitignore correctly.
+   *
+   * @param string $gitIgnoreContent
+   * @param string $expected
+   *
+   * @dataProvider uninstallProcessGitIgnoreDataProvider
+   */
+  final public function testUninstallProcessGitIgnore(string $gitIgnoreContent, string $expected): void {
+    $configObject = $this->configInstallManager->getConfig();
+    $this->fs->dumpFile($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE), $gitIgnoreContent);
+
+    $step = new InitConfig($this->composer, $this->io, $this->configInstallManager);
+    $step->uninstall();
+
+    if (preg_replace('/\R+/m', '', $expected) === '') {
+      self::assertFileNotExists($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE));
+    }
+    else {
+      self::assertSame($expected, file_get_contents($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE)));
+    }
+  }
+
+  /**
+   * Data provider for ::testUnnstallProcessGitIgnore().
+   *
+   * @return array<int,array<int,bool|string>>
+   */
+  final public function uninstallProcessGitIgnoreDataProvider(): array {
+
+    $reverseInstall = [];
+    foreach ($this->installProcessGitIgnoreDataProvider() as [$a, $b]) {
+      $reverseInstall[] = [$b, $a];
+    }
+
+    $extraCases = [
+      [
+        "# Ignore Composer-managed dependencies.\n/vendor\n" . self::GITIGNORE_VAGRANT_LINE . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE . "# Ignore binaries.\n/bin\n",
+        "# Ignore Composer-managed dependencies.\n/vendor\n# Ignore binaries.\n/bin\n",
+      ],
+      [
+        ltrim(self::GITIGNORE_VAGRANT_LINE) . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE,
+        '',
+      ],
+      [
+        self::GITIGNORE_VAGRANT_LINE . ltrim(self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE),
+        '',
+      ],
+      [
+        ltrim(self::GITIGNORE_VAGRANT_LINE) . ltrim(self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE),
+        '',
+      ],
+      [
+        "\n\n" . self::GITIGNORE_VAGRANT_LINE . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE,
+        '',
+      ],
+      [
+        self::GITIGNORE_VAGRANT_LINE . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE . "\n\n\n",
+        '',
+      ],
+      [
+        "\n\n" . self::GITIGNORE_VAGRANT_LINE . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE . "\n",
+        '',
+      ],
+    ];
+
+    return array_merge($reverseInstall, $extraCases);
+  }
+
 }
