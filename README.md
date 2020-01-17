@@ -1,22 +1,22 @@
-# Draft Environment
+# Draft Environment 3.x.x
 
-[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=3.0.0-beta4)](https://travis-ci.org/lemberg/draft-environment)
+[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=3.x.x)](https://travis-ci.org/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.
 
 ## Prerequisites
 
-- PHP and Composer
+- PHP (7.2+) and Composer
 - Vagrant (2.2.6+)
-- VirtualBox
+- VirtualBox (5.2+)
 
 ## Vagrant plugins (will be automatically installed)
 
-#### Vagrant Host Manager
+#### [Vagrant Host Manager](https://github.com/devopsgroup-io/vagrant-hostmanager)
 
 Manages host and/or guest `hosts` files. Draft is configured to create a `hostname.test` DNS record on a host machine.
 
-#### vagrant-vbguest
+#### [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
 
 Automatically installs the host's VirtualBox Guest Additions on the guest system.
 
@@ -24,48 +24,44 @@ Automatically installs the host's VirtualBox Guest Additions on the guest system
 
 A Vagrant plugin to resize disks in VirtualBox.
 
-#### Vagrant WinNFSd (WINDOWS only)
+#### [Vagrant WinNFSd (WINDOWS only)](https://github.com/winnfsd/vagrant-winnfsd)
 
 Dramatically increases disk IO on Windows by adding NFS support.
 
 ## How to
 
-1. Add Draft to the project (as a dev dependency):
+1. Add Draft Environment to the project (as a dev dependency):
 
     ```
     $ composer require --dev lemberg/draft-environment
     ```
 
-1. Configure guest machine by answering installer's questions. At the moment, project name (hostname) is the only setting that can be set interactively. More to come. Adjust other settings by editing `vm-settings.yml` manually
+1. Configure guest machine by answering installer's questions. At the moment, project name (hostname) and PHP version are the only settings that can be set interactively
 
-1. Create and configure guest machine:
+1. Override any variable used in any Ansible role by manually editing the `vm-settings.yml`. All available variables alongside with their default values are listed in [default.vm-settings.yml](/default.vm-settings.yml)
+
+  Here's the list of used roles:
+
+  - draft (internal)
+  - [oefenweb.swapfile @ v2.0.24](https://github.com/Oefenweb/ansible-swapfile/tree/v2.0.24)
+  - [geerlingguy.mailhog @ 2.2.0](https://github.com/geerlingguy/ansible-role-mailhog/tree/2.2.0)
+  - git_config (internal)
+  - apache2 (internal)
+  - [geerlingguy.mysql @ 2.9.5](https://github.com/geerlingguy/ansible-role-mysql/tree/2.9.5)
+  - [T2L.php @ 1.2.1](https://github.com/T2L/ansible-role-php/tree/1.2.1)
+  - [T2L.composer @ 2.0.2](https://github.com/T2L/ansible-role-composer/tree/2.0.2)
+  - [T2L.java @ 1.2.0](https://github.com/T2L/ansible-role-java/tree/1.2.0)
+  - [T2L.solr @ 2.1.0](https://github.com/T2L/ansible-role-solr/tree/2.1.0)
+
+1. Create and provision the guest machine:
 
     ```
     $ vagrant up
     ```
 
-1. Override any variable used in any Ansible role by including it in the `vm-settings.yml`. For details see [default.vm-settings.yml](/default.vm-settings.yml)
+1. Commit `.gitignore`, `Vagrantfile` and `vm-settings.yml` to lock the VM state
 
-    Here's the list of used roles and available variables (and their default values):
-
-    - [draft (internal)](/provisioning/playbooks/roles/draft/defaults/main.yml)
-    - [oefenweb.swapfile](https://github.com/Oefenweb/ansible-swapfile/blob/v2.0.7/defaults/main.yml)
-    - [geerlingguy.mailhog](https://github.com/geerlingguy/ansible-role-mailhog/blob/2.1.4/defaults/main.yml)
-    - git_config (internal)
-    - [apache2 (internal)](/provisioning/playbooks/roles/apache2/defaults/main.yml)
-    - mysql (internal)
-    - [T2L.php](https://github.com/T2L/ansible-role-php/blob/1.1.2/defaults/main.yml)
-    - [T2L.composer](https://github.com/T2L/ansible-role-composer/blob/2.0.2/defaults/main.yml)
-    - [T2L.java](https://github.com/T2L/ansible-role-java/blob/1.1.0/defaults/main.yml)
-    - [T2L.solr](https://github.com/T2L/ansible-role-solr/blob/2.0.1/defaults/main.yml)
-
-    Some of those variables are already overridden. Find them [here](/provisioning/playbooks/vars).
-
-1. Commit `Vagrantfile` and `vm-settings.yml` to lock the VM state
-
-1. File `vm-settings.yml` is project-specific, not a machine specific. Configuration can be overridden in `vm-settings.local.yml` (and this file must not be committed)
-
-1. Run `vagrant ssh`. Project is located in `/var/www/draft` by default (see [default.vm-settings.yml](/default.vm-settings.yml#L28))
+1. Configuration can be overridden locally by creating and editing `vm-settings.local.yml` (and this file must not be committed)
 
 ## Documentation
 

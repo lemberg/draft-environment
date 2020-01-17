@@ -4,8 +4,8 @@
 - [GH-83](https://github.com/lemberg/draft-environment/issues/83) - Added configuration update manager
 - [GH-92](https://github.com/lemberg/draft-environment/issues/92) - Added mod_expires and mod_headers for Apache2
 - [GH-117](https://github.com/lemberg/draft-environment/issues/117) - Replaced Configurer with Composer event handler
-- [GH-94](https://github.com/lemberg/draft-environment/issues/94) - Converted project to a composer-plugin. Clean up Draft Environment config files upon package uninstallation
-- [GH-96](https://github.com/lemberg/draft-environment/issues/96) - Added vagrant-disksize plugin, which allows to alter VirtualBox disk size. By default VirtualBox disk size is capped at 10Gb, which is fine for most of the projects, unless project has huge database. Introduced new variable `virtualbox.disk_size` (defaults to `10Gb`)
+- [GH-94](https://github.com/lemberg/draft-environment/issues/94) - Converted project to a composer-plugin. Clean up Draft Environment configuration files upon package uninstall
+- [GH-96](https://github.com/lemberg/draft-environment/issues/96) - Added vagrant-disksize plugin, which allows to alter VirtualBox disk size. By default VirtualBox disk size is capped at 10GB, which is fine for most of the projects, unless project has huge database. Introduced new variable `virtualbox.disk_size` (defaults to `10GB`)
 - [GH-104](https://github.com/lemberg/draft-environment/issues/104) - Bump minimum supported Vagrant version to 2.2.6
 - [GH-106](https://github.com/lemberg/draft-environment/issues/106) - Converted tests to support Molecule 2
 
