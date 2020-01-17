@@ -12,14 +12,27 @@ use Lemberg\Draft\Environment\Config\Install\Step\InitConfig;
 /**
  * Draft Environment configuration install/uninstall manager.
  */
-final class InstallManager extends AbstractConfigManager {
+final class InstallManager extends AbstractConfigManager implements InstallManagerInterface {
 
   /**
-   * Installs the Draft Environment.
+   * {@inheritdoc}
    */
   public function install(): void {
     $this->installInitPhase();
     $this->installConfigPhase();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function uninstall(): void {
+    // Discovery mechanism (similar to the one in install()) cannot be used here
+    // as Composer will remove all the dependencies of this package before
+    // dispatching the PRE_PACKAGE_UNINSTALL event.
+    // At the moment, only single uninstall step is required.
+    $step = new InitConfig($this->composer, $this->io, $this);
+    $step->uninstall();
+    $this->writeMessage($step->getMessages());
   }
 
   /**
@@ -76,19 +89,6 @@ HERE;
     if ($message !== '') {
       $this->io->write("\n" . $message);
     }
-  }
-
-  /**
-   * Uninstalls the Draft Environment configuration.
-   */
-  public function uninstall(): void {
-    // Discovery mechanism (similar to the one in install()) cannot be used here
-    // as Composer will remove all the dependencies of this package before
-    // dispatching the PRE_PACKAGE_UNINSTALL event.
-    // At the moment, only single uninstall step is required.
-    $step = new InitConfig($this->composer, $this->io, $this);
-    $step->uninstall();
-    $this->writeMessage($step->getMessages());
   }
 
 }

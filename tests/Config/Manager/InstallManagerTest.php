@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\Config;
+namespace Lemberg\Tests\Draft\Environment\Config\Manager;
 
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
@@ -16,6 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Tests Draft Environment configuration install manager.
  *
+ * @covers \Lemberg\Draft\Environment\Config\Manager\AbstractConfigManager
  * @covers \Lemberg\Draft\Environment\Config\Manager\InstallManager
  */
 final class InstallManagerTest extends TestCase {
@@ -36,7 +37,7 @@ final class InstallManagerTest extends TestCase {
   private $root;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\InstallManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface
    */
   private $configInstallManager;
 

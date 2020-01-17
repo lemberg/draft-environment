@@ -19,7 +19,7 @@ trait FileReaderTrait {
   /**
    * Init file system object.
    */
-  protected function initFileSystem(): void {
+  final protected function initFileSystem(): void {
     $this->fs = new Filesystem();
   }
 
@@ -34,7 +34,7 @@ trait FileReaderTrait {
    * @throws \RuntimeException
    *   When file cannot be read for any reason.
    */
-  protected function readFile(string $filename, string $filepath): string {
+  final protected function readFile(string $filename, string $filepath): string {
     $content = file_get_contents($filepath);
     if ($content === FALSE) {
       throw new \RuntimeException(sprintf("Draft Environment Composer plugin was not able to read %s at '%s'", $filename, $filepath));
@@ -49,7 +49,7 @@ trait FileReaderTrait {
    * @param string $filepath
    * @param string $content
    */
-  protected function writeFile(string $filepath, string $content): void {
+  final protected function writeFile(string $filepath, string $content): void {
     $this->fs->dumpFile($filepath, $content);
   }
 
