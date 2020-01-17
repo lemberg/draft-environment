@@ -1,6 +1,8 @@
 # Draft Environment 3.x.x
 
-[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=3.x.x)](https://travis-ci.org/lemberg/draft-environment)
+![Packagist](https://img.shields.io/packagist/dm/lemberg/draft-environment)
+![Build Status](https://img.shields.io/travis/lemberg/draft-environment/3.x.x)
+![Codecov](https://img.shields.io/codecov/c/github/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.
 
