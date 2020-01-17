@@ -7,6 +7,9 @@ namespace Lemberg\Tests\Draft\Environment\Config\Manager;
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\IO\IOInterface;
+use Composer\Package\RootPackage;
+use Composer\Repository\RepositoryManager;
+use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 use org\bovigo\vfs\vfsStream;
@@ -47,6 +50,23 @@ final class InstallManagerTest extends TestCase {
   protected function setUp(): void {
     $this->composer = new Composer();
     $this->composer->setConfig(new ComposerConfig());
+    $package = new RootPackage(App::PACKAGE_NAME, '^3.0', '3.0.0.0');
+    $this->composer->setPackage($package);
+    $manager = $this->getMockBuilder(RepositoryManager::class)
+      ->disableOriginalConstructor()
+      ->setMethods([
+        'getLocalRepository',
+        'findPackage',
+      ])
+      ->getMock();
+    $manager->expects(self::any())
+      ->method('getLocalRepository')
+      ->willReturnSelf();
+    $manager->expects(self::any())
+      ->method('findPackage')
+      ->with(App::PACKAGE_NAME, '*')
+      ->willReturn($package);
+    $this->composer->setRepositoryManager($manager);
     $this->io = $this->createMock(IOInterface::class);
 
     // Mock source and target configuration directories.
@@ -87,9 +107,18 @@ final class InstallManagerTest extends TestCase {
       $fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
     }
 
+    // Run the installation and check that configuration files exist after that.
     $this->configInstallManager->install();
     foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
+    }
+
+    // Remove target configuration and run installation for the 2nd time. It
+    // should not run (i.e. files should not be created).
+    $fs->remove($this->configInstallManager->getConfig()->getTargetConfigFilepaths());
+    $this->configInstallManager->install();
+    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
+      self::assertFileNotExists($filepath);
     }
   }
 
