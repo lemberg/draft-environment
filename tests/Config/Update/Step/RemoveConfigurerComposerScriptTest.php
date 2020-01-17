@@ -21,6 +21,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Tests Draft Environment configuration install manager.
  *
+ * @covers \Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\RemoveConfigurerComposerScript
  */
 final class RemoveConfigurerComposerScriptTest extends TestCase {
@@ -41,12 +42,7 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
   private $root;
 
   /**
-   * @var string
-   */
-  private $composerFile;
-
-  /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
    */
   private $configUpdateManager;
 
@@ -65,8 +61,6 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
     $wd = sys_get_temp_dir() . '/draft-environment';
     $fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
     chdir($wd);
-    $this->composerFile = "$wd/composer.json";
-    $fs->dumpFile($this->composerFile, '');
 
     $configObject = new Config("$this->root/source", "$this->root/target");
     $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject);

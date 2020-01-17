@@ -8,6 +8,7 @@ use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Operation\UninstallOperation;
+use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\DependencyResolver\PolicyInterface;
 use Composer\DependencyResolver\Pool;
 use Composer\DependencyResolver\Request;
@@ -21,12 +22,9 @@ use Composer\Repository\RepositoryManager;
 use Composer\Script\Event as ScriptEvent;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
-use Lemberg\Draft\Environment\Config\Config;
-use Lemberg\Draft\Environment\Config\Manager\InstallManager;
+use Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
-use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Tests Draft Environment app.
@@ -51,12 +49,12 @@ final class AppTest extends TestCase {
   private $app;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\InstallManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface&\PHPUnit\Framework\MockObject\MockObject
    */
   private $configInstallManager;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface|\PHPUnit\Framework\MockObject\MockObject
+   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface&\PHPUnit\Framework\MockObject\MockObject
    */
   private $configUpdateManager;
 
@@ -115,101 +113,199 @@ final class AppTest extends TestCase {
     $this->request = new Request();
     $this->installedRepo = $this->createMock(CompositeRepository::class);
 
-    // Mock source and target configuration directories.
-    $root = vfsStream::setup()->url();
-    $fs = new Filesystem();
-    $fs->mkdir(["$root/source", "$root/target"]);
-
-    $config = new Config("$root/source", "$root/target");
-    $this->configInstallManager = new InstallManager($this->composer, $this->io, $config);
+    $this->configInstallManager = $this->createMock(InstallManagerInterface::class);
     $this->configUpdateManager = $this->createMock(UpdateManagerInterface::class);
+
     $this->app = new App($this->composer, $this->io, $this->configInstallManager, $this->configUpdateManager);
   }
 
   /**
    * Tests Composer PackageEvents::PRE_PACKAGE_UNINSTAL event handler.
    */
-  public function testComposerPrePackageUninstallEventHandler(): void {
-    // Target configuration files must exists before the test execution.
-    $fs = new Filesystem();
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      $fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
-    }
-
+  public function testComposerPrePackageUninstallEventHandlerDoesNotRunWithOtherPackages(): void {
     // Clean up must not run when any package other than
     // "lemberg/draft-environment" is being uninstalled.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('uninstall');
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileExists($filepath);
-    }
+  }
 
+  /**
+   * Tests Composer PackageEvents::PRE_PACKAGE_UNINSTAL event handler.
+   */
+  public function testComposerPrePackageUninstallEventHandlerDoesNotRunWithOtherEvents(): void {
     // Clean up must not run when other than
     // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('uninstall');
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileExists($filepath);
-    }
+  }
 
+  /**
+   * Tests Composer PackageEvents::PRE_PACKAGE_UNINSTAL event handler.
+   */
+  public function testComposerPrePackageUninstallEventHandlerDoesRun(): void {
     // Clean up must run when "lemberg/draft-environment" is being uninstalled.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
     $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configInstallManager
+      ->expects(self::once())
+      ->method('uninstall');
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths(FALSE) as $filepath) {
-      self::assertFileNotExists($filepath);
-    }
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
+   */
+  public function testComposerPostPackageUpdateEventHandlerDoesNotRunWithOtherPackages(): void {
+    // Update must not run when any package other than
+    // "lemberg/draft-environment" is being updated.
+    $initial = new Package('dummy', '1.0.0.0', '^1.0');
+    $target = new Package('dummy', '1.2.0.0', '^1.0');
+    $operation = new UpdateOperation($initial, $target);
+    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configUpdateManager
+      ->expects(self::never())
+      ->method('update');
+    $this->app->handleEvent($event);
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
+   */
+  public function testComposerPostPackageUpdateEventHandlerDoesNotRunWithOtherEvents(): void {
+    // Update must not run when other than
+    // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
+    $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($initial);
+    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configUpdateManager
+      ->expects(self::never())
+      ->method('update');
+    $this->app->handleEvent($event);
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
+   */
+  public function testComposerPostPackageUpdateEventHandlerDoesRun(): void {
+    // Update must run when "lemberg/draft-environment" is being updated.
+    $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
+    $operation = new UpdateOperation($initial, $target);
+    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configUpdateManager
+      ->expects(self::once())
+      ->method('update');
+    $this->app->handleEvent($event);
   }
 
   /**
    * Tests Composer ScriptEvents::POST_INSTALL_CMD and
-   * ScriptEvents::POST_UPDATE_CMD event handler.
+   * ScriptEvents::POST_UPDATE_CMD event handlers.
+   *
+   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
    */
-  public function testComposerPostInstallOrUpdateCommandEventHandler(): void {
-    // Source configuration files must exists before the test execution.
-    $fs = new Filesystem();
-    foreach ($this->configInstallManager->getConfig()->getSourceConfigFilepaths() as $filepath) {
-      $fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
-    }
+  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithEveryEvent(string $scriptEventName): void {
+    // Install should not run on every ScriptEvents::POST_INSTALL_CMD or
+    // ScriptEvents::POST_UPDATE_CMD event dispatch. Install should only run if
+    // the package itself is being installed.
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('install');
 
-    // Install should not run on every ScriptEvents::POST_INSTALL_CMD dispatch.
-    $event = new ScriptEvent(ScriptEvents::POST_INSTALL_CMD, $this->composer, $this->io);
+    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileNotExists($filepath);
-    }
+  }
 
-    // Installation process should be triggered by the
-    // PackageEvents::POST_PACKAGE_INSTALL event only.
+  /**
+   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
+   * ScriptEvents::POST_UPDATE_CMD event handlers.
+   */
+  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithOtherScriptEvents(): void {
+    // Install should not run on any other script event even if the package
+    // itself is being installed.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
     $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent(ScriptEvents::POST_ARCHIVE_CMD, $this->composer, $this->io);
+
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('install');
+
     $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileExists($filepath);
-    }
+  }
 
-    // Clean up target configuration.
-    $fs->remove($this->configInstallManager->getConfig()->getTargetConfigFilepaths());
+  /**
+   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
+   * ScriptEvents::POST_UPDATE_CMD event handlers.
+   *
+   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
+   */
+  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithOtherPackageEvents(string $scriptEventName): void {
+    // Install should not run on any other script event even if the package
+    // itself is being installed.
+    $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($package);
+    $packageEvent = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
 
-    // Install should not run on every ScriptEvents::POST_INSTALL_CMD dispatch.
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('install');
+
+    $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileNotExists($filepath);
-    }
+  }
 
-    // Install should not run on every ScriptEvents::POST_UPDATE_CMD dispatch.
-    $event = new ScriptEvent(ScriptEvents::POST_UPDATE_CMD, $this->composer, $this->io);
+  /**
+   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
+   * ScriptEvents::POST_UPDATE_CMD event handlers.
+   *
+   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
+   */
+  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithOtherPackages(string $scriptEventName): void {
+    // Install should not run if any other package is being installed.
+    $package = new Package('dummy', '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($package);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
+
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('install');
+
+    $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileNotExists($filepath);
-    }
+  }
+
+  /**
+   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
+   * ScriptEvents::POST_UPDATE_CMD event handlers.
+   *
+   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
+   */
+  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesRun(string $scriptEventName): void {
+    $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($package);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
+
+    // Install should run.
+    $this->configInstallManager
+      ->expects(self::once())
+      ->method('install');
 
     // Ensure that install manager has marked all available updates as already
     // applied.
@@ -217,13 +313,19 @@ final class AppTest extends TestCase {
       ->expects(self::once())
       ->method('setLastAppliedUpdateWeight');
 
-    // Installation process should be triggered by the
-    // PackageEvents::POST_PACKAGE_INSTALL only.
     $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
-    foreach ($this->configInstallManager->getConfig()->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileExists($filepath);
-    }
+  }
+
+  /**
+   *
+   * @return array<int,array<int,string>>
+   */
+  public function composerPostInstallOrUpdateCommandEventHandlerDataProvider(): array {
+    return [
+      [ScriptEvents::POST_INSTALL_CMD],
+      [ScriptEvents::POST_UPDATE_CMD],
+    ];
   }
 
 }

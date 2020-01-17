@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lemberg\Tests\Draft\Environment\Config;
 
 use Lemberg\Draft\Environment\Config\Config;
+use Lemberg\Draft\Environment\Utility\Filesystem;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Tests Draft Environment configuration install manager.
@@ -27,13 +27,20 @@ final class ConfigTest extends TestCase {
   private $config;
 
   /**
+   * @var \Lemberg\Draft\Environment\Utility\Filesystem
+   */
+  private $fs;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp(): void {
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
-    $fs = new Filesystem();
-    $fs->mkdir(["$this->root/source", "$this->root/target"]);
+    $this->fs = new Filesystem();
+    $this->fs->mkdir(
+      ["$this->root/source", "$this->root/target", "$this->root/wd"]
+    );
 
     $this->config = new Config("$this->root/source", "$this->root/target");
   }
@@ -101,6 +108,84 @@ final class ConfigTest extends TestCase {
     $filename = 'this-file-is-not-part-of-the-draft-environment-project.yml';
     $this->expectExceptionMessage(sprintf("Non-existing Draft Environment target configuration filename '%s' has been passed.", $filename));
     $this->config->getTargetConfigFilepath($filename);
+  }
+
+  /**
+   * Tests ::readConfigFromTheFile().
+   */
+  public function testReadConfigFromTheFile(): void {
+    $content = 'phpunit: ' . __METHOD__;
+    $filename = "$this->root/wd/config.yml";
+    $this->fs->dumpFile($filename, $content);
+
+    self::assertSame($content, $this->config->readConfigFromTheFile($filename));
+  }
+
+  /**
+   * Tests ::readAndParseConfigFromTheFile().
+   *
+   * @depends testReadConfigFromTheFile
+   */
+  public function testReadAndParseConfigFromTheFile(): void {
+    $content = "phunit:\n  method: " . __METHOD__;
+    $filename = "$this->root/wd/config.yml";
+    $this->fs->dumpFile($filename, $content);
+    self::assertSame(['phunit' => ['method' => __METHOD__]], $this->config->readAndParseConfigFromTheFile($filename));
+  }
+
+  /**
+   * Tests ::writeConfigToTheFile().
+   *
+   * @param string $sorceYaml
+   * @param string $expectedYaml
+   * @param array<int|string,array> $config
+   *
+   * @depends testReadAndParseConfigFromTheFile
+   * @dataProvider writeConfigToTheFileDataProvider
+   */
+  public function testWriteConfigToTheFile(string $sorceYaml, string $expectedYaml, array $config): void {
+    $source = "$this->root/wd/config-source.yml";
+    $target = "$this->root/wd/config-target.yml";
+    $this->fs->dumpFile($source, $sorceYaml);
+    $this->config->writeConfigToTheFile($source, $target, $config);
+
+    self::assertSame($expectedYaml, $this->config->readConfigFromTheFile($target));
+  }
+
+  /**
+   * Data provider for the ::testWriteConfigToTheFile().
+   *
+   * @return array<int|string,array>
+   */
+  public function writeConfigToTheFileDataProvider(): array {
+    return [
+      [
+        "# One\none:\n  # Two\n  two: two",
+        "# One\none:\n  # Two\n  two: 2",
+        [
+          'one' => [
+            'two' => 2,
+          ],
+        ],
+      ],
+      [
+        "# One\none:\n  # Two\n  two: two",
+        "# One\none: one",
+        [
+          'one' => 'one',
+        ],
+      ],
+      [
+        "# One\none:\n  # Two\n  two: two",
+        "# One\none:\n  # Two\n  two: two\nthree: 3",
+        [
+          'one' => [
+            'two' => 'two',
+          ],
+          'three' => 3,
+        ],
+      ],
+    ];
   }
 
 }

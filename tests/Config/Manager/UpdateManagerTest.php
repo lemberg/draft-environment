@@ -2,12 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\Config;
+namespace Lemberg\Tests\Draft\Environment\Config\Manager;
 
-use Composer\Package\RootPackage;
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
+use Composer\Factory;
 use Composer\IO\IOInterface;
+use Composer\Json\JsonFile;
+use Composer\Package\RootPackage;
 use Composer\Repository\RepositoryManager;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
@@ -19,6 +21,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Tests Draft Environment configuration update manager.
  *
+ * @covers \Lemberg\Draft\Environment\Config\Manager\AbstractConfigManager
  * @covers \Lemberg\Draft\Environment\Config\Manager\UpdateManager
  */
 final class UpdateManagerTest extends TestCase {
@@ -39,7 +42,7 @@ final class UpdateManagerTest extends TestCase {
   private $root;
 
   /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManager
+   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
    */
   private $configUpdateManager;
 
@@ -71,8 +74,15 @@ final class UpdateManagerTest extends TestCase {
 
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
+    $wd = sys_get_temp_dir() . '/draft-environment';
     $fs = new Filesystem();
-    $fs->mkdir(["$this->root/source", "$this->root/target"]);
+    $fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
+    chdir($wd);
+
+    // Dump empty composer.json.
+    $filename = Factory::getComposerFile();
+    $json = new JsonFile($filename);
+    $json->write(['name' => App::PACKAGE_NAME]);
 
     $configObject = new Config("$this->root/source", "$this->root/target");
 
@@ -99,7 +109,7 @@ final class UpdateManagerTest extends TestCase {
   }
 
   /**
-   * Tests Draft Environment configuration installation.
+   * Tests Draft Environment configuration update.
    */
   public function testUpdate(): void {
     $configObject = $this->configUpdateManager->getConfig();

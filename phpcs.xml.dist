@@ -31,6 +31,8 @@
     <exclude name="Drupal.Commenting.FunctionComment.IncorrectParamVarName"/>
     <!--Ignore "Expected "%s" but found "%s" for function return type". -->
     <exclude name="Drupal.Commenting.FunctionComment.InvalidReturn"/>
+    <!--Ignore "Expected "%s" but found "%s" for @var tag in member variable comment". -->
+    <exclude name="Drupal.Commenting.VariableComment.IncorrectVarType"/>
   </rule>
 
 </ruleset>
