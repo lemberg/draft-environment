@@ -150,7 +150,7 @@ final class Config {
    *
    * @param string $source
    *
-   * @return array<string, array>
+   * @return array<int|string, array>
    */
   public function readAndParseConfigFromTheFile(string $source): array {
     $content = $this->readConfigFromTheFile($source);
@@ -159,7 +159,8 @@ final class Config {
   }
 
   /**
-   * Dumps and writes configuration to a given file.
+   * Dumps and writes configuration to a given target file, preserving comments
+   * from a given source file.
    *
    * @param string $source
    * @param string $target
