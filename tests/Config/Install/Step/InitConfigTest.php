@@ -22,6 +22,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class InitConfigTest extends TestCase {
 
+  // Those are copied from the InitConfig class.
+  private const GITIGNORE_VAGRANT_LINE = "\n# Ignore Vagrant virtual machine data.\n/.vagrant\n";
+  private const GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE = "\n# Ignore Draft Environment local configuration overrides.\n/" . Config::TARGET_LOCAL_CONFIG_FILENAME . "\n";
+
   /**
    * @var \Composer\Composer
    */
@@ -103,6 +107,54 @@ final class InitConfigTest extends TestCase {
 
     $configObject = $this->configInstallManager->getConfig();
     self::assertContains('load File.dirname(__FILE__) + "/' . $vendorDir . '/lemberg/draft-environment/Vagrantfile"', file_get_contents($configObject->getTargetConfigFilepath(Config::TARGET_VM_FILENAME)));
+  }
+
+  /**
+   * Tests that install can process .gitignore correctly.
+   *
+   * @param string $gitIgnoreContent
+   * @param string $expected
+   *
+   * @dataProvider installProcessGitIgnoreDataProvider
+   */
+  final public function testInstallProcessGitIgnore(string $gitIgnoreContent, string $expected): void {
+    $configObject = $this->configInstallManager->getConfig();
+    $this->fs->dumpFile($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE), $gitIgnoreContent);
+
+    $step = new InitConfig($this->composer, $this->io, $this->configInstallManager);
+    $step->install();
+
+    self::assertSame($expected, file_get_contents($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE)));
+  }
+
+  /**
+   * Data provider for ::testInstallProcessGitIgnore().
+   *
+   * @return array<int,array<int,bool|string>>
+   */
+  final public function installProcessGitIgnoreDataProvider(): array {
+    return [
+      [
+        '',
+        self::GITIGNORE_VAGRANT_LINE . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE,
+      ],
+      [
+        "# Ignore Composer-managed dependencies.\n/vendor",
+        "# Ignore Composer-managed dependencies.\n/vendor" . self::GITIGNORE_VAGRANT_LINE . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE,
+      ],
+      [
+        "# Ignore VM data.\n/.vagrant",
+        "# Ignore VM data.\n/.vagrant" . self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE,
+      ],
+      [
+        "# Ignore local VM settings.\n/" . Config::TARGET_LOCAL_CONFIG_FILENAME . "\n",
+        "# Ignore local VM settings.\n/" . Config::TARGET_LOCAL_CONFIG_FILENAME . "\n" . self::GITIGNORE_VAGRANT_LINE,
+      ],
+      [
+        "# Ignore VM data.\n/.vagrant\n# Ignore local VM settings.\n/" . Config::TARGET_LOCAL_CONFIG_FILENAME . "\n",
+        "# Ignore VM data.\n/.vagrant\n# Ignore local VM settings.\n/" . Config::TARGET_LOCAL_CONFIG_FILENAME . "\n",
+      ],
+    ];
   }
 
   /**
