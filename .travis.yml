@@ -1,3 +1,9 @@
+---
+branches:
+  only:
+    - 3.x.x
+    - /^\d+\.\d+\.\d+$/
+
 stages:
   - PHP
   - Vagrant
