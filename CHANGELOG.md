@@ -1,4 +1,4 @@
-## Draft Environment 3.x.x
+## Draft Environment 3.0.0-rc1, 2020-01-18
 
 - [GH-90](https://github.com/lemberg/draft-environment/issues/90) - Replaced internal MySQL role with [geerlingguy.mysql @ 2.9.5](https://github.com/geerlingguy/ansible-role-mysql) Ansible role
 - [GH-83](https://github.com/lemberg/draft-environment/issues/83) - Added configuration update manager

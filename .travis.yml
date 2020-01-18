@@ -2,7 +2,7 @@
 branches:
   only:
     - 3.x.x
-    - /^\d+\.\d+\.\d+$/
+    - /^\d+\.\d+\.\d+[-a-z0-9]*$/
 
 stages:
   - PHP
