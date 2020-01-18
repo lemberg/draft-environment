@@ -29,9 +29,47 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
     $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
 
     $defaultConfig = $configObject->readAndParseConfigFromTheFile($sourceConfigFilepath);
-    $config = array_merge($defaultConfig, $config);
+    $config = $this->configMerge($defaultConfig, $config);
 
     $configObject->writeConfigToTheFile($sourceConfigFilepath, $targetConfigFilepath, $config);
+  }
+
+  /**
+   * Merges default configuration with actual configuration.
+   *
+   * Rules:
+   *   - scalar values from the actual configratuion always win
+   *   - indexed array values from the actual configratuion always win
+   *   - associative arrays are merged recursively, values from the actual
+   *     confuguration overrides default ones
+   *   - missing configration params are being added recursively.
+   *
+   * @param mixed $defaultConfig
+   * @param array<string,mixed> $config
+   *
+   * @return array<string,mixed>
+   *
+   * @throws \UnexpectedValueException
+   */
+  private function configMerge($defaultConfig, array $config): array {
+    $result = [];
+
+    foreach ($config as $key => $value) {
+      if (is_scalar($value)) {
+        $result[$key] = $value;
+      }
+      elseif (is_array($value) && is_int(key($value))) {
+        $result[$key] = $value;
+      }
+      elseif (is_array($value)) {
+        $result[$key] = $this->configMerge($defaultConfig[$key] ?? [], $config[$key]);
+      }
+      else {
+        throw new \UnexpectedValueException(sprintf("Unexpected value type '%s' in the configuration array", gettype($value)));
+      }
+    }
+
+    return $result + (is_array($defaultConfig) ? $defaultConfig : []);
   }
 
 }
