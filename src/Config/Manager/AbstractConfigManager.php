@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment\Config\Manager;
 
 use Composer\Composer;
+use Composer\Factory;
 use Composer\IO\IOInterface;
+use Composer\Json\JsonFile;
+use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\AbstractStepInterface;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\ConfigAwareTrait;
@@ -71,6 +74,40 @@ abstract class AbstractConfigManager implements ManagerInterface {
       }
       return ($a->getWeight() > $b->getWeight()) ? 1 : -1;
     });
+  }
+
+  /**
+   * @return array<mixed>
+   */
+  final protected function getPackageExtra(): array {
+    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
+    /** @var \Composer\Package\Package $localPackage */
+    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
+    return $localPackage->getExtra();
+  }
+
+  /**
+   * @param array<mixed> $extra
+   */
+  final protected function setPackageExtra(array $extra): void {
+    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
+    /** @var \Composer\Package\Package $localPackage */
+    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
+    $localPackage->setExtra($extra);
+
+    // This code might run after Composer has written the lock file.
+    $composerFile = Factory::getComposerFile();
+    $lockFile = 'json' === pathinfo($composerFile, PATHINFO_EXTENSION) ? substr($composerFile, 0, -4) . 'lock' : $composerFile . '.lock';
+    if ($this->getConfig()->getFilesystem()->exists($lockFile)) {
+      $json = new JsonFile($lockFile);
+      $content = $json->read();
+
+      $key = array_search(App::PACKAGE_NAME, array_column($content['packages'], 'name'), TRUE);
+      if ($key !== FALSE) {
+        $content['packages'][$key]['extra'] = $extra;
+        $json->write($content);
+      }
+    }
   }
 
 }

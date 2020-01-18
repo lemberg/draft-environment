@@ -47,6 +47,11 @@ final class UpdateManagerTest extends TestCase {
   private $fs;
 
   /**
+   * @var string
+   */
+  private $lockFile;
+
+  /**
    * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
    */
   private $configUpdateManager;
@@ -79,15 +84,37 @@ final class UpdateManagerTest extends TestCase {
 
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
-    $wd = sys_get_temp_dir() . '/draft-environment';
     $this->fs = new Filesystem();
-    $this->fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
-    chdir($wd);
+    $this->fs->mkdir(
+      ["$this->root/source", "$this->root/target", "$this->root/wd"]
+    );
+
+    // Point composer to a test composer.json.
+    putenv("COMPOSER=$this->root/wd/composer.json");
 
     // Dump empty composer.json.
-    $filename = Factory::getComposerFile();
-    $json = new JsonFile($filename);
+    $composerFile = Factory::getComposerFile();
+    $json = new JsonFile($composerFile);
     $json->write(['name' => App::PACKAGE_NAME]);
+
+    // Dump composer.lock.
+    $this->lockFile = 'json' === pathinfo($composerFile, PATHINFO_EXTENSION) ? substr($composerFile, 0, -4) . 'lock' : $composerFile . '.lock';
+    $json = new JsonFile($this->lockFile);
+    $lockData = [
+      'packages' => [
+        [
+          'name' => 'dummy',
+          'extra' => [],
+        ],
+        [
+          'name' => App::PACKAGE_NAME,
+          'extra' => [
+            'class' => 'Lemberg\Draft\Environment\Dummy',
+          ],
+        ],
+      ],
+    ];
+    $json->write($lockData);
 
     $configObject = new Config("$this->root/source", "$this->root/target");
 
@@ -140,6 +167,10 @@ final class UpdateManagerTest extends TestCase {
     self::assertSame(0, $this->configUpdateManager->getLastAppliedUpdateWeight());
     $this->configUpdateManager->setLastAppliedUpdateWeight(4);
     self::assertSame(4, $this->configUpdateManager->getLastAppliedUpdateWeight());
+
+    $json = new JsonFile($this->lockFile);
+    $lockData = $json->read();
+    self::assertSame(4, $lockData['packages'][1]['extra']['draft-environment']['last-update-weight']);
   }
 
   /**
