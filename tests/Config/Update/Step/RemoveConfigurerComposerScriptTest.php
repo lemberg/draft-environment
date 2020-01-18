@@ -157,8 +157,8 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
       [
         [
           ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
             'Lemberg\Draft\Environment\Configurer::setUp',
+            'Lemberg\Draft\Environment\Dummy::setUp',
           ],
         ],
         [
@@ -170,8 +170,8 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
       [
         [
           ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
             'Lemberg\Draft\Environment\Configurer::setUp',
+            'Lemberg\Draft\Environment\Dummy::setUp',
           ],
         ],
         [
@@ -183,8 +183,8 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
       [
         [
           ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
             'Lemberg\Draft\Environment\Configurer::setUp',
+            'Lemberg\Draft\Environment\Dummy::setUp',
           ],
           ScriptEvents::POST_UPDATE_CMD => [
             'Lemberg\Draft\Environment\Dummy::setUp',
