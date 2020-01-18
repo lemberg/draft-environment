@@ -6,7 +6,9 @@ namespace Lemberg\Tests\Draft\Environment\Config\Manager;
 
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
+use Composer\Factory;
 use Composer\IO\IOInterface;
+use Composer\Json\JsonFile;
 use Composer\Package\RootPackage;
 use Composer\Repository\RepositoryManager;
 use Lemberg\Draft\Environment\App;
@@ -45,6 +47,11 @@ final class InstallManagerTest extends TestCase {
   private $fs;
 
   /**
+   * @var string
+   */
+  private $lockFile;
+
+  /**
    * @var \Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface
    */
   private $configInstallManager;
@@ -77,7 +84,32 @@ final class InstallManagerTest extends TestCase {
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
     $this->fs = new Filesystem();
-    $this->fs->mkdir(["$this->root/source", "$this->root/target"]);
+    $this->fs->mkdir(
+      ["$this->root/source", "$this->root/target", "$this->root/wd"]
+    );
+
+    // Point composer to a test composer.json.
+    putenv("COMPOSER=$this->root/wd/composer.json");
+
+    // Dump composer.lock.
+    $composerFile = Factory::getComposerFile();
+    $this->lockFile = 'json' === pathinfo($composerFile, PATHINFO_EXTENSION) ? substr($composerFile, 0, -4) . 'lock' : $composerFile . '.lock';
+    $json = new JsonFile($this->lockFile);
+    $lockData = [
+      'packages' => [
+        [
+          'name' => 'dummy',
+          'extra' => [],
+        ],
+        [
+          'name' => App::PACKAGE_NAME,
+          'extra' => [
+            'class' => 'Lemberg\Draft\Environment\Dummy',
+          ],
+        ],
+      ],
+    ];
+    $json->write($lockData);
 
     $config = new Config("$this->root/source", "$this->root/target");
     $this->configInstallManager = new InstallManager($this->composer, $this->io, $config);
@@ -118,6 +150,10 @@ final class InstallManagerTest extends TestCase {
       self::assertFileExists($filepath);
     }
 
+    $json = new JsonFile($this->lockFile);
+    $lockData = $json->read();
+    self::assertTrue($lockData['packages'][1]['extra']['draft-environment']['already-installed']);
+
     // Remove target configuration and run installation for the 2nd time. It
     // should not run (i.e. files should not be created).
     $this->fs->remove($configObject->getTargetConfigFilepaths());
@@ -125,6 +161,19 @@ final class InstallManagerTest extends TestCase {
     foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
       self::assertFileNotExists($filepath);
     }
+  }
+
+  /**
+   * Tests ::hasBeenAlreadyInstalled() and ::setAsAlreadyInstalled().
+   */
+  public function testHasBeenAlreadyInstalledFlagGetterAndSetter(): void {
+    self::assertFalse($this->configInstallManager->hasBeenAlreadyInstalled());
+    $this->configInstallManager->setAsAlreadyInstalled();
+    self::assertTrue($this->configInstallManager->hasBeenAlreadyInstalled());
+
+    $json = new JsonFile($this->lockFile);
+    $lockData = $json->read();
+    self::assertTrue($lockData['packages'][1]['extra']['draft-environment']['already-installed']);
   }
 
   /**

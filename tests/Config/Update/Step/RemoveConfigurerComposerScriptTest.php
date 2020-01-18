@@ -57,10 +57,11 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
 
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
-    $wd = sys_get_temp_dir() . '/draft-environment';
     $fs = new Filesystem();
-    $fs->mkdir(["$this->root/source", "$this->root/target", $wd]);
-    chdir($wd);
+    $fs->mkdir(["$this->root/source", "$this->root/target", "$this->root/wd"]);
+
+    // Point composer to a test composer.json.
+    putenv("COMPOSER=$this->root/wd/composer.json");
 
     $configObject = new Config("$this->root/source", "$this->root/target");
     $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject);

@@ -117,7 +117,7 @@ final class App {
    * @param \Composer\DependencyResolver\Operation\UpdateOperation $operation
    */
   private function onPostPackageUpdate(UpdateOperation $operation): void {
-    // Clean up Draft Environment config files upon package uninstallation.
+    // Update Draft Environment configuration upon package update.
     if ($operation->getTargetPackage()->getName() === self::PACKAGE_NAME) {
       $this->configUpdateManager->update();
     }
@@ -154,6 +154,7 @@ final class App {
   private function onPostInstallCommand(ScriptEvent $event): void {
     if ($this->shouldRunInstallation) {
       $this->configInstallManager->install();
+
       // Fresh installation should mark all available updates as already
       // applied.
       $lastAvailableWeight = $this->configUpdateManager->getLastAvailableUpdateWeight();

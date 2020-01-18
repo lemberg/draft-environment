@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config\Manager;
 
-use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Install\InstallConfigStepInterface;
 use Lemberg\Draft\Environment\Config\Install\InstallInitStepInterface;
@@ -24,6 +23,23 @@ final class InstallManager extends AbstractConfigManager implements InstallManag
       $this->installConfigPhase();
       $this->setAsAlreadyInstalled();
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function hasBeenAlreadyInstalled(): bool {
+    $extra = $this->getPackageExtra();
+    return $extra['draft-environment']['already-installed'] ?? FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setAsAlreadyInstalled(): void {
+    $extra = $this->getPackageExtra();
+    $extra['draft-environment']['already-installed'] = TRUE;
+    $this->setPackageExtra($extra);
   }
 
   /**
@@ -93,28 +109,6 @@ HERE;
     if ($message !== '') {
       $this->io->write("\n" . $message);
     }
-  }
-
-  /**
-   * Check whether Draft Environment has been already installed.
-   */
-  private function hasBeenAlreadyInstalled(): bool {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    return $localPackage->getExtra()['draft-environment']['already-installed'] ?? FALSE;
-  }
-
-  /**
-   * Set Draft Environment as already installed.
-   */
-  private function setAsAlreadyInstalled(): void {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    $extra = $localPackage->getExtra();
-    $extra['draft-environment']['already-installed'] = TRUE;
-    $localPackage->setExtra($extra);
   }
 
 }

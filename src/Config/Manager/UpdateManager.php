@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config\Manager;
 
-use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\AbstractStepInterface;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
@@ -45,22 +44,17 @@ final class UpdateManager extends AbstractConfigManager implements UpdateManager
    * {@inheritdoc}
    */
   public function getLastAppliedUpdateWeight(): int {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    return $localPackage->getExtra()['draft-environment']['last-update-weight'] ?? 0;
+    $extra = $this->getPackageExtra();
+    return $extra['draft-environment']['last-update-weight'] ?? 0;
   }
 
   /**
    * {@inheritdoc}
    */
   public function setLastAppliedUpdateWeight(int $weight): void {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    $extra = $localPackage->getExtra();
+    $extra = $this->getPackageExtra();
     $extra['draft-environment']['last-update-weight'] = $weight;
-    $localPackage->setExtra($extra);
+    $this->setPackageExtra($extra);
   }
 
   /**
