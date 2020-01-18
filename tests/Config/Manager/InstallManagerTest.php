@@ -164,6 +164,19 @@ final class InstallManagerTest extends TestCase {
   }
 
   /**
+   * Tests ::hasBeenAlreadyInstalled() and ::setAsAlreadyInstalled().
+   */
+  public function testHasBeenAlreadyInstalledFlagGetterAndSetter(): void {
+    self::assertFalse($this->configInstallManager->hasBeenAlreadyInstalled());
+    $this->configInstallManager->setAsAlreadyInstalled();
+    self::assertTrue($this->configInstallManager->hasBeenAlreadyInstalled());
+
+    $json = new JsonFile($this->lockFile);
+    $lockData = $json->read();
+    self::assertTrue($lockData['packages'][1]['extra']['draft-environment']['already-installed']);
+  }
+
+  /**
    * Tests Draft Environment configuration uninstall.
    */
   public function testUninstall(): void {

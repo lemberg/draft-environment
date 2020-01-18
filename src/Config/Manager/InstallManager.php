@@ -28,6 +28,23 @@ final class InstallManager extends AbstractConfigManager implements InstallManag
   /**
    * {@inheritdoc}
    */
+  public function hasBeenAlreadyInstalled(): bool {
+    $extra = $this->getPackageExtra();
+    return $extra['draft-environment']['already-installed'] ?? FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setAsAlreadyInstalled(): void {
+    $extra = $this->getPackageExtra();
+    $extra['draft-environment']['already-installed'] = TRUE;
+    $this->setPackageExtra($extra);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function uninstall(): void {
     // Discovery mechanism (similar to the one in install()) cannot be used here
     // as Composer will remove all the dependencies of this package before
@@ -92,23 +109,6 @@ HERE;
     if ($message !== '') {
       $this->io->write("\n" . $message);
     }
-  }
-
-  /**
-   * Check whether Draft Environment has been already installed.
-   */
-  private function hasBeenAlreadyInstalled(): bool {
-    $extra = $this->getPackageExtra();
-    return $extra['draft-environment']['already-installed'] ?? FALSE;
-  }
-
-  /**
-   * Set Draft Environment as already installed.
-   */
-  private function setAsAlreadyInstalled(): void {
-    $extra = $this->getPackageExtra();
-    $extra['draft-environment']['already-installed'] = TRUE;
-    $this->setPackageExtra($extra);
   }
 
 }
