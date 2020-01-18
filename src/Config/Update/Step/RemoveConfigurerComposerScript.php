@@ -57,17 +57,10 @@ final class RemoveConfigurerComposerScript extends AbstractUpdateStep implements
       return;
     }
 
-    $key = NULL;
-    foreach ($scripts[$event] as $i => $listener) {
-      if ($listener === 'Lemberg\Draft\Environment\Configurer::setUp') {
-        $key = $i;
-      }
-    }
-    if (is_null($key)) {
-      return;
-    }
+    $scripts[$event] = array_filter($scripts[$event], function (string $value): bool {
+      return $value !== 'Lemberg\Draft\Environment\Configurer::setUp';
+    });
 
-    unset($scripts[$event][$key]);
     if (count($scripts[$event]) === 0) {
       unset($scripts[$event]);
     }
