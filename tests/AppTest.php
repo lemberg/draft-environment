@@ -197,6 +197,23 @@ final class AppTest extends TestCase {
   /**
    * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
    */
+  public function testComposerPostPackageUpdateEventHandlerDoesNotRunWhenDowngrading(): void {
+    // Update must run when "lemberg/draft-environment" is being updated.
+    $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $initial->setReleaseDate(new \DateTime());
+    $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
+    $target->setReleaseDate(new \DateTime('yesterday'));
+    $operation = new UpdateOperation($initial, $target);
+    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configUpdateManager
+      ->expects(self::never())
+      ->method('update');
+    $this->app->handleEvent($event);
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
+   */
   public function testComposerPostPackageUpdateEventHandlerDoesRun(): void {
     // Update must run when "lemberg/draft-environment" is being updated.
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');

@@ -119,7 +119,15 @@ final class App {
   private function onPostPackageUpdate(UpdateOperation $operation): void {
     // Update Draft Environment configuration upon package update.
     if ($operation->getTargetPackage()->getName() === self::PACKAGE_NAME) {
-      $this->configUpdateManager->update();
+      // Release date may be empty in rare cases. Assume the latest
+      // version is being used.
+      $now = new \DateTime();
+      $initialReleaseDate = $operation->getInitialPackage()->getReleaseDate() ?? $now;
+      $targetReleaseDate = $operation->getTargetPackage()->getReleaseDate() ?? $now;
+      // Package downgrading is not supported by the update manager.
+      if ($targetReleaseDate >= $initialReleaseDate) {
+        $this->configUpdateManager->update();
+      }
     }
   }
 
