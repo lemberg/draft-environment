@@ -1,3 +1,7 @@
+## Draft Environment 3.x.x
+
+- [GH-152](https://github.com/lemberg/draft-environment/issues/152) - Updated Ansible Solr role to 2.1.1
+
 ## Draft Environment 3.0.0-rc1, 2020-01-18
 
 - [GH-90](https://github.com/lemberg/draft-environment/issues/90) - Replaced internal MySQL role with [geerlingguy.mysql @ 2.9.5](https://github.com/geerlingguy/ansible-role-mysql) Ansible role
