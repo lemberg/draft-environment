@@ -1,6 +1,15 @@
 ## Draft Environment 3.x.x
 
+Updates:
+
 - [GH-152](https://github.com/lemberg/draft-environment/issues/152) - Updated Ansible Solr role to 2.1.1
+
+Fixes:
+
+- [GH-145](https://github.com/lemberg/draft-environment/issues/145) - Downgrading the package causes PHP fatal error
+- [GH-144](https://github.com/lemberg/draft-environment/issues/144) - Export all configuration update step does not preserve all overridden values
+- [GH-147](https://github.com/lemberg/draft-environment/issues/147) - Settings are not being saved in extra section of the package in composer.lock
+- [GH-143](https://github.com/lemberg/draft-environment/issues/143) - Remove composer scripts update step does not reset script indexes
 
 ## Draft Environment 3.0.0-rc1, 2020-01-18
 
