@@ -39,6 +39,8 @@
   notify:
     - Restart Apache2 web server
   register: draft_ssl_config_file
+  when:
+    mkcert is not defined
 
 - name: Generate SSL keys
   command: |
@@ -48,10 +50,21 @@
     -out /etc/apache2/ssl/draft.crt
   notify:
     - Restart Apache2 web server
-  when: draft_ssl_config_file is changed
+  when:
+    mkcert is not defined and draft_ssl_config_file is changed
   # Skip Ansible Lint check. This should not be a handler.
   tags:
     - skip_ansible_lint
+
+- name: Copy mkcert certificate and key to the host ssl folder
+  copy:
+    src: /tmp/mkcert/
+    dest: /etc/apache2/ssl
+    remote_src: true
+  notify:
+    - Restart Apache2 web server
+  when:
+    mkcert is defined
 
 - name: Ensure that document directory exist
   file:

@@ -194,6 +194,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   project_pathname = Pathname.new PROJECT_BASE_PATH
   vm_pathname = Pathname.new VM_BASE_PATH
 
+  # Copy generated SSL certificate and private key to the VM.
+  unless configuration.get("mkcert").nil?
+    config.vm.provision "file", source: configuration.get("mkcert.directory") + "/.", destination: "/tmp/mkcert"
+  end
+
   # Run Ansible provisioner from within the virtual machine using Ansible Local
   # provisioner.
   config.vm.provision "ansible_local" do |ansible|

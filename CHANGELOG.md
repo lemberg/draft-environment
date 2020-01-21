@@ -1,5 +1,9 @@
 ## Draft Environment 3.x.x
 
+New features:
+
+- [GH-142](https://github.com/lemberg/draft-environment/issues/142) - Added trusted dev SSL certificates support (requires [mkcert](https://mkcert.dev))
+
 Updates:
 
 - [GH-152](https://github.com/lemberg/draft-environment/issues/152) - Updated Ansible Solr role to 2.1.1
