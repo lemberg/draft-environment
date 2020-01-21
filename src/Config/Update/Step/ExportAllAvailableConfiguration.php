@@ -38,11 +38,11 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
    * Merges default configuration with actual configuration.
    *
    * Rules:
-   *   - scalar values from the actual configratuion always win
-   *   - indexed array values from the actual configratuion always win
+   *   - scalar values from the actual configuration always win
+   *   - indexed array values from the actual configuration always win
    *   - associative arrays are merged recursively, values from the actual
-   *     confuguration overrides default ones
-   *   - missing configration params are being added recursively.
+   *     configuration overrides default ones
+   *   - missing configuration parameters are being added recursively.
    *
    * @param mixed $defaultConfig
    * @param array<string,mixed> $config
