@@ -12,6 +12,7 @@ class Configuration
   def initialize(project_base_path, draft_base_path)
     self.load_settings(project_base_path, draft_base_path)
     self.merge_default_settings
+    self.generate_mkcert_certificate
   end
 
   # Public: Get configuration setting value by given key.
@@ -194,6 +195,64 @@ class Configuration
 
       self.set("ansible.version", latest_release)
     end
+  end
+
+  # Internal: Generates SSL certificate and private key using mkcert.
+  #
+  # Returns nothing.
+  protected
+  def generate_mkcert_certificate
+    # This feature depends on mkcert. See https://mkcert.dev
+    `mkcert -CAROOT 2>&1`
+    unless $?.success?
+      return;
+    end
+
+    # Generate new certificate/key pair only on provisioning.
+    unless self.is_provisioning
+      return;
+    end
+
+    require 'tmpdir'
+    require 'fileutils'
+
+    domain_names = ([
+      self.get("vagrant.ip_address"),
+      self.get("vagrant.hostname"),
+    ] + self.get("vagrant.host_aliases")).join(" ")
+
+    directory = Dir.tmpdir() + "/mkcert-" + self.get("vagrant.hostname")
+    unless File.directory?(directory)
+      FileUtils.mkdir_p(directory)
+    end
+
+    `mkcert -cert-file #{directory}/draft.crt -key-file #{directory}/draft.key #{domain_names} 2>&1`
+    unless $?.success?
+      return;
+    end
+
+    self.set("mkcert", {})
+    self.set("mkcert.directory", directory)
+    self.set("mkcert.cert", directory + "/draft.crt")
+    self.set("mkcert.key", directory + "/draft.key")
+
+  end
+
+  # Internal: Checks whether provisioning will be running.
+  #
+  # Returns boolean indicating whether provisioning will be running.
+  protected
+  def is_provisioning
+    if ((ARGV.include?("up") && ARGV.include?("--provision")) || ARGV.include?("provision") || (ARGV.include?("reload") && ARGV.include?("--provision")))
+      return true
+    end
+
+    if (ARGV.include?("up"))
+      status = system("vagrant status")
+      return status.include? "not created"
+    end
+
+    return false
   end
 
 end
