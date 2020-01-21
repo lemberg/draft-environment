@@ -11,6 +11,7 @@ This is Vagrant-based development environment for Drupal projects. This project 
 - PHP (7.2+) and Composer
 - Vagrant (2.2.6+)
 - VirtualBox (5.2+)
+- [mkcert](https://mkcert.dev) (optional)
 
 ## Vagrant plugins (will be automatically installed)
 
@@ -31,6 +32,16 @@ A Vagrant plugin to resize disks in VirtualBox.
 Dramatically increases disk IO on Windows by adding NFS support.
 
 ## How to
+
+1. (Optional) Locally-trusted SSL certificates
+
+    **Skip this step if `mkcert` is already installed and the local CA does already exist.**
+
+    Install [mkcert](https://mkcert.dev) in order to get locally-trusted development SSL certificates. This tool requires no configuration. After installation just run:
+
+    ```
+    $ mkcert -install
+    ```
 
 1. Add Draft Environment to the project (as a dev dependency):
 
