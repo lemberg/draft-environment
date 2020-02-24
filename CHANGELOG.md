@@ -1,3 +1,9 @@
+## Draft Environment 3.x.x (unreleased)
+
+Updates:
+
+- [GH-157](https://github.com/lemberg/draft-environment/issues/157) - Switched to unofficial PPA for Vagrant on Travis; Vagrant 2.2.7 supports VirtualBox 6.1.x
+
 ## Draft Environment 3.0.0-rc2, 2020-02-12
 
 New features:
