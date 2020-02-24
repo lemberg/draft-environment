@@ -74,9 +74,9 @@ jobs:
         - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
         - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
         # Add Oracle VirtualBox repository
-        - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian xenial contrib"
+        - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib"
         # Add Vagrant PPA (unofficial)
-        - sudo add-apt-repository ppa:tiagohillebrandt/vagrant
+        - sudo add-apt-repository -y ppa:tiagohillebrandt/vagrant
         # Update apt-get
         - sudo apt-get update -qq
         # Install Linux headers
