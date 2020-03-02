@@ -60,7 +60,7 @@ Dramatically increases disk IO on Windows by adding NFS support.
     - [geerlingguy.mailhog @ 2.2.0](https://github.com/geerlingguy/ansible-role-mailhog/tree/2.2.0)
     - git_config (internal)
     - apache2 (internal)
-    - [geerlingguy.mysql @ 2.9.5](https://github.com/geerlingguy/ansible-role-mysql/tree/2.9.5)
+    - [geerlingguy.mysql @ 3.0.0](https://github.com/geerlingguy/ansible-role-mysql/tree/3.0.0)
     - [T2L.php @ 1.2.1](https://github.com/T2L/ansible-role-php/tree/1.2.1)
     - [T2L.composer @ 2.0.2](https://github.com/T2L/ansible-role-composer/tree/2.0.2)
     - [T2L.java @ 1.2.0](https://github.com/T2L/ansible-role-java/tree/1.2.0)
