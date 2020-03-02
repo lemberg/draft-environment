@@ -39,7 +39,7 @@
     - ../../provisioning/roles/draft
     - ../../provisioning/roles/git_config
     - ../../provisioning/roles/apache2
-    - geerlingguy.mysql
+    - { role: geerlingguy.mysql, mysql_python_package_debian: python3-mysqldb }
     - geerlingguy.mailhog
     - T2L.php
     - T2L.composer
