@@ -12,9 +12,6 @@ stages:
 
 jobs:
   fast_finish: true
-  allow_failures:
-    - stage: Vagrant
-      env: VIRTUAL_BOX_VERSION=6.1
 
   include:
     - &PHP
@@ -77,7 +74,9 @@ jobs:
         - wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
         - wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
         # Add Oracle VirtualBox repository
-        - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian xenial contrib"
+        - sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib"
+        # Add Vagrant PPA (unofficial)
+        - sudo add-apt-repository -y ppa:tiagohillebrandt/vagrant
         # Update apt-get
         - sudo apt-get update -qq
         # Install Linux headers
@@ -85,9 +84,7 @@ jobs:
         # Install VirtualBox
         - sudo apt-get install virtualbox-${VIRTUAL_BOX_VERSION}
         # Install Vagrant
-        # Todo: install from a package repository, not from a hardcoded URL.s
-        - curl -O https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb
-        - sudo dpkg -i vagrant_2.2.6_x86_64.deb
+        - sudo apt-get install vagrant
 
       install:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
