@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Tests\Draft\Environment\Composer;
 
 use Composer\Composer;
+use Composer\Config;
 use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\DependencyResolver\PolicyInterface;
 use Composer\DependencyResolver\Pool;
@@ -137,6 +138,7 @@ final class PluginTest extends TestCase {
         'findPackage',
         'getInstallationManager',
         'getInstallPath',
+        'getConfig',
       ])
       ->getMock();
     $this->composer->expects(self::any())
@@ -157,6 +159,10 @@ final class PluginTest extends TestCase {
       ->method('getInstallPath')
       ->with($findPackageReturnValue)
       ->willReturn(sys_get_temp_dir());
+
+    $this->composer->expects(self::any())
+      ->method('getConfig')
+      ->willReturn(new Config());
   }
 
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Tests\Draft\Environment\Config\Update\Step;
 
 use Composer\Composer;
+use Composer\Config as ComposerConfig;
 use Composer\Factory;
 use Composer\IO\IOInterface;
 use Composer\Json\JsonFile;
@@ -53,6 +54,7 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
     $this->composer = new Composer();
     $package = new RootPackage(App::PACKAGE_NAME, '^3.0', '3.0.0.0');
     $this->composer->setPackage($package);
+    $this->composer->setConfig(new ComposerConfig());
     $this->io = $this->createMock(IOInterface::class);
 
     // Mock source and target configuration directories.

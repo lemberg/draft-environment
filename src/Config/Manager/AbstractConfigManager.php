@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config\Manager;
 
+use Composer\Autoload\ClassLoader;
+use Composer\Autoload\ClassMapGenerator;
 use Composer\Composer;
 use Composer\Factory;
 use Composer\IO\IOInterface;
@@ -43,6 +45,12 @@ abstract class AbstractConfigManager implements ManagerInterface {
     $this->composer = $composer;
     $this->io = $io;
     $this->setConfig($config);
+
+    // This code is running in Composer context, newly added packages might
+    // not be autoloaded.
+    if (!class_exists(RobotLoader::class)) {
+      $this->autoloadDependencies();
+    }
   }
 
   /**
@@ -108,6 +116,20 @@ abstract class AbstractConfigManager implements ManagerInterface {
         $json->write($content);
       }
     }
+  }
+
+  /**
+   * Manually autoload dependencies from Nette framework.
+   */
+  final private function autoloadDependencies(): void {
+    $loader = new ClassLoader();
+
+    $vendorDir = $this->composer->getConfig()->get('vendor-dir');
+    foreach (['nette/utils', 'nette/finder', 'nette/robot-loader'] as $path) {
+      $loader->addClassMap(ClassMapGenerator::createMap("$vendorDir/$path"));
+    }
+
+    $loader->register();
   }
 
 }
