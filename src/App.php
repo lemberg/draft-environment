@@ -149,8 +149,8 @@ final class App {
    * @param \Composer\Script\Event $event
    */
   private function handleScriptEvent(ScriptEvent $event): void {
-    if ($event->getName() === ScriptEvents::POST_INSTALL_CMD || $event->getName() === ScriptEvents::POST_UPDATE_CMD) {
-      $this->onPostInstallCommand($event);
+    if ($event->getName() === ScriptEvents::POST_AUTOLOAD_DUMP) {
+      $this->onPostAutoloadDumpCommand($event);
     }
   }
 
@@ -159,7 +159,7 @@ final class App {
    *
    * @param \Composer\Script\Event $event
    */
-  private function onPostInstallCommand(ScriptEvent $event): void {
+  private function onPostAutoloadDumpCommand(ScriptEvent $event): void {
     if ($this->shouldRunInstallation) {
       $this->configInstallManager->install();
 

@@ -227,28 +227,24 @@ final class AppTest extends TestCase {
   }
 
   /**
-   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
-   * ScriptEvents::POST_UPDATE_CMD event handlers.
-   *
-   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
+   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
    */
-  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithEveryEvent(string $scriptEventName): void {
-    // Install should not run on every ScriptEvents::POST_INSTALL_CMD or
-    // ScriptEvents::POST_UPDATE_CMD event dispatch. Install should only run if
-    // the package itself is being installed.
+  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithEveryEvent(): void {
+    // Install should not run on every ScriptEvents::POST_AUTOLOAD_DUMP event
+    // dispatch. Install should only run if the package itself is being
+    // installed.
     $this->configInstallManager
       ->expects(self::never())
       ->method('install');
 
-    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
     $this->app->handleEvent($event);
   }
 
   /**
-   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
-   * ScriptEvents::POST_UPDATE_CMD event handlers.
+   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
    */
-  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithOtherScriptEvents(): void {
+  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithOtherScriptEvents(): void {
     // Install should not run on any other script event even if the package
     // itself is being installed.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
@@ -265,18 +261,15 @@ final class AppTest extends TestCase {
   }
 
   /**
-   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
-   * ScriptEvents::POST_UPDATE_CMD event handlers.
-   *
-   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
+   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
    */
-  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithOtherPackageEvents(string $scriptEventName): void {
+  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithOtherPackageEvents(): void {
     // Install should not run on any other script event even if the package
     // itself is being installed.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
     $packageEvent = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configInstallManager
       ->expects(self::never())
@@ -287,17 +280,14 @@ final class AppTest extends TestCase {
   }
 
   /**
-   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
-   * ScriptEvents::POST_UPDATE_CMD event handlers.
-   *
-   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
+   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
    */
-  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesNotRunWithOtherPackages(string $scriptEventName): void {
+  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithOtherPackages(): void {
     // Install should not run if any other package is being installed.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
     $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configInstallManager
       ->expects(self::never())
@@ -308,16 +298,13 @@ final class AppTest extends TestCase {
   }
 
   /**
-   * Tests Composer ScriptEvents::POST_INSTALL_CMD and
-   * ScriptEvents::POST_UPDATE_CMD event handlers.
-   *
-   * @dataProvider composerPostInstallOrUpdateCommandEventHandlerDataProvider
+   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
    */
-  public function testComposerPostInstallOrUpdateCommandEventHandlerDoesRun(string $scriptEventName): void {
+  public function testComposerPostDumpAutoloadCommandEventHandlerDoesRun(): void {
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
     $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent($scriptEventName, $this->composer, $this->io);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     // Install should run.
     $this->configInstallManager
@@ -332,16 +319,6 @@ final class AppTest extends TestCase {
 
     $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
-  }
-
-  /**
-   * @return array<int,array<int,string>>
-   */
-  public function composerPostInstallOrUpdateCommandEventHandlerDataProvider(): array {
-    return [
-      [ScriptEvents::POST_INSTALL_CMD],
-      [ScriptEvents::POST_UPDATE_CMD],
-    ];
   }
 
 }
