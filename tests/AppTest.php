@@ -172,10 +172,14 @@ final class AppTest extends TestCase {
     $initial = new Package('dummy', '1.0.0.0', '^1.0');
     $target = new Package('dummy', '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
-    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
+
     $this->configUpdateManager
       ->expects(self::never())
       ->method('update');
+
+    $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
   }
 
@@ -187,10 +191,14 @@ final class AppTest extends TestCase {
     // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($initial);
-    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
+
     $this->configUpdateManager
       ->expects(self::never())
       ->method('update');
+
+    $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
   }
 
@@ -204,10 +212,14 @@ final class AppTest extends TestCase {
     $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
     $target->setReleaseDate(new \DateTime('yesterday'));
     $operation = new UpdateOperation($initial, $target);
-    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
+
     $this->configUpdateManager
       ->expects(self::never())
       ->method('update');
+
+    $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
   }
 
@@ -219,10 +231,14 @@ final class AppTest extends TestCase {
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
-    $event = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
+
     $this->configUpdateManager
       ->expects(self::once())
       ->method('update');
+
+    $this->app->handleEvent($packageEvent);
     $this->app->handleEvent($event);
   }
 
