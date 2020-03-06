@@ -162,7 +162,7 @@ mysql_packages:
   - mysql-server
 
 # If you need to explicitly set the MySQL Python package, you can set it here. If not set, it will default to `python-mysqldb` for Python 2 and `python3-mysqldb` for Python 3.
-mysql_python_package_debian: ''
+# mysql_python_package_debian: ''
 
 # MySQL connection settings.
 mysql_port: "3306"
