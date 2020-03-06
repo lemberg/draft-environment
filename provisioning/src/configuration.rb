@@ -248,7 +248,7 @@ class Configuration
     end
 
     if (ARGV.include?("up"))
-      status = system("vagrant status")
+      status = `vagrant status`
       return status.include? "not created"
     end
 
