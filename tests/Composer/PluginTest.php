@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Tests\Draft\Environment\Composer;
 
 use Composer\Composer;
+use Composer\Config;
 use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\DependencyResolver\PolicyInterface;
 use Composer\DependencyResolver\Pool;
@@ -69,8 +70,7 @@ final class PluginTest extends TestCase {
       PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
       PackageEvents::POST_PACKAGE_UPDATE => 'onComposerEvent',
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
-      ScriptEvents::POST_INSTALL_CMD => 'onComposerEvent',
-      ScriptEvents::POST_UPDATE_CMD => 'onComposerEvent',
+      ScriptEvents::POST_AUTOLOAD_DUMP => 'onComposerEvent',
     ];
     self::assertSame($expected, Plugin::getSubscribedEvents());
 
@@ -138,6 +138,7 @@ final class PluginTest extends TestCase {
         'findPackage',
         'getInstallationManager',
         'getInstallPath',
+        'getConfig',
       ])
       ->getMock();
     $this->composer->expects(self::any())
@@ -158,6 +159,10 @@ final class PluginTest extends TestCase {
       ->method('getInstallPath')
       ->with($findPackageReturnValue)
       ->willReturn(sys_get_temp_dir());
+
+    $this->composer->expects(self::any())
+      ->method('getConfig')
+      ->willReturn(new Config());
   }
 
 }

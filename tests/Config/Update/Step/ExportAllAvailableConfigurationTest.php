@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Tests\Draft\Environment\Config\Update\Step;
 
 use Composer\Composer;
+use Composer\Config as ComposerConfig;
 use Composer\IO\IOInterface;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
@@ -51,6 +52,7 @@ final class ExportAllAvailableConfigurationTest extends TestCase {
    */
   protected function setUp(): void {
     $this->composer = new Composer();
+    $this->composer->setConfig(new ComposerConfig());
     $this->io = $this->createMock(IOInterface::class);
 
     // Mock source and target configuration directories.

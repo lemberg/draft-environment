@@ -52,6 +52,13 @@ final class App {
   private $shouldRunInstallation = FALSE;
 
   /**
+   * Boolean indicating whether the update process should run.
+   *
+   * @var bool
+   */
+  private $shouldRunUpdate = FALSE;
+
+  /**
    * Draft Environment app constructor.
    *
    * @param \Composer\Composer $composer
@@ -126,7 +133,9 @@ final class App {
       $targetReleaseDate = $operation->getTargetPackage()->getReleaseDate() ?? $now;
       // Package downgrading is not supported by the update manager.
       if ($targetReleaseDate >= $initialReleaseDate) {
-        $this->configUpdateManager->update();
+        // Run update later (during post command phase) in order to have
+        // dependencies autoloaded.
+        $this->shouldRunUpdate = TRUE;
       }
     }
   }
@@ -149,8 +158,8 @@ final class App {
    * @param \Composer\Script\Event $event
    */
   private function handleScriptEvent(ScriptEvent $event): void {
-    if ($event->getName() === ScriptEvents::POST_INSTALL_CMD || $event->getName() === ScriptEvents::POST_UPDATE_CMD) {
-      $this->onPostInstallCommand($event);
+    if ($event->getName() === ScriptEvents::POST_AUTOLOAD_DUMP) {
+      $this->onPostAutoloadDumpCommand($event);
     }
   }
 
@@ -159,7 +168,7 @@ final class App {
    *
    * @param \Composer\Script\Event $event
    */
-  private function onPostInstallCommand(ScriptEvent $event): void {
+  private function onPostAutoloadDumpCommand(ScriptEvent $event): void {
     if ($this->shouldRunInstallation) {
       $this->configInstallManager->install();
 
@@ -169,6 +178,11 @@ final class App {
       $this->configUpdateManager->setLastAppliedUpdateWeight($lastAvailableWeight);
     }
     $this->shouldRunInstallation = FALSE;
+
+    if ($this->shouldRunUpdate) {
+      $this->configUpdateManager->update();
+    }
+    $this->shouldRunUpdate = FALSE;
   }
 
 }

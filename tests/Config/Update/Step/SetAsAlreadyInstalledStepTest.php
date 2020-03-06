@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lemberg\Tests\Draft\Environment\Config\Update\Step;
 
 use Composer\Composer;
+use Composer\Config as ComposerConfig;
 use Composer\Factory;
 use Composer\IO\IOInterface;
 use Composer\Json\JsonFile;
@@ -73,6 +74,7 @@ final class SetAsAlreadyInstalledStepTest extends TestCase {
       ->with(App::PACKAGE_NAME, '*')
       ->willReturn($package);
     $this->composer->setRepositoryManager($manager);
+    $this->composer->setConfig(new ComposerConfig());
 
     $this->io = $this->createMock(IOInterface::class);
 
