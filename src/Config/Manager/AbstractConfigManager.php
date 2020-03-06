@@ -109,11 +109,17 @@ abstract class AbstractConfigManager implements ManagerInterface {
     if ($this->getConfig()->getFilesystem()->exists($lockFile)) {
       $json = new JsonFile($lockFile);
       $content = $json->read();
+      $content += [
+        'packages' => [],
+        'packages-dev' => [],
+      ];
 
-      $key = array_search(App::PACKAGE_NAME, array_column($content['packages'], 'name'), TRUE);
-      if ($key !== FALSE) {
-        $content['packages'][$key]['extra'] = $extra;
-        $json->write($content);
+      foreach (['packages', 'packages-dev'] as $type) {
+        $key = array_search(App::PACKAGE_NAME, array_column($content[$type], 'name'), TRUE);
+        if ($key !== FALSE) {
+          $content[$type][$key]['extra'] = $extra;
+          $json->write($content);
+        }
       }
     }
   }
