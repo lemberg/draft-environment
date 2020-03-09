@@ -51,11 +51,13 @@
     - ../../provisioning/roles/draft
     - ../../provisioning/roles/git_config
     - ../../provisioning/roles/apache2
-    - { role: geerlingguy.mysql, mysql_python_package_debian: python3-mysqldb }
+    - geerlingguy.mysql
     - geerlingguy.mailhog
     - T2L.php
     - T2L.composer
     - T2L.java
     - { role: T2L.solr, solr_cleanup_downloads: false, solr_cleanup_gpg: false }
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
   vars_files:
     - ../../default.vm-settings.yml

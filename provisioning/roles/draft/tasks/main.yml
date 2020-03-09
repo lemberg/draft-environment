@@ -49,8 +49,8 @@
     name:
       - libxml2-dev
       - libxslt-dev
-      - python-dev
-      - python-lxml
+      - python3-dev
+      - python3-lxml
       - rsync
     state: present
   when: "'solr' in draft_features"
