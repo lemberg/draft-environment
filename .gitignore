@@ -15,3 +15,6 @@
 
 # Ignore local settings.
 /vm-settings.local.yml
+
+# Ignore test configuration overrides.
+/grumphp.yml

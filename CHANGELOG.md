@@ -2,6 +2,7 @@
 
 Updates:
 
+- [GH-175](https://github.com/lemberg/draft-environment/issues/175) - Add GrumPHP support
 - [GH-161](https://github.com/lemberg/draft-environment/issues/161) - Updated Ansible MySQL role to 3.0.0
 - [GH-159](https://github.com/lemberg/draft-environment/issues/159) - Upgraded Molecule framework (2 => 3)
 - [GH-157](https://github.com/lemberg/draft-environment/issues/157) - Switched to unofficial PPA for Vagrant on Travis; Vagrant 2.2.7 supports VirtualBox 6.1.x
