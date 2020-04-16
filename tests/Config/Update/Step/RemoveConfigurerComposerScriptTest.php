@@ -8,9 +8,7 @@ use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\Factory;
 use Composer\IO\IOInterface;
-use Composer\Json\JsonFile;
 use Composer\Package\RootPackage;
-use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
@@ -43,6 +41,18 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
   private $root;
 
   /**
+   * @var \Symfony\Component\Filesystem\Filesystem
+   */
+  private $fs;
+
+  /**
+   * Path to a directory with test composer.json files.
+   *
+   * @var string
+   */
+  private $basePath;
+
+  /**
    * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
    */
   private $configUpdateManager;
@@ -59,11 +69,18 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
 
     // Mock source and target configuration directories.
     $this->root = vfsStream::setup()->url();
-    $fs = new Filesystem();
-    $fs->mkdir(["$this->root/source", "$this->root/target", "$this->root/wd"]);
+    $this->fs = new Filesystem();
+    $this->fs->mkdir([
+      "$this->root/source",
+      "$this->root/target",
+      "$this->root/wd",
+    ]);
 
     // Point composer to a test composer.json.
     putenv("COMPOSER=$this->root/wd/composer.json");
+
+    // Build path to the test composer.json files based on this class name.
+    $this->basePath = './tests/fixtures/' . str_replace('\\', DIRECTORY_SEPARATOR, substr(__CLASS__, strlen('Lemberg\Tests\Draft\Enviaronment')));
 
     $configObject = new Config("$this->root/source", "$this->root/target");
     $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject);
@@ -80,155 +97,71 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
   /**
    * Tests update step execution.
    *
-   * @param array<int|string,array> $before
-   * @param array<int|string,array> $after
+   * @param string $composer_before
+   * @param string $composer_after
    *
    * @dataProvider updateDataProvider
    */
-  final public function testUpdate(array $before, array $after): void {
+  final public function testUpdate(string $composer_before, string $composer_after): void {
+
+    // Copy test composer,json to the vritual working directory.
+    $this->fs->copy("$this->basePath/$composer_before", "$this->root/wd/composer.json", TRUE);
+
+    $composer_wd = Factory::getComposerFile();
+    $before_content = file_get_contents($composer_wd);
+    if ($before_content === FALSE) {
+      throw new \RuntimeException(sprintf('File %s could not be read', $composer_wd));
+    }
+    $decoded_before_content = json_decode($before_content, TRUE);
+
     /** @var \Composer\Package\RootPackage $rootPackage */
     $rootPackage = $this->composer->getPackage();
-    $rootPackage->setScripts($before);
+    $rootPackage->setScripts($decoded_before_content['scripts'] ?? []);
     $this->composer->setPackage($rootPackage);
+
+    // Run update.
     $step = new RemoveConfigurerComposerScript($this->composer, $this->io, $this->configUpdateManager);
     $config = [];
-
-    $filename = Factory::getComposerFile();
-    $json = new JsonFile($filename);
-    $json->write(['name' => App::PACKAGE_NAME, 'scripts' => $before]);
-
     $step->update($config);
 
-    self::assertSame($after, $this->composer->getPackage()->getScripts());
-    $expected = count($after) > 0 ? ['name' => App::PACKAGE_NAME, 'scripts' => $after] : ['name' => App::PACKAGE_NAME];
-    self::assertSame(JsonFile::encode($expected) . "\n", file_get_contents($filename));
+    // Verify that Composer root package has the script removed.
+    $after_content = file_get_contents("$this->basePath/$composer_after");
+    if ($after_content === FALSE) {
+      throw new \RuntimeException(sprintf('File %s could not be read', "$this->basePath/$composer_after"));
+    }
+    $decoded_after_content = json_decode($after_content, TRUE);
+    self::assertSame($decoded_after_content['scripts'] ?? [], $this->composer->getPackage()->getScripts());
+
+    // Verify that composer.json has the script removed.
+    self::assertFileEquals("$this->basePath/$composer_after", $composer_wd);
   }
 
   /**
    * Data provider for the ::testUpdate().
    *
-   * @return array<int|string,array>
+   * @return array<int,array<int,string>>
    */
   final public function updateDataProvider(): array {
     return [
       [
-        [],
-        [],
+        'composer-no-scripts.json',
+        'composer-no-scripts.json',
       ],
       [
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
+        'composer-empty-scripts.json',
+        'composer-no-scripts.json',
       ],
       [
-        [
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-        [
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
+        'composer-with-only-scripts-in-the-middle.json',
+        'composer-no-scripts.json',
       ],
       [
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
+        'composer-with-only-scripts-in-the-end.json',
+        'composer-no-scripts.json',
       ],
       [
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Configurer::setUp',
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-      ],
-      [
-        [
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Configurer::setUp',
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-        [
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-      ],
-      [
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Configurer::setUp',
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-            'Lemberg\Draft\Environment\Configurer::setUp',
-          ],
-        ],
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Dummy::setUp',
-          ],
-        ],
-      ],
-      [
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Configurer::setUp',
-          ],
-        ],
-        [],
-      ],
-      [
-        [
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Configurer::setUp',
-          ],
-        ],
-        [],
-      ],
-      [
-        [
-          ScriptEvents::POST_INSTALL_CMD => [
-            'Lemberg\Draft\Environment\Configurer::setUp',
-          ],
-          ScriptEvents::POST_UPDATE_CMD => [
-            'Lemberg\Draft\Environment\Configurer::setUp',
-          ],
-        ],
-        [],
+        'composer-with-mixed-scripts-before.json',
+        'composer-with-mixed-scripts-after.json',
       ],
     ];
   }
