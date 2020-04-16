@@ -1,16 +1,16 @@
 {
     "name": "lemberg/draft-environment",
-    "description": "Development environment for Draft Drupal.",
     "type": "composer-plugin",
+    "description": "Development environment for Draft Drupal.",
     "license": "GPL-2.0-or-later",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/T2L/comments.git"
-        }
-    ],
+    "require": {
+        "php": "^7.2",
+        "composer-plugin-api": "^1.1",
+        "consolidation/comments": "dev-master",
+        "nette/robot-loader": "^3.2",
+        "symfony/filesystem": "^3.4 || ^4",
+        "symfony/yaml": "^3.4 || ^4"
+    },
     "require-dev": {
         "composer/composer": "^1.9",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
@@ -24,32 +24,32 @@
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^6.5 | ^7",
+        "phpunit/phpunit": "^6.5 || ^7",
         "slam/phpstan-extensions": "^4.0",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
-    },
-    "require": {
-        "php": "^7.2",
-        "composer-plugin-api": "^1.1",
-        "consolidation/comments": "dev-master",
-        "nette/robot-loader": "^3.2",
-        "symfony/filesystem": "^3.4|^4",
-        "symfony/yaml": "^3.4|^4"
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Lemberg\\Tests\\Draft\\Environment\\": "tests/"
-        }
-    },
-    "autoload": {
-        "psr-4": {
-            "Lemberg\\Draft\\Environment\\": "src/"
-        }
     },
     "config": {
         "sort-packages": true
     },
     "extra": {
         "class": "Lemberg\\Draft\\Environment\\Composer\\Plugin"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "Lemberg\\Draft\\Environment\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Lemberg\\Tests\\Draft\\Environment\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/T2L/comments.git"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
