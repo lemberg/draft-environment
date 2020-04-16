@@ -132,13 +132,18 @@ final class PluginTest extends TestCase {
     $findPackageReturnValue = $returnPackage ? new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0') : NULL;
 
     $this->composer = $this->getMockBuilder(Composer::class)
-      ->setMethods([
+      ->onlyMethods([
         'getRepositoryManager',
+        'getInstallationManager',
+        'getConfig',
+      ])
+      // These methods do not exist in the target class, but this is not
+      // relevant here. To simplify this test (and to avoid mocking too many
+      // classes) let's use non-existing methods and leverage willReturnSelf().
+      ->addMethods([
         'getLocalRepository',
         'findPackage',
-        'getInstallationManager',
         'getInstallPath',
-        'getConfig',
       ])
       ->getMock();
     $this->composer->expects(self::any())
