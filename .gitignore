@@ -7,5 +7,8 @@
 # Ignore Composer-managed dependencies.
 /vendor
 
+# Ignore Composer lock file (this is not a project).
+/composer.lock
+
 # Ignore local settings.
 /vm-settings.local.yml
