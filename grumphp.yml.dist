@@ -1,0 +1,20 @@
+parameters:
+  ascii: ~
+  git_dir: .
+  bin_dir: vendor/bin
+  tasks:
+    composer: ~
+    composer_normalize: ~
+    git_commit_message:
+      enforce_capitalized_subject: false
+      matchers:
+        Subject must start with a GitHub issue number: /^\#\d+/
+        Subject text must start with a capital letter: /^\#\d+\s[A-Z]+/
+    jsonlint: ~
+    phpcs:
+      standard: Drupal,DrupalPractice
+      ignore_patterns:
+        - vendor
+    phplint: ~
+    phpstan: ~
+    phpunit: ~
