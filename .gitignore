@@ -10,5 +10,8 @@
 # Ignore Composer lock file (this is not a project).
 /composer.lock
 
+# Ignore PHPUnit results cache.
+/.phpunit.result.cache
+
 # Ignore local settings.
 /vm-settings.local.yml
