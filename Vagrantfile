@@ -148,6 +148,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Allow creation of symlinks in VirtualBox shared folders (works with both
     # VirtualBox shared folders and NFS).
     v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/" + configuration.get("vagrant.base_directory"), "1"]
+    # Enable multiple cores in Vagrant/VirtualBox.
+    v.customize ['modifyvm', :id, '--ioapic', 'on']
+    # Disable Audio.
+    v.customize ['modifyvm', :id, '--audio', 'none']
+    # Set recommended Graphics Controller.
+    v.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
     # When using the Vagrantbox ubuntu/xenial64 you will have a file
     # ubuntu-xenial-16.04-cloudimg-console.log after the start. Get rid of it.
     # Thanks to https://betacloud.io/get-rid-of-ubuntu-xenial-16-04-cloudimg-console-log/
