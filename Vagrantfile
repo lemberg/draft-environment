@@ -148,10 +148,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Allow creation of symlinks in VirtualBox shared folders (works with both
     # VirtualBox shared folders and NFS).
     v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/" + configuration.get("vagrant.base_directory"), "1"]
-    # When using the Vagrantbox ubuntu/xenial64 you will have a file
-    # ubuntu-xenial-16.04-cloudimg-console.log after the start. Get rid of it.
-    # Thanks to https://betacloud.io/get-rid-of-ubuntu-xenial-16-04-cloudimg-console-log/
-    v.customize ["modifyvm", :id, "--uartmode1", "disconnected"]
+    # Enable multiple cores in Vagrant/VirtualBox.
+    v.customize ['modifyvm', :id, '--ioapic', 'on']
+    # Disable Audio.
+    v.customize ['modifyvm', :id, '--audio', 'none']
+    # Set recommended Graphics Controller.
+    v.customize ['modifyvm', :id, '--graphicscontroller', 'vmsvga']
+
+    # The VM is configured with console=ttyS0 as one of the kernel parameters
+    # (/etc/default/grub -> GRUB_CMDLINE_LINUX_DEFAULT) which causes a
+    # dependency with the serial port. If the serial port is enabled but not
+    # connected (the default state) then the boot is slow. Disabling the serial
+    # port makes the boot fast until something needs to be written to the port
+    # and that's when things get stuck. Workaround is to redirect output to the
+    # NULL file.
+    #
+    # See:
+    #   - https://forums.virtualbox.org/viewtopic.php?f=6&t=92832#p448121
+    #   - https://bugs.launchpad.net/cloud-images/+bug/1829625
+    v.customize ["modifyvm", :id, "--uartmode1", "file", File::NULL]
 
     # Tune the guest additions time synchronization parameters.
     # See https://www.virtualbox.org/manual/ch09.html#changetimesync
