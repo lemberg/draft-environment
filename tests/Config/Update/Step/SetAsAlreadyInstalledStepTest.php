@@ -61,7 +61,7 @@ final class SetAsAlreadyInstalledStepTest extends TestCase {
     $this->composer->setPackage($package);
     $manager = $this->getMockBuilder(RepositoryManager::class)
       ->disableOriginalConstructor()
-      ->setMethods([
+      ->onlyMethods([
         'getLocalRepository',
         'findPackage',
       ])

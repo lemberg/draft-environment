@@ -6,26 +6,26 @@
     "require": {
         "php": "^7.2",
         "composer-plugin-api": "^1.1",
-        "consolidation/comments": "dev-master",
+        "consolidation/comments": "dev-patch-1",
         "nette/robot-loader": "^3.2",
-        "symfony/filesystem": "^3.4 || ^4",
-        "symfony/yaml": "^3.4 || ^4"
+        "symfony/filesystem": "^3.4 || ^4.4 || ^5",
+        "symfony/yaml": "^3.4 || ^4.4 || ^5"
     },
     "require-dev": {
-        "composer/composer": "^1.9",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+        "composer/composer": "^1.10",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.6.0",
         "dg/bypass-finals": "^1.1",
-        "drupal/coder": "^8.3",
-        "ergebnis/phpstan-rules": "^0.14.0",
+        "drupal/coder": "^8.3.8",
+        "ergebnis/phpstan-rules": "^0.14",
         "mikey179/vfsstream": "^1.6",
         "php-mock/php-mock-phpunit": "^2.5",
-        "phpstan/extension-installer": "^1.0",
+        "phpstan/extension-installer": "^1.0.4",
         "phpstan/phpstan": "^0.12",
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^6.5 || ^7",
-        "slam/phpstan-extensions": "^4.0",
+        "phpunit/phpunit": "^8.5 || ~9.0.0",
+        "slam/phpstan-extensions": "^5.0",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "config": {
