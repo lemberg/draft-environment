@@ -8,6 +8,7 @@ Updates:
 
 Fixes:
 
+- [GH-177](https://github.com/lemberg/draft-environment/issues/177) - Add `.gitattributes` file and configure git to export  production code only
 - [GH-176](https://github.com/lemberg/draft-environment/issues/176) - Make this project less dependent on other packages:
     * Support Symfony 5
     * Bump Symfony 4 version constraint to `^4.4`
