@@ -8,6 +8,7 @@ Updates:
 
 Fixes:
 
+- [GH-172](https://github.com/lemberg/draft-environment/issues/172) - Ensure that composer.json is not broken after running updates; remove Configurer:setUp listener from all events
 - [GH-168](https://github.com/lemberg/draft-environment/issues/168) - Ansible role geerlingguy.mysql @ 3.0.0 was failing to install due to incorrect python configuration in certain cases (fixed by setting `ansible_python_interpreter` to `/usr/bin/python3`
 
 ## Draft Environment 3.0.0-rc2, 2020-02-12
