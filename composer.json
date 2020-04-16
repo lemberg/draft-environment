@@ -24,7 +24,7 @@
         "phpstan/phpstan-deprecation-rules": "^0.12",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpstan/phpstan-strict-rules": "^0.12",
-        "phpunit/phpunit": "^8.5 || ^9.1",
+        "phpunit/phpunit": "^8.5 || ~9.0.0",
         "slam/phpstan-extensions": "^5.0",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
