@@ -8,6 +8,11 @@ Updates:
 
 Fixes:
 
+- [GH-176](https://github.com/lemberg/draft-environment/issues/176) - Make this project less dependent on other packages:
+    * Support Symfony 5
+    * Bump Symfony 4 version constraint to `^4.4`
+    * Remove composer.lock from the repository (as it's does make sense to have it only for projects)
+    * Run `composer update` on Travis with `--prefer-lowest`, so minimum versions can be tested (on PHP 7.2)
 - [GH-172](https://github.com/lemberg/draft-environment/issues/172) - Ensure that composer.json is not broken after running updates; remove Configurer:setUp listener from all events
 - [GH-168](https://github.com/lemberg/draft-environment/issues/168) - Ansible role geerlingguy.mysql @ 3.0.0 was failing to install due to incorrect python configuration in certain cases (fixed by setting `ansible_python_interpreter` to `/usr/bin/python3`
 
