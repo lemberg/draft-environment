@@ -106,7 +106,11 @@ final class InitConfigTest extends TestCase {
     $step->install();
 
     $configObject = $this->configInstallManager->getConfig();
-    self::assertContains('load File.dirname(__FILE__) + "/' . $vendorDir . '/lemberg/draft-environment/Vagrantfile"', file_get_contents($configObject->getTargetConfigFilepath(Config::TARGET_VM_FILENAME)));
+    $contents = file_get_contents($configObject->getTargetConfigFilepath(Config::TARGET_VM_FILENAME));
+    if ($contents === FALSE) {
+      throw new \RuntimeException(sprintf('File %s could not be read', $configObject->getTargetConfigFilepath(Config::TARGET_VM_FILENAME)));
+    }
+    self::assertStringContainsString('load File.dirname(__FILE__) + "/' . $vendorDir . '/lemberg/draft-environment/Vagrantfile"', $contents);
   }
 
   /**
