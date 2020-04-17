@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\Composer;
+namespace Lemberg\Tests\Unit\Draft\Environment\Composer;
 
 use Composer\Composer;
 use Composer\Config;

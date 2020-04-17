@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\Config;
+namespace Lemberg\Tests\Unit\Draft\Environment\Config;
 
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Utility\Filesystem;

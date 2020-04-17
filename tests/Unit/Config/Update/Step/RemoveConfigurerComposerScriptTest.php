@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\Config\Update\Step;
+namespace Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step;
 
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
@@ -80,7 +80,7 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
     putenv("COMPOSER=$this->root/wd/composer.json");
 
     // Build path to the test composer.json files based on this class name.
-    $this->basePath = './tests/fixtures/' . str_replace('\\', DIRECTORY_SEPARATOR, substr(__CLASS__, strlen('Lemberg\Tests\Draft\Enviaronment')));
+    $this->basePath = './tests/fixtures/Unit' . str_replace('\\', DIRECTORY_SEPARATOR, substr(__CLASS__, strlen('Lemberg\Tests\Unit\Draft\Environment')));
 
     $configObject = new Config("$this->root/source", "$this->root/target");
     $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject);
