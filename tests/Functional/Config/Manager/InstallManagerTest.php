@@ -39,7 +39,7 @@ final class InstallManagerTest extends AbstractConfigManagerTest {
         'type' => 'path',
         'url' => getcwd(),
         'options' => [
-          'symlink' => TRUE,
+          'symlink' => FALSE,
         ],
       ]),
       '--working-dir', $this->workingDir,
