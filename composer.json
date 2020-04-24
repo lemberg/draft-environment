@@ -28,7 +28,7 @@
         "phpstan/phpstan-strict-rules": "^0.12",
         "phpunit/phpunit": "^8.5 || ~9.0.0",
         "slam/phpstan-extensions": "^5.0",
-        "symfony/process": "^3.4 || ^4.4 || ^5",
+        "symfony/process": "^3.4.3 || ^4.4 || ^5",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "config": {
