@@ -35,6 +35,10 @@ jobs:
       before_install:
         - phpenv config-rm xdebug.ini
         - composer self-update
+        # Some tests run Composer via command line. It's not possible to require
+        # a package in the detached state. Checkout to a branch to workaround
+        # this.
+        - git checkout -b test
 
       install:
         - composer update --no-progress --no-suggest --prefer-dist $PREFER_LOWEST --optimize-autoloader
@@ -157,6 +161,10 @@ jobs:
 
       before_install:
         - composer self-update
+        # Some tests run Composer via command line. It's not possible to require
+        # a package in the detached state. Checkout to a branch to workaround
+        # this.
+        - git checkout -b test
 
       install:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
