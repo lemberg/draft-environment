@@ -1,0 +1,94 @@
+# This file contains Vagrant and VirtualBox configuration.
+#
+# Settings in this file are project specific, not a local machine specific.
+#
+# If there is a need to override any value, create file vm-settings.local.yml
+# and put it there. Local settings should not be committed to the repository.
+
+# Vagrant configuration.
+vagrant:
+  # Box to use. At the moment Debian-based distributions are supported only.
+  # Do not change this value, unless absolutely necessary. Valid use case is
+  # 32-bit host machine and no support for virtualization of 64-bit guest
+  # machine.
+  # Defaults to "Official Ubuntu Server 16.04 LTS (Xenial Xerus)".
+  # Change this parameter in the local settings file.
+  box: "ubuntu/xenial64"
+  # Box version.
+  box_version: ">= 0"
+  # Disable automatic update checking be setting this option to false.
+  # See https://www.vagrantup.com/docs/boxes/versioning.html#automatic-update-checking
+  box_check_update: false
+  # Host name. This setting is required. Usually host name matches project name.
+  hostname: "draft"
+  # Host aliases. Will be added to hosts file alongside <hostname>.test.
+  host_aliases: []
+  # Base directory. No trailing slash!
+  base_directory: /var/www/draft
+  # Synced folder options. Refer to https://www.vagrantup.com/docs/synced-folders/
+  # for possible options and their values. Please note that each synced fodler
+  # type could have extra options, look at NFS or RSync for examples.
+  synced_folder_options:
+    type: nfs
+    create: true
+
+# VirtualBox configuration.
+#
+# Virtual machine specification is quite machine-specific. This file provides
+# default settings that should work just fine for a common 2015-2016 machine:
+#   - quad core CPU
+#   - hardware virtualization support
+#   - 8+Gb of RAM
+#   - SSD
+#
+# Sometimes VirtualBox will fail to start with provided settings. For example:
+#   - single core CPU
+#   - no hardware virtualization support
+#   - low amount of RAM
+#
+# In that case virtual machine specification must be overridden. Do not edit
+# this file directly. This file contains global poroject-wide settings, i.e.
+# these settings are shared between all project members. Local settings file is
+# the right place to do it.
+virtualbox:
+  # Machine name. Optional, defaults to Vagrant host name.
+  name: ""
+  # Number of CPUs. Lower this value if host machine has single/dual core CPU
+  # and/or no hardware virtualization support.
+  cpus: 2
+  # Memory limit (in MB). Small projects may work with less amount of RAM
+  # available. However, machine provisioning usually requires more memory than
+  # normal run. If the host machine has limited RAM available, lower memory
+  # limit after virtual machine provisioning.
+  memory: 1024
+  # CPU execution cap (in %). Lower this value if host machine has single core
+  # CPU.
+  cpuexecutioncap: 100
+
+# Ansible local configuration.
+ansible:
+  version: 2.6.6
+
+# List of features to install. Some roles depend on each other, be careful.
+draft_features:
+  # Configure Swap file (sort of required by Composer)
+  - swapfile
+  - mailhog
+  # Copy host machine GIT credentilas to the VM
+  - git_config
+  - apache2
+  - mysql
+  - php
+  # Composer (PHP dependency manager), requires PHP
+  - composer
+#  - java
+  # Apache Solr, requires Java
+#  - solr
+
+# Provisioner (Ansible) configuration.
+#
+# Any variable that is being used in any Ansible role can be overridden in this
+# file.
+# For example, in order to install PHP 5.6 instead of default 7.1, specify:
+#
+# php_version: 5.6

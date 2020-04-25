@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\PHPUnit\Hook;
+namespace Lemberg\Tests\Extensions\Draft\Environment\PHPUnit\Hook;
 
 use DG\BypassFinals;
 use PHPUnit\Runner\BeforeTestHook;

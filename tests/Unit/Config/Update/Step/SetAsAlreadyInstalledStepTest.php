@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\Config\Update\Step;
+namespace Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step;
 
 use Composer\Composer;
 use Composer\Config as ComposerConfig;

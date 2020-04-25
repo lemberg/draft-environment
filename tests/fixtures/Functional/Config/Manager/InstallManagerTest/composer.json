@@ -1,0 +1,17 @@
+{
+    "name": "lemberg/draft-environment-test",
+    "type": "project",
+    "description": "Test project that using lemberg/draft-environment",
+    "license": "GPL-2.0-or-later",
+    "require-dev": {
+        "lemberg/draft-environment": "@dev"
+    },
+    "repositories": {
+        "comments": {
+            "type": "vcs",
+            "url": "https://github.com/T2L/comments.git"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

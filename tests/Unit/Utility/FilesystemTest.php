@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Draft\Environment\Utility;
+namespace Lemberg\Tests\Unit\Draft\Environment\Utility;
 
 use Lemberg\Draft\Environment\Utility\Filesystem;
 use org\bovigo\vfs\vfsStream;
