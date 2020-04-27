@@ -11,10 +11,7 @@ parameters:
         Subject must start with a GitHub issue number: /^\#\d+/
         Subject text must start with a capital letter: /^\#\d+\s[A-Z]+/
     jsonlint: ~
-    phpcs:
-      standard: Drupal,DrupalPractice
-      ignore_patterns:
-        - vendor
+    phpcs: ~
     phplint: ~
     phpstan: ~
     phpunit: ~
