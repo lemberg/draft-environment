@@ -2,6 +2,7 @@
 
 Updates:
 
+- [GH-149](https://github.com/lemberg/draft-environment/issues/149) - Use forked version of `consolidation/comments`: `t2l/comments`
 - [GH-193](https://github.com/lemberg/draft-environment/issues/193) - Update all Ansible roles:
     * oefenweb.swapfile (v2.0.24 => v2.0.26)
     * geerlingguy.mysql (3.0.0 => 3.1.0)
