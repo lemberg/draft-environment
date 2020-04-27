@@ -12,6 +12,9 @@ stages:
 
 jobs:
   fast_finish: true
+  allow_failures:
+    - stage: Molecule
+      env: MOLECULE_PLATFORM=ubuntu2004
 
   include:
     - &PHP
@@ -142,6 +145,10 @@ jobs:
     - <<: *Molecule
 
       env: MOLECULE_PLATFORM=ubuntu1804
+
+    - <<: *Molecule
+
+      env: MOLECULE_PLATFORM=ubuntu2004
 
     - &CodeCoverage
 
