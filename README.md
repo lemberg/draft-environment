@@ -1,4 +1,4 @@
-# Draft Environment 3.x.x
+# Draft Environment 3.0
 
 [![Latest Stable Version](https://poser.pugx.org/lemberg/draft-environment/v/stable)](https://packagist.org/packages/lemberg/draft-environment)
 [![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=3.x.x)](https://travis-ci.org/lemberg/draft-environment)

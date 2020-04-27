@@ -1,4 +1,4 @@
-## Draft Environment 3.x.x (unreleased)
+## Draft Environment 3.0.0, 2020-04-27
 
 Updates:
 
