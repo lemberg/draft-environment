@@ -13,8 +13,12 @@
 # Ignore PHPUnit results cache.
 /.phpunit.result.cache
 
-# Ignore local settings.
+# Ignore VM regular & local settings.
+/vm-settings.yml
 /vm-settings.local.yml
 
 # Ignore test configuration overrides.
 /grumphp.yml
+/phpcs.xml
+/phpstan.neon
+/phpunit.xml

@@ -112,9 +112,9 @@ swapfile_size: 2GB
 
 mailhog_install_dir: /opt/mailhog
 mailhog_version: 1.0.0
-mailhog_binary_url: "https://github.com/mailhog/MailHog/releases/download/v{{ mailhog_version }}/MailHog_linux_amd64"
+mailhog_binary_url: 'https://github.com/mailhog/MailHog/releases/download/v{{ mailhog_version }}/MailHog_linux_amd64'
 mhsendmail_version: 0.2.0
-mhsendmail_binary_url: "https://github.com/mailhog/mhsendmail/releases/download/v{{ mhsendmail_version }}/mhsendmail_linux_amd64"
+mhsendmail_binary_url: 'https://github.com/mailhog/mhsendmail/releases/download/v{{ mhsendmail_version }}/mhsendmail_linux_amd64'
 
 # Path to daemonize, which is used to launch MailHog via init script.
 mailhog_daemonize_bin_path: /usr/sbin/daemonize
@@ -165,8 +165,8 @@ mysql_packages:
 # mysql_python_package_debian: ''
 
 # MySQL connection settings.
-mysql_port: "3306"
-mysql_bind_address: '0.0.0.0'
+mysql_port: '3306'
+mysql_bind_address: 0.0.0.0
 mysql_skip_name_resolve: false
 mysql_datadir: /var/lib/mysql
 mysql_sql_mode: ''
@@ -178,52 +178,52 @@ mysql_log_file_group: adm
 
 # Slow query log settings.
 mysql_slow_query_log_enabled: false
-mysql_slow_query_time: "2"
+mysql_slow_query_time: '2'
 mysql_slow_query_log_file: /var/log/mysql/mysql-slow.log
 
 # Memory settings (default values optimized ~512MB RAM).
-mysql_key_buffer_size: "256M"
-mysql_max_allowed_packet: "64M"
-mysql_table_open_cache: "256"
-mysql_sort_buffer_size: "1M"
-mysql_read_buffer_size: "1M"
-mysql_read_rnd_buffer_size: "4M"
-mysql_myisam_sort_buffer_size: "64M"
-mysql_thread_cache_size: "8"
-mysql_query_cache_type: "0"
-mysql_query_cache_size: "16M"
-mysql_query_cache_limit: "1M"
-mysql_max_connections: "151"
-mysql_tmp_table_size: "16M"
-mysql_max_heap_table_size: "16M"
-mysql_group_concat_max_len: "1024"
-mysql_join_buffer_size: "262144"
+mysql_key_buffer_size: 256M
+mysql_max_allowed_packet: 64M
+mysql_table_open_cache: '256'
+mysql_sort_buffer_size: 1M
+mysql_read_buffer_size: 1M
+mysql_read_rnd_buffer_size: 4M
+mysql_myisam_sort_buffer_size: 64M
+mysql_thread_cache_size: '8'
+mysql_query_cache_type: '0'
+mysql_query_cache_size: 16M
+mysql_query_cache_limit: 1M
+mysql_max_connections: '151'
+mysql_tmp_table_size: 16M
+mysql_max_heap_table_size: 16M
+mysql_group_concat_max_len: '1024'
+mysql_join_buffer_size: '262144'
 
 # Other settings.
-mysql_lower_case_table_names: "0"
-mysql_wait_timeout: "28800"
-mysql_event_scheduler_state: "OFF"
+mysql_lower_case_table_names: '0'
+mysql_wait_timeout: '28800'
+mysql_event_scheduler_state: 'OFF'
 
 # InnoDB settings.
-mysql_innodb_file_per_table: "1"
+mysql_innodb_file_per_table: '1'
 # Set .._buffer_pool_size up to 80% of RAM but beware of setting too high.
-mysql_innodb_buffer_pool_size: "256M"
+mysql_innodb_buffer_pool_size: 256M
 # Set .._log_file_size to 25% of buffer pool size.
-mysql_innodb_log_file_size: "64M"
-mysql_innodb_log_buffer_size: "8M"
-mysql_innodb_flush_log_at_trx_commit: "1"
-mysql_innodb_lock_wait_timeout: "50"
+mysql_innodb_log_file_size: 64M
+mysql_innodb_log_buffer_size: 8M
+mysql_innodb_flush_log_at_trx_commit: '1'
+mysql_innodb_lock_wait_timeout: '50'
 
 # These settings require MySQL > 5.5.
 mysql_supports_innodb_large_prefix: true
-mysql_innodb_large_prefix: "1"
-mysql_innodb_file_format: "barracuda"
+mysql_innodb_large_prefix: '1'
+mysql_innodb_file_format: barracuda
 
 # mysqldump settings.
-mysql_mysqldump_max_allowed_packet: "64M"
+mysql_mysqldump_max_allowed_packet: 64M
 
 # Logging settings.
-mysql_log: ""
+mysql_log: ''
 mysql_log_error: /var/log/mysql/mysql.err
 mysql_syslog_tag: mysql
 
@@ -243,13 +243,13 @@ mysql_users:
   -
     name: drupal
     password: drupal
-    priv: drupal.*:ALL
+    priv: 'drupal.*:ALL'
 
 # Replication settings (replication is only enabled if master/user have values).
-mysql_server_id: "1"
-mysql_max_binlog_size: "100M"
-mysql_binlog_format: "ROW"
-mysql_expire_logs_days: "10"
+mysql_server_id: '1'
+mysql_max_binlog_size: 100M
+mysql_binlog_format: ROW
+mysql_expire_logs_days: '10'
 mysql_replication_role: ''
 mysql_replication_master: ''
 # Same keys as `mysql_users` above.
