@@ -1,8 +1,8 @@
 # Draft Environment 3.x.x
 
-![Packagist](https://img.shields.io/packagist/dm/lemberg/draft-environment)
-![Build Status](https://img.shields.io/travis/lemberg/draft-environment/3.x.x)
-![Codecov](https://img.shields.io/codecov/c/github/lemberg/draft-environment)
+[![Latest Stable Version](https://poser.pugx.org/lemberg/draft-environment/v/stable)](https://packagist.org/packages/lemberg/draft-environment)
+[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=3.x.x)](https://travis-ci.org/lemberg/draft-environment)
+[![codecov](https://codecov.io/gh/lemberg/draft-environment/branch/3.x.x/graph/badge.svg)](https://codecov.io/gh/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.
 
@@ -66,13 +66,13 @@ Dramatically increases disk IO on Windows by adding NFS support.
     - [T2L.java @ 1.3.0](https://github.com/T2L/ansible-role-java/tree/1.3.0)
     - [T2L.solr @ 2.2.0](https://github.com/T2L/ansible-role-solr/tree/2.2.0)
 
-1. Create and provision the guest machine:
+2. Create and provision the guest machine:
 
     ```
     $ vagrant up
     ```
 
-1. Commit `.gitignore`, `Vagrantfile` and `vm-settings.yml` to lock the VM state
+2. Commit `.gitignore`, `Vagrantfile` and `vm-settings.yml` to lock the VM state
 
 1. Configuration can be overridden locally by creating and editing `vm-settings.local.yml` (and this file must not be committed)
 
