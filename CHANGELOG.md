@@ -2,6 +2,7 @@
 
 Updates:
 
+- [GH-190](https://github.com/lemberg/draft-environment/issues/175) - Add Ubuntu 20.04 to the test package on Travis
 - [GH-175](https://github.com/lemberg/draft-environment/issues/175) - Add GrumPHP support
 - [GH-161](https://github.com/lemberg/draft-environment/issues/161) - Updated Ansible MySQL role to 3.0.0
 - [GH-159](https://github.com/lemberg/draft-environment/issues/159) - Upgraded Molecule framework (2 => 3)
