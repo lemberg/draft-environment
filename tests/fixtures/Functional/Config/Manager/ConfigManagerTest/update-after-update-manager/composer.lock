@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73275404f6da0c94f105315cd0273e87",
+    "content-hash": "08606a3b090117cd46dda2a93141d5b9",
     "packages": [],
     "packages-dev": [
         {
             "name": "consolidation/comments",
-            "version": "dev-patch-1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/T2L/comments.git",
-                "reference": "4d4df53cb2233903b53fd0894a72ae41a06f3311"
+                "url": "https://github.com/consolidation/comments.git",
+                "reference": "a27cf1c3c02722b08468a70fdba2aae58b86fb2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/T2L/comments/zipball/4d4df53cb2233903b53fd0894a72ae41a06f3311",
-                "reference": "4d4df53cb2233903b53fd0894a72ae41a06f3311",
+                "url": "https://api.github.com/repos/consolidation/comments/zipball/a27cf1c3c02722b08468a70fdba2aae58b86fb2e",
+                "reference": "a27cf1c3c02722b08468a70fdba2aae58b86fb2e",
                 "shasum": ""
             },
             "require": {
@@ -42,26 +42,7 @@
                     "Consolidation\\Comments\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Consolidation\\Comments\\": "tests"
-                }
-            },
-            "scripts": {
-                "cs": [
-                    "phpcs --standard=PSR2 -n src"
-                ],
-                "cbf": [
-                    "phpcbf --standard=PSR2 -n src"
-                ],
-                "unit": [
-                    "phpunit --colors=always"
-                ],
-                "test": [
-                    "@unit",
-                    "@cs"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -72,10 +53,7 @@
                 }
             ],
             "description": "A tool for preserving comments, e.g. when parsing YAML files.",
-            "support": {
-                "source": "https://github.com/T2L/comments/tree/patch-1"
-            },
-            "time": "2020-03-13T11:06:24+00:00"
+            "time": "2020-01-15T17:48:27+00:00"
         },
         {
             "name": "lemberg/draft-environment",
@@ -83,12 +61,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lemberg/draft-environment.git",
-                "reference": "92da9674971d77f831f1551cadf0402a6e46b430"
+                "reference": "b6968a89d39077abc1917474c7a89d22aefc3eb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lemberg/draft-environment/zipball/92da9674971d77f831f1551cadf0402a6e46b430",
-                "reference": "92da9674971d77f831f1551cadf0402a6e46b430",
+                "url": "https://api.github.com/repos/lemberg/draft-environment/zipball/b6968a89d39077abc1917474c7a89d22aefc3eb9",
+                "reference": "b6968a89d39077abc1917474c7a89d22aefc3eb9",
                 "shasum": ""
             },
             "require": {
@@ -108,6 +86,7 @@
                 "ergebnis/phpstan-rules": "^0.14",
                 "mikey179/vfsstream": "^1.6",
                 "php-mock/php-mock-phpunit": "^2.5",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
                 "phpro/grumphp": "^0.18.0",
                 "phpstan/extension-installer": "^1.0.4",
                 "phpstan/phpstan": "^0.12",
@@ -136,7 +115,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Development environment for Draft Drupal.",
-            "time": "2020-04-16T22:19:10+00:00"
+            "time": "2020-04-27T14:59:25+00:00"
         },
         {
             "name": "nette/finder",
@@ -552,9 +531,17 @@
             "time": "2020-03-30T11:42:42+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "dev-patch-1",
+            "alias_normalized": "dev-patch-1",
+            "version": "9999999-dev",
+            "package": "consolidation/comments"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
+        "consolidation/comments": 20,
         "lemberg/draft-environment": 20
     },
     "prefer-stable": true,

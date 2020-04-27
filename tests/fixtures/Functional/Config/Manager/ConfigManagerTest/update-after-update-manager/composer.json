@@ -4,13 +4,8 @@
     "description": "Test project that using lemberg/draft-environment",
     "license": "GPL-2.0-or-later",
     "require-dev": {
-        "lemberg/draft-environment": "3.x.x-dev#5fc08040bdf0a0b1003e792b5d5170b6a60750c7"
-    },
-    "repositories": {
-        "comments": {
-            "type": "vcs",
-            "url": "https://github.com/T2L/comments.git"
-        }
+        "consolidation/comments": "dev-master as dev-patch-1",
+        "lemberg/draft-environment": "3.x.x-dev"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

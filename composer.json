@@ -6,10 +6,10 @@
     "require": {
         "php": "^7.2",
         "composer-plugin-api": "^1.1",
-        "consolidation/comments": "dev-patch-1",
         "nette/robot-loader": "^3.2",
         "symfony/filesystem": "^3.4 || ^4.4 || ^5",
-        "symfony/yaml": "^3.4 || ^4.4 || ^5"
+        "symfony/yaml": "^3.4 || ^4.4 || ^5",
+        "t2l/comments": "^1.1.0"
     },
     "require-dev": {
         "composer/composer": "^1.10",
@@ -50,12 +50,6 @@
             "Lemberg\\Tests\\Unit\\Draft\\Environment\\": "tests/Unit"
         }
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/T2L/comments.git"
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true
 }

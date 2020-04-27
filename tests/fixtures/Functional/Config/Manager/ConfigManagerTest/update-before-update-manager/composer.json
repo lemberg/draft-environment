@@ -6,12 +6,6 @@
     "require-dev": {
         "lemberg/draft-environment": "3.0.0-beta4"
     },
-    "repositories": {
-        "comments": {
-            "type": "vcs",
-            "url": "https://github.com/T2L/comments.git"
-        }
-    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
