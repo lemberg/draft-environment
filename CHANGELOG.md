@@ -2,6 +2,16 @@
 
 Updates:
 
+- [GH-193](https://github.com/lemberg/draft-environment/issues/193) - Update all Ansible roles:
+    * oefenweb.swapfile (v2.0.24 => v2.0.26)
+    * geerlingguy.mysql (3.0.0 => 3.1.0)
+    * T2L.php (1.2.1 => 1.3.0)
+    * T2L.java (1.2.0 => 1.3.0)
+    * T2L.solr (2.1.1 => 2.2.0)
+
+    Bump the following defaults:
+
+    * Solr version: 7.7.3
 - [GH-190](https://github.com/lemberg/draft-environment/issues/175) - Add Ubuntu 20.04 to the test package on Travis
 - [GH-175](https://github.com/lemberg/draft-environment/issues/175) - Add GrumPHP support
 - [GH-161](https://github.com/lemberg/draft-environment/issues/161) - Updated Ansible MySQL role to 3.0.0
