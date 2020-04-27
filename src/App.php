@@ -164,7 +164,7 @@ final class App {
   }
 
   /**
-   * Post install command event handler.
+   * Post autoload dump command event handler.
    *
    * @param \Composer\Script\Event $event
    */
