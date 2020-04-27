@@ -18,3 +18,6 @@
 
 # Ignore test configuration overrides.
 /grumphp.yml
+/phpcs.xml
+/phpstan.neon
+/phpunit.xml
