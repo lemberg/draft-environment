@@ -10,11 +10,14 @@ use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\DependencyResolver\PolicyInterface;
 use Composer\DependencyResolver\Pool;
 use Composer\DependencyResolver\Request;
+use Composer\Installer\InstallationManager;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
+use Composer\Repository\RepositoryManager;
+use Composer\Repository\WritableRepositoryInterface;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
@@ -131,39 +134,31 @@ final class PluginTest extends TestCase {
   private function setUpComposerMock(bool $returnPackage): void {
     $findPackageReturnValue = $returnPackage ? new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0') : NULL;
 
-    $this->composer = $this->getMockBuilder(Composer::class)
-      ->onlyMethods([
-        'getRepositoryManager',
-        'getInstallationManager',
-        'getConfig',
-      ])
-      // These methods do not exist in the target class, but this is not
-      // relevant here. To simplify this test (and to avoid mocking too many
-      // classes) let's use non-existing methods and leverage willReturnSelf().
-      ->addMethods([
-        'getLocalRepository',
-        'findPackage',
-        'getInstallPath',
-      ])
-      ->getMock();
-    $this->composer->expects(self::any())
-      ->method('getRepositoryManager')
-      ->willReturnSelf();
-    $this->composer->expects(self::any())
-      ->method('getLocalRepository')
-      ->willReturnSelf();
-    $this->composer->expects(self::any())
+    $localRepository = $this->createMock(WritableRepositoryInterface::class);
+    $localRepository->expects(self::any())
       ->method('findPackage')
       ->with(App::PACKAGE_NAME, '*')
       ->willReturn($findPackageReturnValue);
 
+    $repositoryManager = $this->createMock(RepositoryManager::class);
+    $repositoryManager->expects(self::any())
+      ->method('getLocalRepository')
+      ->willReturn($localRepository);
+
+    $this->composer = $this->createMock(Composer::class);
     $this->composer->expects(self::any())
-      ->method('getInstallationManager')
-      ->willReturnSelf();
-    $this->composer->expects(self::any())
+      ->method('getRepositoryManager')
+      ->willReturn($repositoryManager);
+
+    $installationManager = $this->createMock(InstallationManager::class);
+    $installationManager->expects(self::any())
       ->method('getInstallPath')
       ->with($findPackageReturnValue)
       ->willReturn(sys_get_temp_dir());
+
+    $this->composer->expects(self::any())
+      ->method('getInstallationManager')
+      ->willReturn($installationManager);
 
     $this->composer->expects(self::any())
       ->method('getConfig')
