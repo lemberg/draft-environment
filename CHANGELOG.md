@@ -2,6 +2,7 @@
 
 Fixes:
 
+- [GH-200](https://github.com/lemberg/draft-environment/issues/200) - Fix newly introduced PHPStan checks
 - [GH-198](https://github.com/lemberg/draft-environment/issues/198) - Fix package settings gets deleted from the composer.lock when running any arbitrary composer command
 
 ## Draft Environment 3.0.0, 2020-04-27
