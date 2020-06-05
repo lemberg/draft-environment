@@ -171,18 +171,19 @@ final class App {
   private function onPostAutoloadDumpCommand(ScriptEvent $event): void {
     if ($this->shouldRunInstallation) {
       $this->configInstallManager->install();
-
-      // Fresh installation should mark all available updates as already
-      // applied.
-      $lastAvailableWeight = $this->configUpdateManager->getLastAvailableUpdateWeight();
-      $this->configUpdateManager->setLastAppliedUpdateWeight($lastAvailableWeight);
+      $this->shouldRunInstallation = FALSE;
     }
-    $this->shouldRunInstallation = FALSE;
 
     if ($this->shouldRunUpdate) {
       $this->configUpdateManager->update();
+      $this->shouldRunUpdate = FALSE;
     }
-    $this->shouldRunUpdate = FALSE;
+
+    // Mark the package as already installed.
+    $this->configInstallManager->setAsAlreadyInstalled();
+    // Mark all available updates as already applied.
+    $lastAvailableWeight = $this->configUpdateManager->getLastAvailableUpdateWeight();
+    $this->configUpdateManager->setLastAppliedUpdateWeight($lastAvailableWeight);
   }
 
 }
