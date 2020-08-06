@@ -1,3 +1,9 @@
+## Draft Environment (unreleased)
+
+Updates:
+
+- [GH-206](https://github.com/lemberg/draft-environment/issues/206) - Allow overriding source/destination directory. Configuration setting `vagrant.base_directory` has been replaced with `vagrant.destination_directory`. Added new configuration setting `vagrant.source_directory` (defaults to `.`). 
+
 ## Draft Environment 3.0.1, 2020-06-05
 
 Fixes:
