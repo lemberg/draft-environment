@@ -70,8 +70,8 @@ final class ReplaceBaseDirectoryWithDestinationDirectoryTest extends TestCase {
   /**
    * Tests update step execution.
    *
-   * @param array<int,array<string,array<string,string>>> $config
-   * @param array<int,array<string,array<string,string>>> $expectedConfig
+   * @param array<string,mixed> $config
+   * @param array<string,mixed> $expectedConfig
    *
    * @dataProvider updateDataProvider
    */
@@ -85,7 +85,7 @@ final class ReplaceBaseDirectoryWithDestinationDirectoryTest extends TestCase {
   /**
    * Data provider for the ::testUpdate().
    *
-   * @return array<int,array<string,array<string,string>>>
+   * @return array<int,array<int,string|array<string,mixed>>>
    */
   final public function updateDataProvider(): array {
     return [
