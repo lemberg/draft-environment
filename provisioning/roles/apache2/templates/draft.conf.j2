@@ -1,6 +1,6 @@
 # {{ ansible_managed }}
 
-<Directory {{ vagrant.base_directory }}/{{ apache2_document_root }}>
+<Directory {{ vagrant.destination_directory }}/{{ apache2_document_root }}>
   AllowOverride All
   Options -Indexes +FollowSymLinks
   Require all granted
@@ -12,7 +12,7 @@
   ServerAlias {{ vagrant.host_aliases|join(" ") }}
 {% endif %}
 
-  DocumentRoot {{ vagrant.base_directory }}/{{ apache2_document_root }}
+  DocumentRoot {{ vagrant.destination_directory }}/{{ apache2_document_root }}
 
   CustomLog "/var/log/draft/apache_access.log" common
   ErrorLog /var/log/draft/apache_error.log
@@ -26,7 +26,7 @@
   ServerAlias {{ vagrant.host_aliases|join(" ") }}
 {% endif %}
 
-  DocumentRoot {{ vagrant.base_directory }}/{{ apache2_document_root }}
+  DocumentRoot {{ vagrant.destination_directory }}/{{ apache2_document_root }}
 
   CustomLog "/var/log/draft/apache_access.log" common
   ErrorLog /var/log/draft/apache_error.log

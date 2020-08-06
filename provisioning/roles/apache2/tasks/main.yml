@@ -72,7 +72,7 @@
     state: directory
     mode: 0755
   with_items:
-    - '{{ vagrant.base_directory }}/{{ apache2_document_root }}'
+    - '{{ vagrant.destination_directory }}/{{ apache2_document_root }}'
 
 # Configure web server.
 - name: Set correct DirectoryIndex

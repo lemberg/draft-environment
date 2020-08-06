@@ -147,7 +147,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     # Allow creation of symlinks in VirtualBox shared folders (works with both
     # VirtualBox shared folders and NFS).
-    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/" + configuration.get("vagrant.base_directory"), "1"]
+    v.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/" + configuration.get("vagrant.destination_directory"), "1"]
     # Enable multiple cores in Vagrant/VirtualBox.
     v.customize ['modifyvm', :id, '--ioapic', 'on']
     # Disable Audio.
@@ -198,7 +198,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # See https://docs.vagrantup.com/v2/synced-folders/nfs.html
 
   # Configure synched folders.
-  config.vm.synced_folder ".", configuration.get("vagrant.base_directory"), configuration.get("vagrant.synced_folder_options")
+  config.vm.synced_folder configuration.get("vagrant.source_directory"), configuration.get("vagrant.destination_directory"), configuration.get("vagrant.synced_folder_options")
 
   # Provisioning
   #
@@ -219,7 +219,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
     ansible.playbook = "playbook.yml"
-    ansible.provisioning_path = File.join(configuration.get("vagrant.base_directory"), vm_pathname.relative_path_from(project_pathname), "/provisioning")
+    ansible.provisioning_path = File.join("/vagrant", vm_pathname.relative_path_from(project_pathname), "/provisioning")
     ansible.extra_vars = configuration.getConfiguration()
     ansible.galaxy_role_file = "requirements.yml"
     ansible.galaxy_roles_path = "/etc/ansible/roles"

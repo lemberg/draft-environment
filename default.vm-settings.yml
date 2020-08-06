@@ -24,8 +24,10 @@ vagrant:
   hostname: ''
   # Host aliases. Will be added to hosts file alongside <hostname>.test.
   host_aliases: []
-  # Base directory. No trailing slash!
-  base_directory: /var/www/draft
+  # Source directory. No trailing slash!
+  source_directory: '.'
+  # Destination directory. No trailing slash!
+  destination_directory: /var/www/draft
   # Synced folder options. Refer to https://www.vagrantup.com/docs/synced-folders/
   # for possible options and their values. Please note that each synced fodler
   # type could have extra options, look at NFS or RSync for examples.
@@ -101,7 +103,7 @@ draft_features:
 
 # Role: draft (internal) @ self
 
-ssh_default_directory: '{{ vagrant.base_directory }}'
+ssh_default_directory: '{{ vagrant.destination_directory }}'
 
 # Role: oefenweb.swapfile @ v2.0.26
 
