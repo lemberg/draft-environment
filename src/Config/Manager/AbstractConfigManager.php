@@ -89,9 +89,9 @@ abstract class AbstractConfigManager implements ManagerInterface {
    */
   final protected function getPackageExtra(): array {
     $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
+    /** @var \Composer\Package\Package|NULL $localPackage */
     $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    return $localPackage->getExtra();
+    return !is_null($localPackage) ? $localPackage->getExtra() : [];
   }
 
   /**
@@ -99,9 +99,11 @@ abstract class AbstractConfigManager implements ManagerInterface {
    */
   final protected function setPackageExtra(array $extra): void {
     $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package $localPackage */
+    /** @var \Composer\Package\Package|NULL $localPackage */
     $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    $localPackage->setExtra($extra);
+    if (!is_null($localPackage)) {
+      $localPackage->setExtra($extra);
+    }
 
     // This code might run after Composer has written the lock file.
     $composerFile = Factory::getComposerFile();

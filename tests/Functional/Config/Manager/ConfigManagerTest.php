@@ -15,16 +15,6 @@ use Symfony\Component\Process\Process;
 final class ConfigManagerTest extends AbstractConfigManagerTest {
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    parent::setUp();
-
-    // Build path to the test composer.json file based on this class name.
-    $this->basePath = './tests/fixtures/Functional' . str_replace('\\', DIRECTORY_SEPARATOR, substr(__CLASS__, strlen('Lemberg\Tests\Functional\Draft\Environment')));
-  }
-
-  /**
    * Tests that package update does set up correct data in the package extra.
    *
    * @param string $directory

@@ -2,22 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Lemberg\Tests\Functional\Draft\Environment\Config\Manager;
+namespace Lemberg\Tests\Functional\Draft\Environment;
 
+use Lemberg\Draft\Environment\App;
 use Symfony\Component\Process\Process;
 
 /**
- * Tests Draft Environment configuration install manager.
+ * Tests Draft Environment installation and removal.
  *
  * @coversNothing
  */
-final class InstallManagerTest extends AbstractConfigManagerTest {
+final class AppTest extends AbstractFunctionalTest {
 
   /**
-   * Tests that package installation does set up correct data in the package
-   * extra.
+   * Tests that package installation and removal works as expected.
+   *
+   * @doesNotPerformAssertions
    */
-  public function testComposerInstall(): void {
+  public function testComposerInstallAndRemove(): void {
 
     $this->fs->mirror($this->basePath, $this->workingDir, NULL, ['override' => TRUE]);
 
@@ -46,7 +48,13 @@ final class InstallManagerTest extends AbstractConfigManagerTest {
     ]))
       ->mustRun();
 
-    $this->assertComposerLockContainsPackageExtra();
+    // Run composer remove.
+    (new Process([
+      'vendor/bin/composer', 'remove',
+      '--dev', App::PACKAGE_NAME,
+      '--working-dir', $this->workingDir,
+    ]))
+      ->mustRun();
   }
 
 }

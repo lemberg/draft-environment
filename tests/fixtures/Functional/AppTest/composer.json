@@ -1,0 +1,11 @@
+{
+    "name": "lemberg/draft-environment-test",
+    "type": "project",
+    "description": "Test project that using lemberg/draft-environment",
+    "license": "GPL-2.0-or-later",
+    "require-dev": {
+        "lemberg/draft-environment": "@dev"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

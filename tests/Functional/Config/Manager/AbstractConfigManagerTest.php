@@ -6,42 +6,14 @@ namespace Lemberg\Tests\Functional\Draft\Environment\Config\Manager;
 
 use Composer\Json\JsonFile;
 use Lemberg\Draft\Environment\App;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\Filesystem\Filesystem;
+use Lemberg\Tests\Functional\Draft\Environment\AbstractFunctionalTest;
 
 /**
  * Base configuration manager test.
  *
  * @coversNothing
  */
-abstract class AbstractConfigManagerTest extends TestCase {
-
-  /**
-   * @var string
-   */
-  protected $workingDir;
-
-  /**
-   * @var \Symfony\Component\Filesystem\Filesystem
-   */
-  protected $fs;
-
-  /**
-   * @var string
-   */
-  protected $basePath;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-
-    $this->workingDir = sys_get_temp_dir() . '/draft-environment';
-
-    $this->fs = new Filesystem();
-    $this->fs->remove($this->workingDir);
-    $this->fs->mkdir($this->workingDir);
-  }
+abstract class AbstractConfigManagerTest extends AbstractFunctionalTest {
 
   /**
    * Asserts that composer.lock exists and contains correct data in the package
@@ -57,15 +29,6 @@ abstract class AbstractConfigManagerTest extends TestCase {
 
     self::assertTrue($decoded_composer_lock['packages-dev'][$key]['extra']['draft-environment']['already-installed']);
     self::assertSame(5, $decoded_composer_lock['packages-dev'][$key]['extra']['draft-environment']['last-update-weight']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  final protected function tearDown(): void {
-    $this->fs->remove($this->workingDir);
-
-    parent::tearDown();
   }
 
 }
