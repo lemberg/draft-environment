@@ -130,6 +130,12 @@ jobs:
 
       env: MOLECULE_PLATFORM=ubuntu1604
 
+      before_install:
+        - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+        - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+        - sudo apt-get update
+        - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+
       install:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
         - pip install ansible==2.9.* ansible-lint docker flake8 molecule==3.*
