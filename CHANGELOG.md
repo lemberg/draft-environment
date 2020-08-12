@@ -1,3 +1,9 @@
+## Draft Environment (Unreleased)
+
+Fixes:
+
+- [GH-208](https://github.com/lemberg/draft-environment/issues/208) - Fix broken provisioning by adding `/vagrant` mount
+
 ## Draft Environment 3.1.0, 2020-08-06
 
 Updates:

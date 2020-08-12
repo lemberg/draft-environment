@@ -32,6 +32,7 @@ vagrant:
   # for possible options and their values. Please note that each synced fodler
   # type could have extra options, look at NFS or RSync for examples.
   synced_folder_options:
+    id: default
     type: nfs
     create: true
 
