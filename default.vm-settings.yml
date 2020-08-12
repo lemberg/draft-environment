@@ -272,6 +272,7 @@ php_configuration:
     display_errors: 'On'
     display_startup_errors: 'On'
     memory_limit: 256M
+    max_execution_time: 300
     output_buffering: 'Off'
     upload_max_filesize: 64M
     post_max_size: 512M
@@ -281,7 +282,13 @@ php_configuration:
 # Configure PHP CLI.
 php_cli_configuration:
   PHP:
+    error_reporting: E_ALL
+    error_log: /var/log/draft/php_error.log
     memory_limit: -1
+    max_execution_time: 0
+    output_buffering: 'Off'
+    # Requires MailHog.
+    sendmail_path: '{{ mailhog_install_dir }}/mhsendmail'
 
 # PHP extensions to install.
 php_extensions:
