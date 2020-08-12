@@ -2,6 +2,7 @@
 
 Fixes:
 
+- [GH-203](https://github.com/lemberg/draft-environment/issues/203) - Allow connecting to the MySQL instance from any host, i.e. allow direct connection from the host OS to the MySQL instance in the guest OS (no SSH tunnel anymore). Side effect - tests can be run from the host OS, which speeds them up to 3-5x.
 - [GH-205](https://github.com/lemberg/draft-environment/issues/205) - Fix PHP fatal error upon package removal (i.e. when running `composer remove lemberg/draft-environment`
 - [GH-208](https://github.com/lemberg/draft-environment/issues/208) - Fix broken provisioning by adding `/vagrant` mount
 

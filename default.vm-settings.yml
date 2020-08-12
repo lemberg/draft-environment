@@ -247,6 +247,7 @@ mysql_users:
     name: drupal
     password: drupal
     priv: 'drupal.*:ALL'
+    host: '%'
 
 # Replication settings (replication is only enabled if master/user have values).
 mysql_server_id: '1'
