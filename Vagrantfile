@@ -200,6 +200,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure synched folders.
   config.vm.synced_folder configuration.get("vagrant.source_directory"), configuration.get("vagrant.destination_directory"), configuration.get("vagrant.synced_folder_options")
 
+  config.vm.synced_folder ".", "/vagrant", id: "vagrant", type: "nfs", create: true
+
   # Provisioning
   #
   # See https://docs.vagrantup.com/v2/provisioning/index.html
