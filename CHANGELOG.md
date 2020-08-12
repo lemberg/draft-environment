@@ -2,6 +2,7 @@
 
 Fixes:
 
+- [GH-205](https://github.com/lemberg/draft-environment/issues/205) - Fix PHP fatal error upon package removal (i.e. when running `composer remove lemberg/draft-environment`
 - [GH-208](https://github.com/lemberg/draft-environment/issues/208) - Fix broken provisioning by adding `/vagrant` mount
 
 ## Draft Environment 3.1.0, 2020-08-06
