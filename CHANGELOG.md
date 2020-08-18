@@ -1,3 +1,7 @@
+## Draft Environment (Unreleased)
+
+- [GH-53](https://github.com/lemberg/draft-environment/issues/53) - Expose draft environment via environment variable `DRAFT_ENVIRONMENT`
+
 ## Draft Environment 3.1.1, 2020-08-12
 
 Updates:

@@ -61,6 +61,11 @@
     dest: /etc/profile.d/vendor_path.sh
     mode: 0644
 
+- name: Expose draft environment via environment variable
+  lineinfile:
+    path: /etc/environment
+    line: DRAFT_ENVIRONMENT=true
+
 - name: Use Vagrant base directory as a default SSH directory
   become: true
   become_user: vagrant

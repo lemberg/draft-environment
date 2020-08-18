@@ -1,0 +1,10 @@
+---
+
+- name: Verify
+  hosts: all
+  tasks:
+    - name: Verify that Draft exposes itself via environment variable
+      assert:
+        that:
+          - "{{ lookup('env', 'DRAFT_ENVIRONMENT') }}"
+        quiet: true
