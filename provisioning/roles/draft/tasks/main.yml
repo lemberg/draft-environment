@@ -65,6 +65,7 @@
   lineinfile:
     path: /etc/environment
     line: DRAFT_ENVIRONMENT=true
+    mode: preserve
 
 - name: Use Vagrant base directory as a default SSH directory
   become: true
