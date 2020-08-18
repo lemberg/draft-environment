@@ -138,7 +138,7 @@ jobs:
 
       install:
         - composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
-        - pip install ansible==2.9.* ansible-lint docker yamllint molecule==3.*
+        - pip install ansible~=2.9 ansible-lint docker yamllint molecule~=3.0,!=3.0.7
 
       script:
         - molecule test
