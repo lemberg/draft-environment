@@ -72,6 +72,7 @@
   lineinfile:
     path: ~/.bashrc
     line: cd {{ ssh_default_directory }}
+    mode: preserve
 
 - name: Ensure locale exists
   locale_gen:
@@ -87,6 +88,7 @@
     path: /etc/ssh/sshd_config
     regexp: '^PasswordAuthentication '
     line: 'PasswordAuthentication yes'
+    mode: preserve
   notify:
     - Restart SSH server
 
@@ -95,5 +97,6 @@
     path: /etc/ssh/sshd_config
     regexp: '^ChallengeResponseAuthentication '
     line: 'ChallengeResponseAuthentication yes'
+    mode: preserve
   notify:
     - Restart SSH server

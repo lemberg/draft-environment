@@ -1,6 +1,9 @@
 ## Draft Environment (Unreleased)
 
+Fixes:
+
 - [GH-53](https://github.com/lemberg/draft-environment/issues/53) - Expose draft environment via environment variable `DRAFT_ENVIRONMENT`
+- [GH-214](https://github.com/lemberg/draft-environment/issues/214) - Address newly introduced issue(s) with file permissions. See https://github.com/ansible/ansible/pull/70221 and https://github.com/ansible/ansible/issues/71200
 
 ## Draft Environment 3.1.1, 2020-08-12
 

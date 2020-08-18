@@ -19,6 +19,8 @@ platforms:
 provisioner:
   name: ansible
   config_options:
+    defaults:
+      remote_tmp: /tmp/ansible
     ssh_connection:
       pipelining: true
 verifier:
