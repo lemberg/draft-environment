@@ -75,13 +75,20 @@
   with_items:
     - '{{ vagrant.destination_directory }}/{{ apache2_document_root }}'
 
+- name: Get /etc/apache2/mods-available/dir.conf permissions
+  stat:
+    path: /etc/apache2/mods-available/dir.conf
+    get_checksum: no
+    get_mime: no
+  register: dir_conf_stat
+
 # Configure web server.
 - name: Set correct DirectoryIndex
   lineinfile:
     dest: /etc/apache2/mods-available/dir.conf
     regexp: "DirectoryIndex"
     line: "DirectoryIndex index.php index.html"
-    mode: preserve
+    mode: '{{ dir_conf_stat.stat.mode }}'
 
 # Disable default virtual host created on Ubuntu/Debian.
 - name: Disable default virtual host.

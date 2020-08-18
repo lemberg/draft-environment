@@ -9,7 +9,6 @@ lint: |
   set -e
   yamllint --config-data "{ignore: vendor/}" .
   ansible-lint
-  flake8
 platforms:
   - name: draft
     image: "geerlingguy/docker-${MOLECULE_PLATFORM}-ansible:latest"
@@ -24,3 +23,5 @@ provisioner:
       remote_tmp: /tmp/ansible
     ssh_connection:
       pipelining: true
+verifier:
+  name: ansible

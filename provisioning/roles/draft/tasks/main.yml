@@ -61,13 +61,33 @@
     dest: /etc/profile.d/vendor_path.sh
     mode: 0644
 
+- name: Get /etc/environment permissions
+  stat:
+    path: /etc/environment
+    get_checksum: no
+    get_mime: no
+  register: etc_environment_stat
+
+- name: Expose draft environment via environment variable
+  lineinfile:
+    path: /etc/environment
+    line: DRAFT_ENVIRONMENT=true
+    mode: '{{ etc_environment_stat.stat.mode }}'
+
+- name: Get ~/.bashrc permissions
+  stat:
+    path: ~/.bashrc
+    get_checksum: no
+    get_mime: no
+  register: bashrc_stat
+
 - name: Use Vagrant base directory as a default SSH directory
   become: true
   become_user: vagrant
   lineinfile:
     path: ~/.bashrc
     line: cd {{ ssh_default_directory }}
-    mode: preserve
+    mode: '{{ bashrc_stat.stat.mode }}'
 
 - name: Ensure locale exists
   locale_gen:
@@ -78,12 +98,19 @@
   command: update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
   when: ansible_env.LC_ALL is not defined
 
+- name: Get /etc/ssh/sshd_config permissions
+  stat:
+    path: /etc/ssh/sshd_config
+    get_checksum: no
+    get_mime: no
+  register: sshd_config_stat
+
 - name: Ensure that PasswordAuthentication is enabled
   lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^PasswordAuthentication '
     line: 'PasswordAuthentication yes'
-    mode: preserve
+    mode: '{{ sshd_config_stat.stat.mode }}'
   notify:
     - Restart SSH server
 
@@ -92,6 +119,6 @@
     path: /etc/ssh/sshd_config
     regexp: '^ChallengeResponseAuthentication '
     line: 'ChallengeResponseAuthentication yes'
-    mode: preserve
+    mode: '{{ sshd_config_stat.stat.mode }}'
   notify:
     - Restart SSH server
