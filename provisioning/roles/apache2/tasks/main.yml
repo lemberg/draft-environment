@@ -61,6 +61,7 @@
     src: /tmp/mkcert/
     dest: /etc/apache2/ssl
     remote_src: true
+    mode: 0644
   notify:
     - Restart Apache2 web server
   when:
@@ -80,6 +81,7 @@
     dest: /etc/apache2/mods-available/dir.conf
     regexp: "DirectoryIndex"
     line: "DirectoryIndex index.php index.html"
+    mode: preserve
 
 # Disable default virtual host created on Ubuntu/Debian.
 - name: Disable default virtual host.
