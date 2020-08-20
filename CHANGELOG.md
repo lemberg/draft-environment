@@ -11,6 +11,10 @@ Fixes:
     * T2L.java (1.3.0 => 1.3.1)
     * T2L.solr (2.2.0 => 2.2.1)
 
+    Bump the following defaults:
+
+    * PHP version: 7.4
+
 ## Draft Environment 3.1.1, 2020-08-12
 
 Updates:
