@@ -106,7 +106,7 @@ draft_features:
 
 ssh_default_directory: '{{ vagrant.destination_directory }}'
 
-# Role: oefenweb.swapfile @ v2.0.26
+# Role: oefenweb.swapfile @ v2.0.28
 
 # Set swap file size.
 swapfile_size: 2GB
@@ -130,7 +130,7 @@ apache2_document_root: docroot
 # Log level to use
 apache2_log_level: error
 
-# Role: geerlingguy.mysql @ 3.1.0
+# Role: geerlingguy.mysql @ 3.3.0
 
 # Set this to the user ansible is logging in as - should have root
 # or sudo access
@@ -259,10 +259,10 @@ mysql_replication_master: ''
 # Same keys as `mysql_users` above.
 mysql_replication_user: []
 
-# Role: T2L.php @ 1.2.0
+# Role: T2L.php @ 1.3.1
 
 # PHP version to install. Possible values: 7.2, 7.3 and 7.4
-php_version: '7.3'
+php_version: '7.4'
 
 # Configure PHP.
 php_configuration:
@@ -334,7 +334,7 @@ composer_keep_updated: true
 # PHP executable name.
 composer_php_executable: php
 
-# Role: T2L.java @ 1.3.0
+# Role: T2L.java @ 1.3.1
 
 # Open JDK version(s) and package type (jre or jdk).
 # Currently supported versions are 6-13 (however not every Java version is
@@ -354,7 +354,7 @@ java_default_alternative:
   provider: openjdk
   version: 8
 
-# Role: T2L.solr @ 2.2.0
+# Role: T2L.solr @ 2.2.1
 
 # Solr user and group. Defaults to solr:solr.
 solr_user: solr

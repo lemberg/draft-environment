@@ -4,6 +4,16 @@ Fixes:
 
 - [GH-53](https://github.com/lemberg/draft-environment/issues/53) - Expose draft environment via environment variable `DRAFT_ENVIRONMENT`
 - [GH-214](https://github.com/lemberg/draft-environment/issues/214) - Address newly introduced issue(s) with file permissions. See https://github.com/ansible/ansible/pull/70221 and https://github.com/ansible/ansible/issues/71200
+- [GH-216](https://github.com/lemberg/draft-environment/issues/216) - Update all Ansible roles:
+    * oefenweb.swapfile (v2.0.26 => v2.0.28)
+    * geerlingguy.mysql (3.1.0 => 3.3.0)
+    * T2L.php (1.3.0 => 1.3.1)
+    * T2L.java (1.3.0 => 1.3.1)
+    * T2L.solr (2.2.0 => 2.2.1)
+
+    Bump the following defaults:
+
+    * PHP version: 7.4
 
 ## Draft Environment 3.1.1, 2020-08-12
 
