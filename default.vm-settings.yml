@@ -106,7 +106,7 @@ draft_features:
 
 ssh_default_directory: '{{ vagrant.destination_directory }}'
 
-# Role: oefenweb.swapfile @ v2.0.29
+# Role: oefenweb.swapfile @ v2.0.28
 
 # Set swap file size.
 swapfile_size: 2GB

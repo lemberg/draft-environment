@@ -1,6 +1,6 @@
 ---
 - src: oefenweb.swapfile
-  version: v2.0.29
+  version: v2.0.28
 - src: geerlingguy.mailhog
   version: 2.2.0
 - src: geerlingguy.mysql
