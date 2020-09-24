@@ -1,3 +1,9 @@
+## Draft Environment (Unreleased)
+
+Fixes:
+
+- [GH-218](https://github.com/lemberg/draft-environment/issues/218) - Address newly introduced PHPCS errors/warnings
+
 ## Draft Environment 3.2.0, 2020-08-21
 
 Updates:

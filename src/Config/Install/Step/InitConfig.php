@@ -90,8 +90,16 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
     // Clean up .gitignore.
     $targetGitIgnore = $configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE);
     $gitIgnoreContent = $fs->loadFile('.gitignore', $targetGitIgnore);
-    $gitIgnoreContent = str_replace([self::GITIGNORE_VAGRANT_LINE, trim(self::GITIGNORE_VAGRANT_LINE)], '', $gitIgnoreContent);
-    $gitIgnoreContent = str_replace([self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE, trim(self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE)], '', $gitIgnoreContent);
+    $search = [
+      self::GITIGNORE_VAGRANT_LINE,
+      trim(self::GITIGNORE_VAGRANT_LINE),
+    ];
+    $gitIgnoreContent = str_replace($search, '', $gitIgnoreContent);
+    $search = [
+      self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE,
+      trim(self::GITIGNORE_TARGET_LOCAL_CONFIG_FILENAME_LINE),
+    ];
+    $gitIgnoreContent = str_replace($search, '', $gitIgnoreContent);
 
     // Check if those where the only lines in the .gitignore.
     if (preg_replace('/\R+/m', '', $gitIgnoreContent) === '') {
