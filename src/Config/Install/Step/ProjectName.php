@@ -34,7 +34,9 @@ Please specify the project name. Must be a valid domain name:
  > Project name <question>[$default]</question>: 
 HERE;
 
-    $config['vagrant']['hostname'] = $this->io->askAndValidate($question, [__CLASS__, 'validateProjectName'], NULL, $default);
+    $config['vagrant']['hostname'] = $this->io->askAndValidate(
+      $question, [__CLASS__, 'validateProjectName'], NULL, $default
+    );
   }
 
   /**
