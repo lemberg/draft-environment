@@ -211,6 +211,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   project_pathname = Pathname.new PROJECT_BASE_PATH
   vm_pathname = Pathname.new VM_BASE_PATH
 
+  # Ensure Python 3.x is set as a default.
+  config.vm.provision "shell",
+    inline: "rm /usr/bin/python && ln -s python3 /usr/bin/python"
+
   # Copy generated SSL certificate and private key to the VM.
   unless configuration.get("mkcert").nil?
     config.vm.provision "file", source: configuration.get("mkcert.directory") + "/.", destination: "/tmp/mkcert"
