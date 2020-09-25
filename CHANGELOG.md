@@ -2,6 +2,7 @@
 
 Fixes:
 
+- [GH-223](https://github.com/lemberg/draft-environment/issues/223) - Ensure that Python 3 is default in the VM
 - [GH-218](https://github.com/lemberg/draft-environment/issues/218) - Address newly introduced PHPCS errors/warnings
 
 ## Draft Environment 3.2.0, 2020-08-21
