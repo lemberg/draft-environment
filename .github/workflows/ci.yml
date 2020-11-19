@@ -19,9 +19,6 @@ jobs:
           - 7.2
           - 7.3
           - 7.4
-        composer-version:
-          - 1
-          - 2
 
     steps:
       - name: Checkout
@@ -32,12 +29,10 @@ jobs:
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
+          tools: composer:v1, prestissimo
       
       - name: Install dependencies
-        uses: php-actions/composer@v4
-        with:
-          php_version: ${{ matrix.php-version }}
-          composer_version: ${{ matrix.composer-version }}
+        run: composer update --no-progress --prefer-dist --optimize-autoloader
 
       - name: Coding standards
         run: vendor/bin/phpcs
