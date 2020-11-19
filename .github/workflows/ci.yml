@@ -24,6 +24,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # Some tests run Composer via command line. It's not possible to require
+      # a package in the detached state. Checkout to a branch to workaround
+      # this.
+      - name: Checkout to a branch
+        run: git checkout -b test
+
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
