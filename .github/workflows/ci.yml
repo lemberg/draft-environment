@@ -75,7 +75,7 @@ jobs:
           # Update apt-get
           sudo apt-get update -qq
           # Install Linux headers
-          sudo apt-get -y --force-yes install linux-headers-`uname -r`
+          sudo apt-get -y install linux-headers-`uname -r`
           # Install VirtualBox
           sudo apt-get install virtualbox-${{ matrix.virtual-box-version }}
 
