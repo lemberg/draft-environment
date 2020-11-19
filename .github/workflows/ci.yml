@@ -77,7 +77,7 @@ jobs:
           # Install Linux headers
           sudo apt-get -y --force-yes install linux-headers-`uname -r`
           # Install VirtualBox
-          sudo apt-get install virtualbox-${VIRTUAL_BOX_VERSION}
+          sudo apt-get install virtualbox-${{ matrix.virtual-box-version }}
 
       - name: Install Vagrant
         run: |
