@@ -37,7 +37,7 @@ jobs:
         uses: php-actions/composer@v4
         with:
           php_version: ${{ matrix.php-version }}
-          composer_version: ${{ composer-version }}
+          composer_version: ${{ matrix.composer-version }}
 
       - name: Coding standards
         run: vendor/bin/phpcs
