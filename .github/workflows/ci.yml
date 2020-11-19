@@ -68,25 +68,25 @@ jobs:
       - name: Install VirtualBox
         run: |
           # Download and register Oracle VirtualBox keys
-          wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-          wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+          sudo wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+          sudo wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
           # Add Oracle VirtualBox repository
-          add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib"
+          sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib"
           # Update apt-get
-          apt-get update -qq
+          sudo apt-get update -qq
           # Install Linux headers
-          apt-get -y --force-yes install linux-headers-`uname -r`
+          sudo apt-get -y --force-yes install linux-headers-`uname -r`
           # Install VirtualBox
-          apt-get install virtualbox-${VIRTUAL_BOX_VERSION}
+          sudo apt-get install virtualbox-${VIRTUAL_BOX_VERSION}
 
       - name: Install Vagrant
         run: |
           # Add Vagrant PPA (unofficial)
-          add-apt-repository -y ppa:tiagohillebrandt/vagrant
+          sudo add-apt-repository -y ppa:tiagohillebrandt/vagrant
           # Update apt-get
-          apt-get update -qq
+          sudo apt-get update -qq
           # Install Vagrant
-          apt-get install vagrant
+          sudo apt-get install vagrant
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
