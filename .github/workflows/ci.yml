@@ -54,6 +54,9 @@ jobs:
 
     runs-on: macos-latest
 
+    env:
+      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
+
     strategy:
       matrix:
         molecule-platform:
