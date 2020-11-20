@@ -1,0 +1,219 @@
+name: Integrate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 3.x.x
+    tags:
+  # Run every night at 05:15.
+  schedule:
+    - cron: '15 5 * * *'
+
+jobs:
+  php:
+    name: Composer plugin with PHP ${{ matrix.php-version }}
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - '7.2'
+          - '7.3'
+          - '7.4'
+        include:
+          - php-version: '7.2'
+            prefer-lowest: --prefer-lowest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Some tests run Composer via command line. It's not possible to require
+      # a package in the detached state. Checkout to a branch to workaround
+      # this.
+      - name: Checkout to a branch
+        run: git checkout -b test
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v1, prestissimo
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
+          restore-keys: php-${{ matrix.php-version }}-
+      
+      - name: Install Composer dependencies
+        env:
+          PREFER_LOWEST: ${{ matrix.prefer-lowest }}
+        run: composer update --no-progress --prefer-dist --optimize-autoloader $PREFER_LOWEST
+
+      - name: Coding standards
+        run: vendor/bin/phpcs
+
+      - name: Static Code Analysis
+        run: vendor/bin/phpstan analyse
+
+      - name: Tests
+        run: vendor/bin/phpunit
+
+  molecule:
+    name: Provision ubuntu/${{ matrix.molecule-platform }} with Molecule
+
+    needs: php
+
+    runs-on: macos-latest
+
+    # Workaround 'XXX may have been in progress in another thread when fork()
+    # was called.'
+    # See https://github.com/ansible/ansible/issues/32499
+    env:
+      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
+
+    strategy:
+      matrix:
+        php-version:
+          - '7.4'
+        python-version:
+          - '3.8'
+        molecule-platform:
+          - xenial64
+          - bionic64
+          - focal64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v1, prestissimo
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
+          restore-keys: php-${{ matrix.php-version }}-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache PiP dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/Library/Caches/pip
+          key: python-${{ matrix.python-version }}
+          restore-keys: python-${{ matrix.python-version }}-
+
+      - name: Install Molecule and it's dependencies
+        run: pip install ansible==2.9.* ansible-lint yamllint molecule~=3.1 python-vagrant molecule-vagrant
+
+      - name: Run Molecule tests
+        run: molecule test
+        env:
+          MOLECULE_PLATFORM: ${{ matrix.molecule-platform }}
+
+  vagrant:
+    name: Provision VM with Vagrantfile
+
+    needs: php
+
+    runs-on: macos-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - '7.4'
+
+    # Workaround 'XXX may have been in progress in another thread when fork()
+    # was called.'
+    # See https://github.com/ansible/ansible/issues/32499
+    env:
+      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v1, prestissimo
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
+          restore-keys: php-${{ matrix.php-version }}-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Provision the machine
+        run: vagrant up
+
+  code-coverage:
+    name: Code Coverage
+
+    needs: php
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php-version:
+          - 7.4
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # Some tests run Composer via command line. It's not possible to require
+      # a package in the detached state. Checkout to a branch to workaround
+      # this.
+      - name: Checkout to a branch
+        run: git checkout -b test
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: xdebug
+          php-version: ${{ matrix.php-version }}
+          tools: composer:v1, prestissimo
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
+          restore-keys: php-${{ matrix.php-version }}-
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Collect code coverage
+        run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml
+
+      - name: Send code coverage report to Codecov.io
+        uses: codecov/codecov-action@v1
+        with:
+         file: coverage.xml

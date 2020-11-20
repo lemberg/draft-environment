@@ -4,18 +4,16 @@ dependency:
   options:
     role-file: provisioning/requirements.yml
 driver:
-  name: docker
+  name: vagrant
 lint: |
   set -e
   yamllint --config-data "{ignore: vendor/}" .
   ansible-lint
 platforms:
   - name: draft
-    image: "geerlingguy/docker-${MOLECULE_PLATFORM}-ansible:latest"
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    pre_build_image: true
+    box: ubuntu/${MOLECULE_PLATFORM}
+    memory: 1024
+    cpus: 2
 provisioner:
   name: ansible
   config_options:

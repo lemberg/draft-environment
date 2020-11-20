@@ -1,5 +1,8 @@
 ## Draft Environment (Unreleased)
 
+Updates:
+- [GH-226](https://github.com/lemberg/draft-environment/issues/226) - Migrate from Travis to Github Actions
+
 Fixes:
 
 - [GH-223](https://github.com/lemberg/draft-environment/issues/223) - Ensure that Python 3 is default in the VM
