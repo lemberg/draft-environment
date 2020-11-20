@@ -57,8 +57,10 @@ jobs:
       - name: Tests
         run: vendor/bin/phpunit
 
-  vagrant:
+  molecule:
     name: Molecule with Vagrant
+
+    needs: php
 
     runs-on: macos-latest
 
@@ -102,8 +104,40 @@ jobs:
         env:
           MOLECULE_PLATFORM: ${{ matrix.molecule-platform }}
 
+  vagrant:
+    name: Provision the machine
+
+    needs: molecule
+
+    runs-on: macos-latest
+
+    # Workaround 'XXX may have been in progress in another thread when fork()
+    # was called.'
+    # See https://github.com/ansible/ansible/issues/32499
+    env:
+      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: none
+          php-version: 7.4
+          tools: composer:v1, prestissimo
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Provision the machine
+        run: vagrant up
+
   code-coverage:
     name: Code Coverage
+
+    needs: php
 
     runs-on: ubuntu-latest
 
