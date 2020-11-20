@@ -48,6 +48,20 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function deactivate(Composer $composer, IOInterface $io): void {
+    // This method is part of the Composer 2 Plugin API.
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function uninstall(Composer $composer, IOInterface $io): void {
+    // This method is part of the Composer 2 Plugin API.
+  }
+
+  /**
    * Returns an array of event names this subscriber wants to listen to.
    *
    * @return array<string, string>
