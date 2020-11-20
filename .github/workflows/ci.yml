@@ -6,6 +6,9 @@ on:
     branches:
       - 3.x.x
     tags:
+  # Run every night at 05:15.
+  schedule:
+    - cron: '15 5 * * *'
 
 jobs:
   php:
