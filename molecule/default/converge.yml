@@ -5,6 +5,27 @@
 - hosts: all
   become: true
 
+  pre_tasks:
+
+    # Molecule does not use our Vagrantfile. Let's fill the gap.
+    - name: Add missing variables
+      set_fact:
+        vagrant: "{{ vagrant | combine(overrides, recursive=true) }}"
+        draft_features:
+          - mailhog
+          - swapfile
+          - git_config
+          - apache2
+          - mysql
+          - php
+          - composer
+          - java
+          - solr
+      vars:
+        overrides:
+          hostname: molecule
+          ip_address: 10.10.10.10
+
   roles:
     - ../../provisioning/roles/draft
     - oefenweb.swapfile
