@@ -12,7 +12,7 @@ on:
 
 jobs:
   php:
-    name: Composer plugin with PHP ${{ matrix.php-version }}
+    name: Composer ${{ matrix.composer-version }} plugin with PHP ${{ matrix.php-version }}
 
     runs-on: ubuntu-latest
 
@@ -22,6 +22,9 @@ jobs:
           - '7.2'
           - '7.3'
           - '7.4'
+        composer-version:
+          - 1
+          - 2
         include:
           - php-version: '7.2'
             prefer-lowest: --prefer-lowest
@@ -41,14 +44,14 @@ jobs:
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
-          tools: composer:v1, prestissimo
+          tools: composer:v${{ matrix.composer-version }}
 
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
           path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
-          restore-keys: php-${{ matrix.php-version }}-
+          key: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-${{ hashFiles('composer.lock') }}
+          restore-keys: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-
       
       - name: Install Composer dependencies
         env:
