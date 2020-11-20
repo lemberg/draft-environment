@@ -52,41 +52,11 @@ jobs:
   vagrant:
     name: Vagrant
 
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        virtual-box-version:
-          - '5.2'
-          - '6.0'
-          - '6.1'
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Install VirtualBox
-        run: |
-          # Download and register Oracle VirtualBox keys
-          sudo wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-          sudo wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
-          # Add Oracle VirtualBox repository
-          sudo add-apt-repository "deb https://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib"
-          # Update apt-get
-          sudo apt-get update -qq
-          # Install Linux headers
-          sudo apt-get -y install linux-headers-`uname -r`
-          # Install VirtualBox
-          sudo apt-get install virtualbox-${{ matrix.virtual-box-version }}
-
-      - name: Install Vagrant
-        run: |
-          # Add Vagrant PPA (unofficial)
-          sudo add-apt-repository -y ppa:tiagohillebrandt/vagrant
-          # Update apt-get
-          sudo apt-get update -qq
-          # Install Vagrant
-          sudo apt-get install vagrant
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -98,8 +68,8 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
 
-      - name: Check Vagrant status
-        run: vagrant status
+      - name: Provision the machine
+        run: vagrant up
 
   molecule:
     name: Molecule
