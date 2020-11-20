@@ -54,6 +54,9 @@ jobs:
 
     runs-on: macos-latest
 
+    # Workaround 'XXX may have been in progress in another thread when fork()
+    # was called.'
+    # See https://github.com/ansible/ansible/issues/32499
     env:
       OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
 
