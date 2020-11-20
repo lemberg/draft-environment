@@ -19,6 +19,9 @@ jobs:
           - '7.2'
           - '7.3'
           - '7.4'
+        include:
+          - php-version: '7.2'
+            prefer-lowest: --prefer-lowest
 
     steps:
       - name: Checkout
@@ -38,7 +41,9 @@ jobs:
           tools: composer:v1, prestissimo
       
       - name: Install dependencies
-        run: composer update --no-progress --prefer-dist --optimize-autoloader
+        env:
+          PREFER_LOWEST: ${{ matrix.prefer-lowest }}
+        run: composer update --no-progress --prefer-dist --optimize-autoloader $PREFER_LOWEST
 
       - name: Coding standards
         run: vendor/bin/phpcs
