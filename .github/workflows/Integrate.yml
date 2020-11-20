@@ -1,4 +1,4 @@
-name: CI
+name: Integrate
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   php:
-    name: PHP
+    name: Composer plugin with PHP ${{ matrix.php-version }}
 
     runs-on: ubuntu-latest
 
@@ -50,7 +50,7 @@ jobs:
           key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
           restore-keys: php-${{ matrix.php-version }}-
       
-      - name: Install dependencies
+      - name: Install Composer dependencies
         env:
           PREFER_LOWEST: ${{ matrix.prefer-lowest }}
         run: composer update --no-progress --prefer-dist --optimize-autoloader $PREFER_LOWEST
@@ -65,7 +65,7 @@ jobs:
         run: vendor/bin/phpunit
 
   molecule:
-    name: Molecule with Vagrant
+    name: Provision ubuntu/${{ matrix.molecule-platform }} with Molecule
 
     needs: php
 
@@ -106,7 +106,7 @@ jobs:
           key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
           restore-keys: php-${{ matrix.php-version }}-
 
-      - name: Install dependencies
+      - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
 
       - name: Install Python
@@ -130,7 +130,7 @@ jobs:
           MOLECULE_PLATFORM: ${{ matrix.molecule-platform }}
 
   vagrant:
-    name: Provision the machine
+    name: Provision VM with Vagrantfile
 
     needs: php
 
@@ -165,7 +165,7 @@ jobs:
           key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
           restore-keys: php-${{ matrix.php-version }}-
 
-      - name: Install dependencies
+      - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
 
       - name: Provision the machine
@@ -207,7 +207,7 @@ jobs:
           key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
           restore-keys: php-${{ matrix.php-version }}-
 
-      - name: Install dependencies
+      - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
       - name: Collect code coverage
