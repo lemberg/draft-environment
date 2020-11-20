@@ -81,7 +81,7 @@ jobs:
           python-version: 3.8
 
       - name: Install Molecule and it's dependencies
-        run: pip install ansible~=2.9.* ansible-lint yamllint molecule~=3.1 python-vagrant molecule-vagrant
+        run: pip install ansible==2.9.* ansible-lint yamllint molecule~=3.1 python-vagrant molecule-vagrant
 
       - name: Run Molecule tests
         run: molecule test
