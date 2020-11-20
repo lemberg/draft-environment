@@ -132,7 +132,7 @@ jobs:
   vagrant:
     name: Provision the machine
 
-    needs: molecule
+    needs: php
 
     runs-on: macos-latest
 
