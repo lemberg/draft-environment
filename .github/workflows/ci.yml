@@ -50,40 +50,16 @@ jobs:
         run: vendor/bin/phpunit
 
   vagrant:
-    name: Vagrant
+    name: Molecule with Vagrant
 
     runs-on: macos-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Install PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          coverage: none
-          php-version: 7.4
-          tools: composer:v1, prestissimo
-
-      - name: Install dependencies
-        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
-
-      - name: Provision the machine
-        run: vagrant up
-
-  molecule:
-    name: Molecule
-
-    runs-on: ubuntu-latest
-
-    continue-on-error: true
 
     strategy:
       matrix:
         molecule-platform:
-          - ubuntu1604
-          - ubuntu1804
-          - ubuntu2004
+          - xenial64
+          - bionic64
+          - focal64
 
     steps:
       - name: Checkout
@@ -105,7 +81,7 @@ jobs:
           python-version: 3.8
 
       - name: Install Molecule and it's dependencies
-        run: pip install ansible~=2.10 ansible-lint docker yamllint molecule~=3.1 molecule-docker
+        run: pip install ansible~=2.9 ansible-lint yamllint molecule~=3.1 molecule-vagrant
 
       - name: Run Molecule tests
         run: molecule test
