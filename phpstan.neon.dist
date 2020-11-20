@@ -3,6 +3,10 @@ parameters:
   paths:
     - src
     - tests
+  excludes_analyse:
+    - tests/Traits/ComposerPackageEventFactoryTrait.php
+  dynamicConstantNames:
+    - Composer\Plugin\PluginInterface::PLUGIN_API_VERSION
   ergebnis:
     classesAllowedToBeExtended:
       - Lemberg\Draft\Environment\Config\Manager\AbstractConfigManager

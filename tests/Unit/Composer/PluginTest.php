@@ -11,7 +11,6 @@ use Composer\DependencyResolver\PolicyInterface;
 use Composer\DependencyResolver\Pool;
 use Composer\DependencyResolver\Request;
 use Composer\Installer\InstallationManager;
-use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
@@ -21,6 +20,7 @@ use Composer\Repository\WritableRepositoryInterface;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
+use Lemberg\Tests\Traits\Draft\Environment\ComposerPackageEventFactoryTrait;
 use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class PluginTest extends TestCase {
 
+  use ComposerPackageEventFactoryTrait;
   use PHPMock;
 
   /**
@@ -85,7 +86,7 @@ final class PluginTest extends TestCase {
 
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
-    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $policy, $pool, $installedRepo, $request, [$operation], $operation);
+    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $policy, $pool, $installedRepo, $request, [$operation], $operation);
 
     // Ensure that plugin passes events to the app.
     $app = $this->createMock(App::class);

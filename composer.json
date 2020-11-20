@@ -47,6 +47,7 @@
         "psr-4": {
             "Lemberg\\Tests\\Extensions\\Draft\\Environment\\": "tests/Extensions",
             "Lemberg\\Tests\\Functional\\Draft\\Environment\\": "tests/Functional",
+            "Lemberg\\Tests\\Traits\\Draft\\Environment\\": "tests/Traits",
             "Lemberg\\Tests\\Unit\\Draft\\Environment\\": "tests/Unit"
         }
     },
