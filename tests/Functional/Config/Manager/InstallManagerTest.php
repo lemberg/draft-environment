@@ -41,7 +41,6 @@ final class InstallManagerTest extends AbstractConfigManagerTest {
       'vendor/bin/composer', 'install',
       '--prefer-dist',
       '--no-interaction',
-      '--no-suggest',
       '--working-dir', $this->workingDir,
     ]))
       ->mustRun();

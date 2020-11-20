@@ -26,6 +26,14 @@ final class ConfigManagerTest extends AbstractConfigManagerTest {
 
     $this->fs->mirror("$this->basePath/$directory", $this->workingDir, NULL, ['override' => TRUE]);
 
+    // Uncompress vendor packages.
+    $zip = new \ZipArchive();
+    if ($zip->open("$this->basePath/$directory/vendor.zip") === TRUE) {
+      $zip->extractTo($this->workingDir);
+      $zip->close();
+    }
+    self::assertDirectoryExists("$this->workingDir/vendor");
+
     // Link package working directory, so tests runs against the proper
     // source code.
     (new Process([
@@ -41,16 +49,6 @@ final class ConfigManagerTest extends AbstractConfigManagerTest {
     ]))
       ->mustRun();
 
-    // Run composer install.
-    (new Process([
-      'vendor/bin/composer', 'install',
-      '--prefer-dist',
-      '--no-interaction',
-      '--no-suggest',
-      '--working-dir', $this->workingDir,
-    ]))
-      ->mustRun();
-
     // Get the current working branch to test against.
     $working_branch = (new Process([
       'git', 'rev-parse', '--abbrev-ref', 'HEAD',
@@ -62,7 +60,6 @@ final class ConfigManagerTest extends AbstractConfigManagerTest {
     (new Process([
       'vendor/bin/composer', 'require',
       '--dev', App::PACKAGE_NAME . ':' . rtrim($working_branch) . '-dev',
-      '--no-suggest',
       '--working-dir', $this->workingDir,
     ]))
       ->mustRun();
