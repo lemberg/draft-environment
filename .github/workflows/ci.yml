@@ -106,6 +106,8 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    continue-on-error: true
+
     strategy:
       matrix:
         molecule-platform:
