@@ -94,6 +94,12 @@ final class PluginTest extends TestCase {
     $plugin->setApp($app);
 
     $plugin->onComposerEvent($event);
+
+    // Ensure that plugin deactivation does not produce any errors.
+    $plugin->deactivate($this->composer, $this->io);
+
+    // Ensure that plugin uninstall does not produce any errors.
+    $plugin->uninstall($this->composer, $this->io);
   }
 
   /**
