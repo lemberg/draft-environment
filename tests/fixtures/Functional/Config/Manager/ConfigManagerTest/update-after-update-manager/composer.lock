@@ -102,7 +102,7 @@
                 "class": "Lemberg\\Draft\\Environment\\Composer\\Plugin",
                 "draft-environment": {
                     "already-installed": true,
-                    "last-update-weight": 1
+                    "last-update-weight": 3
                 }
             },
             "autoload": {

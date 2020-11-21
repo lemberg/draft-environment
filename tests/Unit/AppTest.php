@@ -12,7 +12,6 @@ use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\DependencyResolver\PolicyInterface;
 use Composer\DependencyResolver\Pool;
 use Composer\DependencyResolver\Request;
-use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
@@ -24,6 +23,7 @@ use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
+use Lemberg\Tests\Traits\Draft\Environment\ComposerPackageEventFactoryTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,6 +32,8 @@ use PHPUnit\Framework\TestCase;
  * @covers \Lemberg\Draft\Environment\App
  */
 final class AppTest extends TestCase {
+
+  use ComposerPackageEventFactoryTrait;
 
   /**
    * @var \Composer\Composer
@@ -127,7 +129,7 @@ final class AppTest extends TestCase {
     // "lemberg/draft-environment" is being uninstalled.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
-    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::never())
       ->method('uninstall');
@@ -142,7 +144,7 @@ final class AppTest extends TestCase {
     // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::never())
       ->method('uninstall');
@@ -156,7 +158,7 @@ final class AppTest extends TestCase {
     // Clean up must run when "lemberg/draft-environment" is being uninstalled.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
-    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::once())
       ->method('uninstall');
@@ -172,7 +174,7 @@ final class AppTest extends TestCase {
     $initial = new Package('dummy', '1.0.0.0', '^1.0');
     $target = new Package('dummy', '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
-    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
@@ -191,7 +193,7 @@ final class AppTest extends TestCase {
     // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($initial);
-    $packageEvent = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
@@ -212,7 +214,7 @@ final class AppTest extends TestCase {
     $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
     $target->setReleaseDate(new \DateTime('yesterday'));
     $operation = new UpdateOperation($initial, $target);
-    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
@@ -231,7 +233,7 @@ final class AppTest extends TestCase {
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
-    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
@@ -265,7 +267,7 @@ final class AppTest extends TestCase {
     // itself is being installed.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_ARCHIVE_CMD, $this->composer, $this->io);
 
     $this->configInstallManager
@@ -284,7 +286,7 @@ final class AppTest extends TestCase {
     // itself is being installed.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $packageEvent = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configInstallManager
@@ -302,7 +304,7 @@ final class AppTest extends TestCase {
     // Install should not run if any other package is being installed.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configInstallManager
@@ -319,7 +321,7 @@ final class AppTest extends TestCase {
   public function testComposerPostDumpAutoloadCommandEventHandlerDoesRun(): void {
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
     $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     // Install should run.
