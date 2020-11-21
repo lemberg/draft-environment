@@ -4,7 +4,7 @@
     "description": "Development environment for Draft Drupal.",
     "license": "GPL-2.0-or-later",
     "require": {
-        "php": "^7.3",
+        "php": ">=7.3",
         "composer-plugin-api": "^1.1 || ^2.0",
         "nette/robot-loader": "^3.2",
         "symfony/filesystem": "^3.4 || ^4.4 || ^5",
