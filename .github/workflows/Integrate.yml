@@ -12,7 +12,7 @@ on:
 
 jobs:
   php:
-    name: Composer ${{ matrix.composer-version }} plugin with PHP ${{ matrix.php-version }}
+    name: Composer ${{ matrix.composer-version }} / PHP ${{ matrix.php-version }}
 
     runs-on: ubuntu-latest
 
@@ -68,7 +68,7 @@ jobs:
         run: vendor/bin/phpunit
 
   molecule:
-    name: Provision ubuntu/${{ matrix.molecule-platform }} with Molecule
+    name: Molecule ubuntu/${{ matrix.molecule-platform }}
 
     needs: php
 
@@ -133,7 +133,7 @@ jobs:
           MOLECULE_PLATFORM: ${{ matrix.molecule-platform }}
 
   vagrant:
-    name: Provision VM with Vagrantfile
+    name: Vagrant up
 
     needs: php
 

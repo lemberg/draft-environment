@@ -1,6 +1,7 @@
 ## Draft Environment (Unreleased)
 
 Updates:
+- [GH-219](https://github.com/lemberg/draft-environment/issues/219) - Add support for Composer 2
 - [GH-226](https://github.com/lemberg/draft-environment/issues/226) - Migrate from Travis to Github Actions
 
 Fixes:
