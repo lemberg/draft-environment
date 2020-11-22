@@ -28,6 +28,8 @@ jobs:
         include:
           - php-version: '7.3'
             prefer-lowest: --prefer-lowest
+          - php-version: '8.0'
+            ignore-platform-reqs: --ignore-platform-reqs
 
     steps:
       - name: Checkout
@@ -54,9 +56,7 @@ jobs:
           restore-keys: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-
       
       - name: Install Composer dependencies
-        env:
-          PREFER_LOWEST: ${{ matrix.prefer-lowest }}
-        run: composer update --no-progress --prefer-dist --optimize-autoloader $PREFER_LOWEST
+        run: composer update --no-progress --prefer-dist --optimize-autoloader ${{ matrix.prefer-lowest }} ${{ matrix.ignore-platform-reqs }}
 
       - name: Coding standards
         run: vendor/bin/phpcs
