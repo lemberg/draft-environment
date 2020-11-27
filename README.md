@@ -8,7 +8,7 @@ This is Vagrant-based development environment for Drupal projects. This project 
 
 ## Prerequisites
 
-- PHP (7.2+) and Composer
+- PHP (^7.3) and Composer
 - Vagrant (2.2.6+)
 - VirtualBox (5.2+)
 - [mkcert](https://mkcert.dev) (optional)

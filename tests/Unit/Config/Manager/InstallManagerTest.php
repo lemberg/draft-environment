@@ -159,7 +159,7 @@ final class InstallManagerTest extends TestCase {
     $this->fs->remove($configObject->getTargetConfigFilepaths());
     $this->configInstallManager->install();
     foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileNotExists($filepath);
+      self::assertFileDoesNotExist($filepath);
     }
   }
 
@@ -187,7 +187,7 @@ final class InstallManagerTest extends TestCase {
     }
     $this->configInstallManager->uninstall();
     foreach ($configObject->getTargetConfigFilepaths(FALSE) as $filepath) {
-      self::assertFileNotExists($filepath);
+      self::assertFileDoesNotExist($filepath);
     }
   }
 
