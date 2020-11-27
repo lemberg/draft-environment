@@ -175,7 +175,7 @@ final class InitConfigTest extends TestCase {
     $step->uninstall();
 
     foreach ($configObject->getTargetConfigFilepaths(FALSE) as $filepath) {
-      self::assertFileNotExists($filepath);
+      self::assertFileDoesNotExist($filepath);
     }
   }
 
@@ -195,7 +195,7 @@ final class InitConfigTest extends TestCase {
     $step->uninstall();
 
     if (preg_replace('/\R+/m', '', $expected) === '') {
-      self::assertFileNotExists($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE));
+      self::assertFileDoesNotExist($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE));
     }
     else {
       self::assertSame($expected, file_get_contents($configObject->getTargetConfigFilepath(Config::TARGET_GITIGNORE)));
