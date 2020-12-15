@@ -8,5 +8,10 @@
         "lemberg/draft-environment": "3.x.x-dev"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "platform": {
+            "php": "7.3.0"
+        }
+    }
 }
