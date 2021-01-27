@@ -132,9 +132,9 @@ jobs:
           MOLECULE_PLATFORM: ${{ matrix.molecule-platform }}
 
   vagrant:
-    name: Vagrant up
+    name: Vagrant ubuntu/${{ matrix.vagrant-box }}
 
-    needs: php
+    needs: molecule
 
     runs-on: macos-latest
 
@@ -142,6 +142,10 @@ jobs:
       matrix:
         php-version:
           - '7.4'
+        vagrant-box:
+          - xenial64
+          - bionic64
+          - focal64
 
     # Workaround 'XXX may have been in progress in another thread when fork()
     # was called.'
@@ -169,6 +173,9 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+
+      - name: Set Vagrant box to use
+        run: sed -i 's/xenial64/${{ matrix.vagrant-box }}/g' vm-settings.yml
 
       - name: Provision the machine
         run: vagrant up
