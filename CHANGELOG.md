@@ -7,6 +7,7 @@ Updates:
 
 Fixes:
 
+- [GH-234](https://github.com/lemberg/draft-environment/issues/234) - Fix broken PiP installation by updating Python within the VM to version 3.7
 - [GH-223](https://github.com/lemberg/draft-environment/issues/223) - Ensure that Python 3 is default in the VM
 - [GH-218](https://github.com/lemberg/draft-environment/issues/218) - Address newly introduced PHPCS errors/warnings
 

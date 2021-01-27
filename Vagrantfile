@@ -213,7 +213,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Ensure Python 3.x is set as a default.
   config.vm.provision "shell",
-    inline: "rm /usr/bin/python && ln -s python3 /usr/bin/python"
+    keep_color: true,
+    inline: <<-SHELL
+      add-apt-repository ppa:deadsnakes/ppa -y
+      apt-get update -q
+      apt-get install python3.7 -y
+      update-alternatives --install /usr/bin/python python /usr/bin/python3.7 10
+    SHELL
 
   # Copy generated SSL certificate and private key to the VM.
   unless configuration.get("mkcert").nil?
