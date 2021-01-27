@@ -200,16 +200,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Configure synched folders.
   config.vm.synced_folder configuration.get("vagrant.source_directory"), configuration.get("vagrant.destination_directory"), configuration.get("vagrant.synced_folder_options")
 
-  config.vm.synced_folder ".", "/vagrant", id: "vagrant", type: "nfs", create: true
-
   # Provisioning
   #
   # See https://docs.vagrantup.com/v2/provisioning/index.html
-
-  # Get correct path to the Ansible playbook within the machine.
-  require 'pathname'
-  project_pathname = Pathname.new PROJECT_BASE_PATH
-  vm_pathname = Pathname.new VM_BASE_PATH
 
   # Ensure Python 3.x is set as a default.
   config.vm.provision "shell",
@@ -220,12 +213,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provision "file", source: configuration.get("mkcert.directory") + "/.", destination: "/tmp/mkcert"
   end
 
+  # Get correct path to the Ansible playbook within the machine (avoiding the
+  # invalid NFS exports file at the same time).
+  require 'pathname'
+
+  source_pathname = (Pathname.new configuration.get("vagrant.source_directory")).realpath
+  vm_pathname = (Pathname.new VM_BASE_PATH).realpath
+
+  # If draft environment is within the synced folder, construct correct path
+  # to the provisioning directory within the destination directory.
+  if File.fnmatch(source_pathname.to_path + "/*", vm_pathname.to_path)
+      ansible_provisioning_path = File.join(configuration.get("vagrant.destination_directory"), vm_pathname.relative_path_from(source_pathname), "provisioning")
+  # Else draft environment is not within the synced folder. In this case create
+  # another NFS synced folder containing the required files.
+  else
+    config.vm.synced_folder VM_BASE_PATH, "/vagrant", id: "vagrant", type: "nfs", create: true
+    ansible_provisioning_path = "/vagrant/provisioning"
+  end
+
   # Run Ansible provisioner from within the virtual machine using Ansible Local
   # provisioner.
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
     ansible.playbook = "playbook.yml"
-    ansible.provisioning_path = File.join("/vagrant", vm_pathname.relative_path_from(project_pathname), "/provisioning")
+    ansible.provisioning_path = ansible_provisioning_path
     ansible.extra_vars = configuration.getConfiguration()
     ansible.galaxy_role_file = "requirements.yml"
     ansible.galaxy_roles_path = "/etc/ansible/roles"
