@@ -243,7 +243,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.compatibility_mode = "2.0"
     ansible.install_mode = "pip"
-    ansible.pip_install_cmd = "curl #{get_pip_url} | sudo python3"
+    ansible.pip_install_cmd = <<-SHELL
+      # Ensure that required Python packsges are present.
+      sudo apt install python3-apt python3-distutils -y
+      # Install PiP.
+      curl #{get_pip_url} | sudo python3
+    SHELL
     ansible.version = configuration.get("ansible.version")
   end
 
