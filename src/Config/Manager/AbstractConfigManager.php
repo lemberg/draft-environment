@@ -129,7 +129,7 @@ abstract class AbstractConfigManager implements ManagerInterface {
   /**
    * Manually autoload dependencies from Nette framework.
    */
-  final private function autoloadDependencies(): void {
+  private function autoloadDependencies(): void {
     $loader = new ClassLoader();
 
     $vendorDir = $this->composer->getConfig()->get('vendor-dir');

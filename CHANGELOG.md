@@ -4,6 +4,7 @@ Updates:
 - [GH-184](https://github.com/lemberg/draft-environment/issues/184) - Drop support of PHP7.2 and bump minimum phpunit/phpunit version to ^9.3
 - [GH-219](https://github.com/lemberg/draft-environment/issues/219) - Add support for Composer 2
 - [GH-226](https://github.com/lemberg/draft-environment/issues/226) - Migrate from Travis to Github Actions
+- [GH-228](https://github.com/lemberg/draft-environment/issues/228) - Add PHP 8 support
 
 Fixes:
 

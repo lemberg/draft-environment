@@ -204,16 +204,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # See https://docs.vagrantup.com/v2/provisioning/index.html
 
-  # Ensure Python 3.x is set as a default.
-  config.vm.provision "shell",
-    keep_color: true,
-    inline: <<-SHELL
-      add-apt-repository ppa:deadsnakes/ppa -y
-      apt-get update -q
-      apt-get install python3.7 -y
-      update-alternatives --install /usr/bin/python python /usr/bin/python3.7 10
-    SHELL
-
   # Copy generated SSL certificate and private key to the VM.
   unless configuration.get("mkcert").nil?
     config.vm.provision "file", source: configuration.get("mkcert.directory") + "/.", destination: "/tmp/mkcert"
@@ -239,6 +229,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Run Ansible provisioner from within the virtual machine using Ansible Local
   # provisioner.
+
+  # Use PiP version < 21 for Ubuntu 16.04.
+  get_pip_url = configuration.get("vagrant.box") === "ubuntu/xenial64" ? "https://bootstrap.pypa.io/3.5/get-pip.py" : "https://bootstrap.pypa.io/get-pip.py"
+
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
     ansible.playbook = "playbook.yml"
@@ -249,6 +243,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.compatibility_mode = "2.0"
     ansible.install_mode = "pip"
+    ansible.pip_install_cmd = <<-SHELL
+      # Ensure that required Python packsges are present.
+      sudo apt install python3-apt python3-distutils -y
+      # Install PiP.
+      curl #{get_pip_url} | sudo python3
+    SHELL
     ansible.version = configuration.get("ansible.version")
   end
 
