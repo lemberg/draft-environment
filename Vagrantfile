@@ -229,6 +229,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Run Ansible provisioner from within the virtual machine using Ansible Local
   # provisioner.
+
+  # Use PiP version < 21 for Ubuntu 16.04.
+  get_pip_url = configuration.get("vagrant.box") === "ubuntu/xenial64" ? "https://bootstrap.pypa.io/3.5/get-pip.py" : "https://bootstrap.pypa.io/get-pip.py"
+
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
     ansible.playbook = "playbook.yml"
@@ -239,17 +243,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.compatibility_mode = "2.0"
     ansible.install_mode = "pip"
-    ansible.pip_install_cmd = <<-SHELL
-      # Ensure Python 3.7 is available.
-      sudo add-apt-repository ppa:deadsnakes/ppa -y
-      sudo apt-get update -q
-      sudo apt-get install python3.7 -y
-      # Set Python 3 as default.
-      sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 10
-      sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 10
-      # Install PiP.
-      curl https://bootstrap.pypa.io/get-pip.py | sudo python
-    SHELL
+    ansible.pip_install_cmd = "curl #{get_pip_url} | sudo python3"
     ansible.version = configuration.get("ansible.version")
   end
 
