@@ -204,16 +204,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #
   # See https://docs.vagrantup.com/v2/provisioning/index.html
 
-  # Ensure Python 3.x is set as a default.
-  config.vm.provision "shell",
-    keep_color: true,
-    inline: <<-SHELL
-      add-apt-repository ppa:deadsnakes/ppa -y
-      apt-get update -q
-      apt-get install python3.7 -y
-      update-alternatives --install /usr/bin/python python /usr/bin/python3.7 10
-    SHELL
-
   # Copy generated SSL certificate and private key to the VM.
   unless configuration.get("mkcert").nil?
     config.vm.provision "file", source: configuration.get("mkcert.directory") + "/.", destination: "/tmp/mkcert"
@@ -249,6 +239,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.compatibility_mode = "2.0"
     ansible.install_mode = "pip"
+    ansible.pip_install_cmd = <<-SHELL
+      # Ensure Python 3.7 is available.
+      sudo add-apt-repository ppa:deadsnakes/ppa -y
+      sudo apt-get update -q
+      sudo apt-get install python3.7 -y
+      # Set Python 3 as default.
+      sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 10
+      sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 10
+      # Install PiP.
+      curl https://bootstrap.pypa.io/get-pip.py | sudo python
+    SHELL
     ansible.version = configuration.get("ansible.version")
   end
 
