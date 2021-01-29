@@ -1,7 +1,7 @@
-# Draft Environment 3.0
+# Draft Environment 3.3.0
 
 [![Latest Stable Version](https://poser.pugx.org/lemberg/draft-environment/v/stable)](https://packagist.org/packages/lemberg/draft-environment)
-[![Build Status](https://travis-ci.org/lemberg/draft-environment.svg?branch=3.x.x)](https://travis-ci.org/lemberg/draft-environment)
+![Build Status](https://github.com/lemberg/draft-environment/workflows/Integrate/badge.svg)
 [![codecov](https://codecov.io/gh/lemberg/draft-environment/branch/3.x.x/graph/badge.svg)](https://codecov.io/gh/lemberg/draft-environment)
 
 This is Vagrant-based development environment for Drupal projects. This project is a part of a [Draft](https://github.com/lemberg/draft-template) Drupal project template.

@@ -1,4 +1,4 @@
-## Draft Environment (Unreleased)
+## Draft Environment 3.3.0, 2021-01-29
 
 Updates:
 - [GH-184](https://github.com/lemberg/draft-environment/issues/184) - Drop support of PHP7.2 and bump minimum phpunit/phpunit version to ^9.3
