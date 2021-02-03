@@ -1,3 +1,10 @@
+## Draft Environment 3.x.x (Unreleased)
+
+Updates:
+
+- [GH-231](https://github.com/lemberg/draft-environment/issues/231) - Migrate to Xdebug 3
+
+
 ## Draft Environment 3.3.0, 2021-01-29
 
 Updates:
