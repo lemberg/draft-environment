@@ -2,6 +2,7 @@
 dependency:
   name: galaxy
   options:
+    roles-path: ~/.ansible/roles
     role-file: provisioning/requirements.yml
 driver:
   name: vagrant
