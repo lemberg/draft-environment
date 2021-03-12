@@ -1,3 +1,4 @@
+---
 # This file contains Vagrant and VirtualBox configuration.
 #
 # Settings in this file are project specific, not a local machine specific.
@@ -92,9 +93,9 @@ draft_features:
   - php
   # Composer (PHP dependency manager), requires PHP
   - composer
-#  - java
+  #  - java
   # Apache Solr, requires Java
-#  - solr
+  #  - solr
 
 # Provisioner (Ansible) configuration.
 

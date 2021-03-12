@@ -6,7 +6,7 @@
       - apache2
       - openssl
     state: present
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 86400
 
 - name: Enable Apache2 modules
@@ -14,10 +14,10 @@
     name: "{{ item }}"
     state: present
   with_items:
-      - expires
-      - headers
-      - rewrite
-      - ssl
+    - expires
+    - headers
+    - rewrite
+    - ssl
   notify:
     - Restart Apache2 web server
 
@@ -78,8 +78,8 @@
 - name: Get /etc/apache2/mods-available/dir.conf permissions
   stat:
     path: /etc/apache2/mods-available/dir.conf
-    get_checksum: no
-    get_mime: no
+    get_checksum: false
+    get_mime: false
   register: dir_conf_stat
 
 # Configure web server.
@@ -121,4 +121,4 @@
   service:
     name: apache2
     state: started
-    enabled: yes
+    enabled: true
