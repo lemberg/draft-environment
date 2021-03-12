@@ -1,3 +1,14 @@
+## Draft Environment (Unreleased)
+
+Updates:
+
+- [GH-240](https://github.com/lemberg/draft-environment/pull/240) - Make Travis CI green again. Side effect: updated all Ansible roles:
+    * oefenweb.swapfile (v2.0.28 => v2.0.32)
+    * t2l.php (1.3.1 => 1.4.0)
+    * t2l.composer (2.0.2 => 2.0.3)
+    * t2l.java (1.3.1 => 1.3.2)
+    * t2l.solr (2.2.1 => 2.2.2)
+
 ## Draft Environment 3.3.1 (2021-02-03)
 
 Updates:
