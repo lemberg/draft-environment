@@ -1,5 +1,7 @@
+---
 name: Integrate
 
+# yamllint disable-line rule:truthy
 on:
   pull_request:
   push:
@@ -53,7 +55,7 @@ jobs:
           path: ~/.composer/cache
           key: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-${{ hashFiles('composer.lock') }}
           restore-keys: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-
-      
+
       - name: Install Composer dependencies
         run: composer update --no-progress --prefer-dist --optimize-autoloader ${{ matrix.prefer-lowest }}
 
@@ -77,7 +79,7 @@ jobs:
     # was called.'
     # See https://github.com/ansible/ansible/issues/32499
     env:
-      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
+      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: 'YES'
 
     strategy:
       matrix:
@@ -151,7 +153,7 @@ jobs:
     # was called.'
     # See https://github.com/ansible/ansible/issues/32499
     env:
-      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: YES
+      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: 'YES'
 
     steps:
       - name: Checkout
@@ -227,4 +229,4 @@ jobs:
       - name: Send code coverage report to Codecov.io
         uses: codecov/codecov-action@v1
         with:
-         file: coverage.xml
+          file: coverage.xml

@@ -17,14 +17,14 @@
       - unzip
       - wget
     state: present
-    update_cache: yes
+    update_cache: true
     cache_valid_time: 86400
 
 - name: Add vagrant user to syslog group
   user:
     name: vagrant
     groups: syslog
-    append: yes
+    append: true
 
 - name: Ensure that logs directories exist
   file:
@@ -64,8 +64,8 @@
 - name: Get /etc/environment permissions
   stat:
     path: /etc/environment
-    get_checksum: no
-    get_mime: no
+    get_checksum: false
+    get_mime: false
   register: etc_environment_stat
 
 - name: Expose draft environment via environment variable
@@ -77,8 +77,8 @@
 - name: Get ~/.bashrc permissions
   stat:
     path: ~/.bashrc
-    get_checksum: no
-    get_mime: no
+    get_checksum: false
+    get_mime: false
   register: bashrc_stat
 
 - name: Use Vagrant base directory as a default SSH directory
@@ -101,8 +101,8 @@
 - name: Get /etc/ssh/sshd_config permissions
   stat:
     path: /etc/ssh/sshd_config
-    get_checksum: no
-    get_mime: no
+    get_checksum: false
+    get_mime: false
   register: sshd_config_stat
 
 - name: Ensure that PasswordAuthentication is enabled

@@ -3,16 +3,16 @@
   become: true
 
   roles:
-    - { role: draft }
-    - { role: oefenweb.swapfile, when: "'swapfile' in draft_features" }
-    - { role: geerlingguy.mailhog, when: "'mailhog' in draft_features" }
-    - { role: git_config, when: "'git_config' in draft_features" }
-    - { role: apache2, when: "'apache2' in draft_features" }
-    - { role: geerlingguy.mysql, when: "'mysql' in draft_features" }
-    - { role: T2L.php, when: "'php' in draft_features" }
-    - { role: T2L.composer, when: "'composer' in draft_features" }
-    - { role: T2L.java, when: "'java' in draft_features" }
-    - { role: T2L.solr, when: "'solr' in draft_features" }
+    - {role: draft}
+    - {role: oefenweb.swapfile, when: "'swapfile' in draft_features"}
+    - {role: geerlingguy.mailhog, when: "'mailhog' in draft_features"}
+    - {role: git_config, when: "'git_config' in draft_features"}
+    - {role: apache2, when: "'apache2' in draft_features"}
+    - {role: geerlingguy.mysql, when: "'mysql' in draft_features"}
+    - {role: t2l.php, when: "'php' in draft_features"}
+    - {role: t2l.composer, when: "'composer' in draft_features"}
+    - {role: t2l.java, when: "'java' in draft_features"}
+    - {role: t2l.solr, when: "'solr' in draft_features"}
 
   vars:
     ansible_python_interpreter: /usr/bin/python3

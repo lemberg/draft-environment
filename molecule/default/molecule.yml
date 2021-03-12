@@ -8,8 +8,8 @@ driver:
   name: vagrant
 lint: |
   set -e
-  yamllint --config-data "{ignore: vendor/}" .
-  ansible-lint
+  yamllint .
+  ansible-lint .
 platforms:
   - name: draft
     box: ubuntu/${MOLECULE_PLATFORM}
