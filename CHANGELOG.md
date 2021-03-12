@@ -9,6 +9,10 @@ Updates:
     * t2l.java (1.3.1 => 1.3.2)
     * t2l.solr (2.2.1 => 2.2.2)
 
+Fixes:
+
+- [GH-241](https://github.com/lemberg/draft-environment/issues/241) - Use correct url for the get-pip.py script
+
 ## Draft Environment 3.3.1 (2021-02-03)
 
 Updates:
