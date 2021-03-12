@@ -7,7 +7,9 @@
     name: "{{ item.name }}"
     value: "{{ item.value }}"
   with_items:
-    - { name: "user.email", value: "{{ git_user_email|default(omit) }}" }
-    - { name: "user.name", value: "{{ git_user_name|default(omit) }}" }
-  become: yes
+    - name: "user.email"
+      value: "{{ git_user_email|default(omit) }}"
+    - name: "user.name"
+      value: "{{ git_user_name|default(omit) }}"
+  become: true
   become_user: vagrant

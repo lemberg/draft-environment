@@ -2,13 +2,14 @@
 dependency:
   name: galaxy
   options:
+    roles-path: ~/.ansible/roles
     role-file: provisioning/requirements.yml
 driver:
   name: vagrant
 lint: |
   set -e
-  yamllint --config-data "{ignore: vendor/}" .
-  ansible-lint
+  yamllint .
+  ansible-lint .
 platforms:
   - name: draft
     box: ubuntu/${MOLECULE_PLATFORM}

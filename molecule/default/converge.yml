@@ -33,10 +33,10 @@
     - ../../provisioning/roles/apache2
     - geerlingguy.mysql
     - geerlingguy.mailhog
-    - T2L.php
-    - T2L.composer
-    - T2L.java
-    - T2L.solr
+    - t2l.php
+    - t2l.composer
+    - t2l.java
+    - t2l.solr
   vars:
     ansible_python_interpreter: /usr/bin/python3
   vars_files:
