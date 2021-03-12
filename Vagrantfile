@@ -231,7 +231,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # provisioner.
 
   # Use PiP version < 21 for Ubuntu 16.04.
-  get_pip_url = configuration.get("vagrant.box") === "ubuntu/xenial64" ? "https://bootstrap.pypa.io/3.5/get-pip.py" : "https://bootstrap.pypa.io/get-pip.py"
+  get_pip_url = configuration.get("vagrant.box") === "ubuntu/xenial64" ? "https://bootstrap.pypa.io/pip/3.5/get-pip.py" : "https://bootstrap.pypa.io/pip/get-pip.py"
 
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
