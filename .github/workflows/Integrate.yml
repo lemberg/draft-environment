@@ -144,7 +144,6 @@ jobs:
         php-version:
           - '7.4'
         vagrant-box:
-          - xenial64
           - bionic64
           - focal64
 
