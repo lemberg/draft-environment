@@ -88,7 +88,6 @@ jobs:
         python-version:
           - '3.8'
         molecule-platform:
-          - xenial64
           - bionic64
           - focal64
 
@@ -177,7 +176,7 @@ jobs:
         run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
 
       - name: Set Vagrant box to use
-        run: sed -i '' 's/xenial64/${{ matrix.vagrant-box }}/g' default.vm-settings.yml
+        run: sed -i '' 's/focal64/${{ matrix.vagrant-box }}/g' default.vm-settings.yml
 
       - name: Provision the machine
         run: vagrant up

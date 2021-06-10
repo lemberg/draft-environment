@@ -12,9 +12,8 @@ vagrant:
   # Do not change this value, unless absolutely necessary. Valid use case is
   # 32-bit host machine and no support for virtualization of 64-bit guest
   # machine.
-  # Defaults to 'Official Ubuntu Server 16.04 LTS (Xenial Xerus)'.
-  # Change this parameter in the local settings file.
-  box: ubuntu/xenial64
+  # Defaults to 'Official Ubuntu Server 20.04 LTS (Focal Fossa)'.
+  box: ubuntu/focal64
   # Box version.
   box_version: '>= 0'
   # Disable automatic update checking be setting this option to false.
