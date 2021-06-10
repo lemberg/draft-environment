@@ -119,7 +119,7 @@ final class Xdebug2To3Test extends TestCase {
             ],
             'xdebug' => [
               'xdebug.mode' => 'debug',
-              'xdebug.discover_client_host' => TRUE,
+              'xdebug.discover_client_host' => 'true',
               'xdebug.remote_log' => '/var/log/draft/php_xdebug_remote.log',
             ],
           ],
@@ -131,7 +131,7 @@ final class Xdebug2To3Test extends TestCase {
             ],
             'xdebug' => [
               'xdebug.mode' => 'debug',
-              'xdebug.discover_client_host' => TRUE,
+              'xdebug.discover_client_host' => 'true',
               'xdebug.remote_log' => '/var/log/draft/php_xdebug_remote.log',
             ],
           ],
@@ -157,7 +157,7 @@ final class Xdebug2To3Test extends TestCase {
             ],
             'xdebug' => [
               'xdebug.mode' => 'off',
-              'xdebug.discover_client_host' => FALSE,
+              'xdebug.discover_client_host' => 'false',
               'xdebug.remote_log' => '/var/log/draft/php_xdebug_remote.log',
             ],
           ],
@@ -183,7 +183,7 @@ final class Xdebug2To3Test extends TestCase {
             ],
             'xdebug' => [
               'xdebug.mode' => 'debug',
-              'xdebug.discover_client_host' => TRUE,
+              'xdebug.discover_client_host' => 'true',
               'xdebug.remote_log' => '/var/log/draft/php_xdebug_remote.log',
             ],
           ],
