@@ -177,7 +177,7 @@ final class UpdateManagerTest extends TestCase {
    * Tests the last available update weight getter.
    */
   public function testGetLastAvailableUpdateWeight(): void {
-    self::assertSame(8, $this->configUpdateManager->getLastAvailableUpdateWeight());
+    self::assertSame(App::LAST_AVAILABLE_UPDATE_WEIGHT, $this->configUpdateManager->getLastAvailableUpdateWeight());
   }
 
 }

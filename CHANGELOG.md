@@ -1,3 +1,14 @@
+## Draft Environment (Unreleased)
+
+Updates:
+
+- [GH-235](https://github.com/lemberg/draft-environment/pull/235) - Drop Ubuntu 16.04 support. Make Ubuntu 20.04 the default guest OS. Side effect: updated all Ansible roles:
+    * oefenweb.swapfile (v2.0.32 => v2.0.33)
+    * geerlingguy.mysql (3.3.0 => 3.3.1)
+    * t2l.php (1.4.0 => 1.5.0)
+    * t2l.composer (2.0.3 => 2.0.4)
+    * t2l.java (1.3.2 => 1.3.3)
+
 ## Draft Environment 3.3.2 (2021-03-13)
 
 Updates:

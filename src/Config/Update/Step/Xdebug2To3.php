@@ -33,7 +33,7 @@ final class Xdebug2To3 extends AbstractUpdateStep implements UpdateStepInterface
         }
         if (array_key_exists('xdebug.remote_connect_back', $xdebug_config)) {
           $this->replaceArrayKey($xdebug_config, 'xdebug.remote_connect_back', 'xdebug.discover_client_host');
-          $xdebug_config['xdebug.discover_client_host'] = $xdebug_config['xdebug.discover_client_host'] === 'On' ? TRUE : FALSE;
+          $xdebug_config['xdebug.discover_client_host'] = $xdebug_config['xdebug.discover_client_host'] === 'On' ? 'true' : 'false';
         }
       }
     }

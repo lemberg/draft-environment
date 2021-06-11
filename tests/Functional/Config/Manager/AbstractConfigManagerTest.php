@@ -28,7 +28,7 @@ abstract class AbstractConfigManagerTest extends AbstractFunctionalTest {
     $key = array_search(App::PACKAGE_NAME, array_column($decoded_composer_lock['packages-dev'], 'name'), TRUE);
 
     self::assertTrue($decoded_composer_lock['packages-dev'][$key]['extra']['draft-environment']['already-installed']);
-    self::assertSame(8, $decoded_composer_lock['packages-dev'][$key]['extra']['draft-environment']['last-update-weight']);
+    self::assertSame(App::LAST_AVAILABLE_UPDATE_WEIGHT, $decoded_composer_lock['packages-dev'][$key]['extra']['draft-environment']['last-update-weight']);
   }
 
 }
