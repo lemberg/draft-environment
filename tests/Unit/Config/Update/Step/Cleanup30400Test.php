@@ -121,6 +121,7 @@ final class Cleanup30400Test extends TestCase {
           'virtualbox' => [
             'disk_size' => '20Gb',
           ],
+          'mysql_sql_mode' => 'ANSI',
           'php_extensions_configuration' => [
             'opcache' => [
               'opcache.error_log' => '/var/log/draft/php_opcache_error.log',
@@ -139,6 +140,7 @@ final class Cleanup30400Test extends TestCase {
           'virtualbox' => [
             'disk_size' => '20Gb',
           ],
+          'mysql_sql_mode' => 'ANSI',
           'php_extensions_configuration' => [
             'opcache' => [
               'opcache.error_log' => '/var/log/draft/php_opcache_error.log',
@@ -160,6 +162,7 @@ final class Cleanup30400Test extends TestCase {
             'memory' => 1024,
             'disk_size' => '10Gb',
           ],
+          'mysql_sql_mode' => '',
           'php_extensions_configuration' => [
             'opcache' => [
               'opcache.error_log' => '/var/log/draft/php_opcache_error.log',
@@ -179,6 +182,7 @@ final class Cleanup30400Test extends TestCase {
             'memory' => 1024,
             'disk_size' => '40Gb',
           ],
+          'mysql_sql_mode' => '~',
           'php_extensions_configuration' => [
             'opcache' => [
               'opcache.error_log' => '/var/log/draft/php_opcache_error.log',

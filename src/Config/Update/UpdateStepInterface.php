@@ -14,7 +14,7 @@ interface UpdateStepInterface extends AbstractStepInterface {
   /**
    * Contains update step business logic.
    *
-   * @param array[] $config
+   * @param array<string,mixed> $config
    *   Draft Environment configuration nested array.
    */
   public function update(array &$config): void;

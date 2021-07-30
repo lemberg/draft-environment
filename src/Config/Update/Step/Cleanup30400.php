@@ -49,6 +49,14 @@ final class Cleanup30400 extends AbstractUpdateStep implements UpdateStepInterfa
         }
       }
     }
+
+    // Update default value of mysql_sql_mode following update of the
+    // geerlingguy.mysql (3.3.1 => 3.3.2).
+    if (array_key_exists('mysql_sql_mode', $config)) {
+      if ($config['mysql_sql_mode'] === '') {
+        $config['mysql_sql_mode'] = '~';
+      }
+    }
   }
 
 }

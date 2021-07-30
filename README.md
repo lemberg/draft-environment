@@ -56,11 +56,11 @@ Dramatically increases disk IO on Windows by adding NFS support.
     Here's the list of used roles:
 
     - draft (internal)
-    - [oefenweb.swapfile @ v2.0.33](https://github.com/Oefenweb/ansible-swapfile/tree/v2.0.33)
+    - [oefenweb.swapfile @ v2.0.34](https://github.com/Oefenweb/ansible-swapfile/tree/v2.0.34)
     - [geerlingguy.mailhog @ 2.2.0](https://github.com/geerlingguy/ansible-role-mailhog/tree/2.2.0)
     - git_config (internal)
     - apache2 (internal)
-    - [geerlingguy.mysql @ 3.3.1](https://github.com/geerlingguy/ansible-role-mysql/tree/3.3.1)
+    - [geerlingguy.mysql @ 3.3.2](https://github.com/geerlingguy/ansible-role-mysql/tree/3.3.2)
     - [t2l.php @ 1.5.0](https://github.com/T2L/ansible-role-php/tree/1.5.0)
     - [t2l.composer @ 2.0.4](https://github.com/T2L/ansible-role-composer/tree/2.0.4)
     - [t2l.java @ 1.3.3](https://github.com/T2L/ansible-role-java/tree/1.3.3)
