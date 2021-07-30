@@ -69,7 +69,7 @@ virtualbox:
   cpuexecutioncap: 100
   # VirtualBox disk size (added by vagrant-disksize plugin).
   # See https://github.com/sprotheroe/vagrant-disksize
-  disk_size: 10GB
+  disk_size: 40GB
 
 # Ansible local configuration.
 ansible:
@@ -80,8 +80,8 @@ ansible:
   #     installs the latest available Ansible version within the given range
   #     constraint. This is the default option.
   #
-  # This project has been successfully tested with Ansible 2.9.
-  version: '2.9.*'
+  # This project has been successfully tested with Ansible 4.0.
+  version: '4.*'
 
 # List of features to install. Some roles depend on each other, be careful.
 draft_features:
@@ -309,7 +309,7 @@ php_extensions_configuration:
     opcache.error_log: /var/log/draft/php_opcache_error.log
   xdebug:
     xdebug.mode: debug
-    xdebug.discover_client_host: true
+    xdebug.discover_client_host: 'true'
     xdebug.remote_log: /var/log/draft/php_xdebug_remote.log
 
 # Web server daemon to restart (defaults to Apache 2).
