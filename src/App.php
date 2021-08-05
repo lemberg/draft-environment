@@ -24,7 +24,7 @@ final class App {
 
   public const PACKAGE_NAME = 'lemberg/draft-environment';
 
-  public const LAST_AVAILABLE_UPDATE_WEIGHT = 9;
+  public const LAST_AVAILABLE_UPDATE_WEIGHT = 10;
 
   /**
    * @var \Composer\Composer

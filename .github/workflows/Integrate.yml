@@ -49,11 +49,16 @@ jobs:
           php-version: ${{ matrix.php-version }}
           tools: composer:v${{ matrix.composer-version }}
 
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
-          path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-${{ hashFiles('composer.lock') }}
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-${{ hashFiles('composer.json') }}
           restore-keys: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-
 
       - name: Install Composer dependencies
@@ -83,6 +88,8 @@ jobs:
 
     strategy:
       matrix:
+        composer-version:
+          - 2
         php-version:
           - '7.4'
         python-version:
@@ -100,17 +107,22 @@ jobs:
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
-          tools: composer:v1, prestissimo
+          tools: composer:v${{ matrix.composer-version }}
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
-          path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
-          restore-keys: php-${{ matrix.php-version }}-
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-${{ hashFiles('composer.json') }}
+          restore-keys: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+        run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-dev
 
       - name: Install Python
         uses: actions/setup-python@v2
@@ -120,12 +132,11 @@ jobs:
       - name: Cache PiP dependencies
         uses: actions/cache@v2
         with:
-          path: ~/Library/Caches/pip
-          key: python-${{ matrix.python-version }}
-          restore-keys: python-${{ matrix.python-version }}-
+          path: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ matrix.molecule-platform }}
 
       - name: Install Molecule and it's dependencies
-        run: pip install ansible==2.9.* ansible-lint yamllint molecule~=3.1 python-vagrant molecule-vagrant
+        run: pip install --upgrade --upgrade-strategy eager ansible==4.* ansible-lint yamllint molecule python-vagrant molecule-vagrant
 
       - name: Run Molecule tests
         run: molecule test
@@ -141,6 +152,8 @@ jobs:
 
     strategy:
       matrix:
+        composer-version:
+          - 2
         php-version:
           - '7.4'
         vagrant-box:
@@ -162,17 +175,22 @@ jobs:
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
-          tools: composer:v1, prestissimo
+          tools: composer:v${{ matrix.composer-version }}
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
-          path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
-          restore-keys: php-${{ matrix.php-version }}-
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-${{ hashFiles('composer.json') }}
+          restore-keys: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --no-dev
+        run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader --no-dev
 
       - name: Set Vagrant box to use
         run: sed -i '' 's/focal64/${{ matrix.vagrant-box }}/g' default.vm-settings.yml
@@ -189,6 +207,8 @@ jobs:
 
     strategy:
       matrix:
+        composer-version:
+          - 2
         php-version:
           - 7.4
 
@@ -209,17 +229,22 @@ jobs:
         with:
           coverage: xdebug
           php-version: ${{ matrix.php-version }}
-          tools: composer:v1, prestissimo
+          tools: composer:v${{ matrix.composer-version }}
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache Composer dependencies
         uses: actions/cache@v2
         with:
-          path: ~/.composer/cache
-          key: php-${{ matrix.php-version }}-${{ hashFiles('composer.lock') }}
-          restore-keys: php-${{ matrix.php-version }}-
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-${{ hashFiles('composer.json') }}
+          restore-keys: php-${{ matrix.php-version }}-${{ matrix.composer-version }}-
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader
+        run: composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
 
       - name: Collect code coverage
         run: vendor/bin/phpunit --testsuite=unit --coverage-clover=coverage.xml
