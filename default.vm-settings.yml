@@ -318,7 +318,7 @@ php_web_server_daemon: apache2
 # Boolean indicating whether to restart web server or not.
 php_restart_web_server: true
 
-# Role: t2l.composer @ 2.0.4
+# Role: t2l.composer @ 2.0.5
 
 # Composer installation directory.
 composer_install_dir: /usr/local/bin

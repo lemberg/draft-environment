@@ -8,7 +8,7 @@
 - src: t2l.php
   version: 1.5.0
 - src: t2l.composer
-  version: 2.0.4
+  version: 2.0.5
 - src: t2l.java
   version: 1.3.3
 - src: t2l.solr

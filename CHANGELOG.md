@@ -5,6 +5,7 @@ Updates:
 - Updated Ansible roles:
     * oefenweb.swapfile (v2.0.33 => v2.0.34)
     * geerlingguy.mysql (3.3.1 => 3.3.2)
+    * t2l.composer (2.0.4 => 2.0.5)
 
 ## Draft Environment 3.3.3 (2021-07-12)
 
