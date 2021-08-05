@@ -230,9 +230,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Run Ansible provisioner from within the virtual machine using Ansible Local
   # provisioner.
 
-  # Use PiP version < 21 for Ubuntu 16.04.
-  get_pip_url = configuration.get("vagrant.box") === "ubuntu/xenial64" ? "https://bootstrap.pypa.io/pip/3.5/get-pip.py" : "https://bootstrap.pypa.io/pip/get-pip.py"
-
   config.vm.provision "ansible_local" do |ansible|
     ansible.become = true
     ansible.playbook = "playbook.yml"
@@ -242,14 +239,26 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.galaxy_roles_path = "/etc/ansible/roles"
     ansible.galaxy_command = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.compatibility_mode = "2.0"
-    ansible.install_mode = "pip"
+    ansible.install_mode = "pip_args_only"
     ansible.pip_install_cmd = <<-SHELL
-      # Ensure that required Python packsges are present.
+      # Ensure that required Python packages are present.
       sudo apt install python3-apt python3-distutils -y
       # Install PiP.
-      curl #{get_pip_url} | sudo python3
+      curl https://bootstrap.pypa.io/get-pip.py | sudo python3
     SHELL
-    ansible.version = configuration.get("ansible.version")
+    # The following will not work properly since the split of Ansible into ansible-base (soon ansible-core)
+    # and the Ansible collections and modules both together resembling Ansible.
+    # `ansible --version` will yield the ansible-base version and this command is used by ansible_local.
+    # It is not suitable to figure out which Ansible distribution/bundle was installed.
+    # To workaround the wrongful mismatch result when installing Ansible through Vagrant,
+    # we have to leave ansible.version empty/unset and use ansible.pip_args to provide the desired version.
+    #
+    # See also:
+    # - https://www.ansible.com/blog/ansible-3.0.0-qa
+    # - https://github.com/hashicorp/vagrant/issues/12204
+    # - https://git.jotbe.io/jotbe/ansible-devops-vm/commit/972e6c0d87d09cca4397fc8eba0885de04046673
+    # ansible.version = configuration.get("ansible.version")
+    ansible.pip_args = "ansible==" + configuration.get("ansible.version")
   end
 
   # Display an informational message to the user.
