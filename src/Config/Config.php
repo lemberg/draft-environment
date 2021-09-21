@@ -170,7 +170,7 @@ final class Config {
     $yaml = new Dumper(2);
 
     $flags = Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE;
-    if (defined('Yaml::DUMP_NULL_AS_TILDE')) {
+    if (defined(Yaml::class . '::DUMP_NULL_AS_TILDE')) {
       $flags |= Yaml::DUMP_NULL_AS_TILDE;
     }
 
