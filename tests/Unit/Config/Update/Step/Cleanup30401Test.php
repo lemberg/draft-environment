@@ -59,7 +59,7 @@ final class Cleanup30401Test extends Cleanup30400Test {
   }
 
   /**
-   * Tests step weight getter.
+   * {@inheritdoc}
    */
   final public function testGetWeight(): void {
     $step = new Cleanup30401($this->composer, $this->io, $this->configUpdateManager);
@@ -79,6 +79,25 @@ final class Cleanup30401Test extends Cleanup30400Test {
 
     $step->update($config);
     self::assertSame($expectedConfig, $config);
+  }
+
+  /**
+   * Data provider for the ::testUpdate().
+   *
+   * @return array<int,array<int,string|array<string,mixed>>>
+   */
+  public function updateDataProvider(): array {
+    $data = parent::updateDataProvider();
+    $data[] = [
+      [
+        'mysql_sql_mode' => '~',
+      ],
+      [
+        'mysql_sql_mode' => NULL,
+      ],
+    ];
+
+    return $data;
   }
 
 }

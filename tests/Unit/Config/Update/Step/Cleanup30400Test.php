@@ -87,7 +87,7 @@ class Cleanup30400Test extends TestCase {
    *
    * @return array<int,array<int,string|array<string,mixed>>>
    */
-  final public function updateDataProvider(): array {
+  public function updateDataProvider(): array {
     return [
       [
         [],
