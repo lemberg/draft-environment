@@ -34,8 +34,8 @@ final class Cleanup30400 extends AbstractUpdateStep implements UpdateStepInterfa
     // Ubuntu 20.04 uses 40Gb disk by default.
     if (array_key_exists('virtualbox', $config)) {
       if (array_key_exists('disk_size', $config['virtualbox'])) {
-        if ($config['virtualbox']['disk_size'] === '10Gb') {
-          $config['virtualbox']['disk_size'] = '40Gb';
+        if (intval($config['virtualbox']['disk_size']) < 40) {
+          $config['virtualbox']['disk_size'] = '40GB';
         }
       }
     }
@@ -54,7 +54,7 @@ final class Cleanup30400 extends AbstractUpdateStep implements UpdateStepInterfa
     // geerlingguy.mysql (3.3.1 => 3.3.2).
     if (array_key_exists('mysql_sql_mode', $config)) {
       if ($config['mysql_sql_mode'] === '') {
-        $config['mysql_sql_mode'] = '~';
+        $config['mysql_sql_mode'] = NULL;
       }
     }
   }
