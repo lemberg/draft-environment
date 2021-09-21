@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\Cleanup30400
  */
-final class Cleanup30400Test extends TestCase {
+class Cleanup30400Test extends TestCase {
 
   /**
    * @var \Composer\Composer
@@ -62,7 +62,7 @@ final class Cleanup30400Test extends TestCase {
   /**
    * Tests step weight getter.
    */
-  final public function testGetWeight(): void {
+  public function testGetWeight(): void {
     $step = new Cleanup30400($this->composer, $this->io, $this->configUpdateManager);
     self::assertSame(10, $step->getWeight());
   }
@@ -75,7 +75,7 @@ final class Cleanup30400Test extends TestCase {
    *
    * @dataProvider updateDataProvider
    */
-  final public function testUpdate(array $config, array $expectedConfig): void {
+  public function testUpdate(array $config, array $expectedConfig): void {
     $step = new Cleanup30400($this->composer, $this->io, $this->configUpdateManager);
 
     $step->update($config);
@@ -138,7 +138,7 @@ final class Cleanup30400Test extends TestCase {
             'version' => '2.10.*',
           ],
           'virtualbox' => [
-            'disk_size' => '20Gb',
+            'disk_size' => '40GB',
           ],
           'mysql_sql_mode' => 'ANSI',
           'php_extensions_configuration' => [
@@ -180,9 +180,9 @@ final class Cleanup30400Test extends TestCase {
           ],
           'virtualbox' => [
             'memory' => 1024,
-            'disk_size' => '40Gb',
+            'disk_size' => '40GB',
           ],
-          'mysql_sql_mode' => '~',
+          'mysql_sql_mode' => NULL,
           'php_extensions_configuration' => [
             'opcache' => [
               'opcache.error_log' => '/var/log/draft/php_opcache_error.log',

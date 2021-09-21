@@ -14,7 +14,10 @@ parameters:
       - Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
       - Lemberg\Tests\Functional\Draft\Environment\AbstractFunctionalTest
       - Lemberg\Tests\Functional\Draft\Environment\Config\Manager\AbstractConfigManagerTest
+      - Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step\Cleanup30400Test
       - Symfony\Component\Filesystem\Filesystem
+    classesNotRequiredToBeAbstractOrFinal:
+      - Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step\Cleanup30400Test
   ignoreErrors:
     -
       message: '#Method [A-Za-z0-9\\]+::[A-Za-z0-9\(\)]+ is not final, but since the containing class is abstract, it should be.#'

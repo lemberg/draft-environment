@@ -168,7 +168,13 @@ final class Config {
    */
   public function writeConfigToTheFile(string $source, string $target, array $config): void {
     $yaml = new Dumper(2);
-    $alteredContent = $yaml->dump($config, PHP_INT_MAX, 0, Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE);
+
+    $flags = Yaml::DUMP_EMPTY_ARRAY_AS_SEQUENCE;
+    if (defined('Yaml::DUMP_NULL_AS_TILDE')) {
+      $flags |= Yaml::DUMP_NULL_AS_TILDE;
+    }
+
+    $alteredContent = $yaml->dump($config, PHP_INT_MAX, 0, $flags);
 
     $originalContent = $this->readConfigFromTheFile($source);
 
