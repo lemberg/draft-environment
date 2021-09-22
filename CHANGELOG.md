@@ -1,5 +1,6 @@
 ## Draft Environment (Unreleased)
 
+- [GH-220](https://github.com/lemberg/draft-environment/pull/220) - Store last applied update in the vm-settings.yml file instead of composer.lock
 - [GH-245](https://github.com/lemberg/draft-environment/pull/245) - Fix MySQL fail to install due to incorrect configuration of the SQL mode ('~' is not a valid configuration)
 
 ## Draft Environment 3.4.0 (2021-08-05)
