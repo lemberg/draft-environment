@@ -19,14 +19,4 @@ interface InstallManagerInterface extends ManagerInterface {
    */
   public function uninstall(): void;
 
-  /**
-   * Check whether Draft Environment has been already installed.
-   */
-  public function hasBeenAlreadyInstalled(): bool;
-
-  /**
-   * Set Draft Environment as already installed.
-   */
-  public function setAsAlreadyInstalled(): void;
-
 }

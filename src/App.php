@@ -12,8 +12,6 @@ use Composer\EventDispatcher\Event;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
-use Composer\Script\Event as ScriptEvent;
-use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
 
@@ -24,7 +22,7 @@ final class App {
 
   public const PACKAGE_NAME = 'lemberg/draft-environment';
 
-  public const LAST_AVAILABLE_UPDATE_WEIGHT = 11;
+  public const LAST_AVAILABLE_UPDATE = 12;
 
   /**
    * @var \Composer\Composer
@@ -45,20 +43,6 @@ final class App {
    * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
    */
   private $configUpdateManager;
-
-  /**
-   * Boolean indicating whether the installation process should run.
-   *
-   * @var bool
-   */
-  private $shouldRunInstallation = FALSE;
-
-  /**
-   * Boolean indicating whether the update process should run.
-   *
-   * @var bool
-   */
-  private $shouldRunUpdate = FALSE;
 
   /**
    * Draft Environment app constructor.
@@ -83,9 +67,6 @@ final class App {
   public function handleEvent(Event $event): void {
     if ($event instanceof PackageEvent) {
       $this->handlePackageEvent($event);
-    }
-    elseif ($event instanceof ScriptEvent) {
-      $this->handleScriptEvent($event);
     }
   }
 
@@ -114,9 +95,7 @@ final class App {
   private function onPostPackageInstall(InstallOperation $operation): void {
     // Clean up Draft Environment config files upon package uninstallation.
     if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
-      // Run installation later (during post command phase) in order to have
-      // nice console output.
-      $this->shouldRunInstallation = TRUE;
+      $this->configInstallManager->install();
     }
   }
 
@@ -135,9 +114,7 @@ final class App {
       $targetReleaseDate = $operation->getTargetPackage()->getReleaseDate() ?? $now;
       // Package downgrading is not supported by the update manager.
       if ($targetReleaseDate >= $initialReleaseDate) {
-        // Run update later (during post command phase) in order to have
-        // dependencies autoloaded.
-        $this->shouldRunUpdate = TRUE;
+        $this->configUpdateManager->update();
       }
     }
   }
@@ -152,40 +129,6 @@ final class App {
     if ($operation->getPackage()->getName() === self::PACKAGE_NAME) {
       $this->configInstallManager->uninstall();
     }
-  }
-
-  /**
-   * Composer script events handler.
-   *
-   * @param \Composer\Script\Event $event
-   */
-  private function handleScriptEvent(ScriptEvent $event): void {
-    if ($event->getName() === ScriptEvents::POST_AUTOLOAD_DUMP) {
-      $this->onPostAutoloadDumpCommand($event);
-    }
-  }
-
-  /**
-   * Post autoload dump command event handler.
-   *
-   * @param \Composer\Script\Event $event
-   */
-  private function onPostAutoloadDumpCommand(ScriptEvent $event): void {
-    if ($this->shouldRunInstallation) {
-      $this->configInstallManager->install();
-      $this->shouldRunInstallation = FALSE;
-    }
-
-    if ($this->shouldRunUpdate) {
-      $this->configUpdateManager->update();
-      $this->shouldRunUpdate = FALSE;
-    }
-
-    // Mark the package as already installed.
-    $this->configInstallManager->setAsAlreadyInstalled();
-    // Mark all available updates as already applied.
-    $lastAvailableWeight = $this->configUpdateManager->getLastAvailableUpdateWeight();
-    $this->configUpdateManager->setLastAppliedUpdateWeight($lastAvailableWeight);
   }
 
 }

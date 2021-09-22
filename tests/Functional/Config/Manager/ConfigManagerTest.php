@@ -64,7 +64,7 @@ final class ConfigManagerTest extends AbstractConfigManagerTest {
     ]))
       ->mustRun();
 
-    $this->assertComposerLockContainsPackageExtra();
+    $this->assertVmSettingsContainsLastAppliedUpdate();
   }
 
 }

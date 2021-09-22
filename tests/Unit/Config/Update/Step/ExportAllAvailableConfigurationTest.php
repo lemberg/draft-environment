@@ -215,7 +215,6 @@ h:
     t: u
 # Comment V
 v: w
-new: new
 # Comment X
 # Comment X2
 x:
@@ -223,6 +222,7 @@ x:
   - 'y'
   # Comment Z
   - z
+new: new
 EOT;
 
     return [

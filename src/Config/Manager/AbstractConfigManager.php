@@ -7,13 +7,13 @@ namespace Lemberg\Draft\Environment\Config\Manager;
 use Composer\Autoload\ClassLoader;
 use Composer\Autoload\ClassMapGenerator;
 use Composer\Composer;
-use Composer\Factory;
 use Composer\IO\IOInterface;
-use Composer\Json\JsonFile;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\AbstractStepInterface;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\ConfigAwareTrait;
+use Lemberg\Draft\Environment\Utility\Filesystem;
+use Lemberg\Draft\Environment\Utility\FilesystemAwareTrait;
 use Nette\Loaders\RobotLoader;
 
 /**
@@ -22,6 +22,7 @@ use Nette\Loaders\RobotLoader;
 abstract class AbstractConfigManager implements ManagerInterface {
 
   use ConfigAwareTrait;
+  use FilesystemAwareTrait;
 
   /**
    * @var \Composer\Composer
@@ -45,12 +46,36 @@ abstract class AbstractConfigManager implements ManagerInterface {
     $this->composer = $composer;
     $this->io = $io;
     $this->setConfig($config);
+    $this->setFilesystem(new Filesystem());
 
     // This code is running in Composer context, newly added packages might
     // not be autoloaded.
     if (!class_exists(RobotLoader::class)) {
       $this->autoloadDependencies();
     }
+  }
+
+  /**
+   * Reads configuration from the target config file.
+   *
+   * @return array<int|string,mixed> $config
+   */
+  final protected function readConfig(): array {
+    $configObject = $this->getConfig();
+    $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+    return $configObject->readAndParseConfigFromTheFile($targetConfigFilepath);
+  }
+
+  /**
+   * Writes given configuration to the target config file.
+   *
+   * @param array<int|string,mixed> $config
+   *   Draft Environment configuration nested array.
+   */
+  final protected function writeConfig(array $config): void {
+    $configObject = $this->getConfig();
+    $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+    $configObject->writeConfigToTheFile($targetConfigFilepath, $targetConfigFilepath, $config);
   }
 
   /**
@@ -85,45 +110,33 @@ abstract class AbstractConfigManager implements ManagerInterface {
   }
 
   /**
-   * @return array<mixed>
+   * Get the last update weight from the local repository.
+   *
+   * @param array<int|string,mixed> $config
+   *
+   * @return int
    */
-  final protected function getPackageExtra(): array {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package|NULL $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    return !is_null($localPackage) ? $localPackage->getExtra() : [];
+  final protected function getLastAppliedUpdateWeight(array $config): int {
+    return $config['draft']['last_applied_update'] ?? 0;
   }
 
   /**
-   * @param array<mixed> $extra
+   * Set the last update weight in the local repository.
+   *
+   * @param array<int|string,mixed> $config
+   * @param int $weight
    */
-  final protected function setPackageExtra(array $extra): void {
-    $localRepository = $this->composer->getRepositoryManager()->getLocalRepository();
-    /** @var \Composer\Package\Package|NULL $localPackage */
-    $localPackage = $localRepository->findPackage(App::PACKAGE_NAME, '*');
-    if (!is_null($localPackage)) {
-      $localPackage->setExtra($extra);
-    }
+  final protected function setLastAppliedUpdateWeight(array &$config, int $weight): void {
+    $config['draft']['last_applied_update'] = $weight;
+  }
 
-    // This code might run after Composer has written the lock file.
-    $composerFile = Factory::getComposerFile();
-    $lockFile = 'json' === pathinfo($composerFile, PATHINFO_EXTENSION) ? substr($composerFile, 0, -4) . 'lock' : $composerFile . '.lock';
-    if ($this->getConfig()->getFilesystem()->exists($lockFile)) {
-      $json = new JsonFile($lockFile);
-      $content = $json->read();
-      $content += [
-        'packages' => [],
-        'packages-dev' => [],
-      ];
-
-      foreach (['packages', 'packages-dev'] as $type) {
-        $key = array_search(App::PACKAGE_NAME, array_column($content[$type], 'name'), TRUE);
-        if ($key !== FALSE) {
-          $content[$type][$key]['extra'] = $extra;
-          $json->write($content);
-        }
-      }
-    }
+  /**
+   * Get the weight of the last available step.
+   *
+   * @return int
+   */
+  final protected function getLastAvailableUpdateWeight(): int {
+    return App::LAST_AVAILABLE_UPDATE;
   }
 
   /**

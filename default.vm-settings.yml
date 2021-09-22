@@ -6,6 +6,10 @@
 # If there is a need to override any value, create file vm-settings.local.yml
 # and put it there. Local settings should not be committed to the repository.
 
+# DO NOT MODIFY THESE SETTINGS MANUALLY.
+draft:
+  last_applied_update: 0
+
 # Vagrant configuration.
 vagrant:
   # Box to use. At the moment Debian-based distributions are supported only.
