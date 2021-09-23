@@ -45,9 +45,9 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
    *   - missing configuration parameters are being added recursively.
    *
    * @param mixed $defaultConfig
-   * @param array<string,mixed> $config
+   * @param array<int|string,mixed> $config
    *
-   * @return array<string,mixed>
+   * @return array<int|string,mixed>
    *
    * @throws \UnexpectedValueException
    */
@@ -69,7 +69,7 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
       }
     }
 
-    return $result + (is_array($defaultConfig) ? $defaultConfig : []);
+    return array_merge(is_array($defaultConfig) ? $defaultConfig : [], $result);
   }
 
 }

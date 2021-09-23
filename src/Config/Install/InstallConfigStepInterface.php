@@ -14,7 +14,7 @@ interface InstallConfigStepInterface extends AbstractStepInterface {
   /**
    * Contains installation step business logic.
    *
-   * @param array[] $config
+   * @param array<int|string,mixed> $config
    *   Draft Environment configuration nested array.
    */
   public function install(array &$config): void;

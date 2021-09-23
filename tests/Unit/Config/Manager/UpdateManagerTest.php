@@ -157,27 +157,9 @@ final class UpdateManagerTest extends TestCase {
       self::assertFileExists($filepath);
     }
 
-    $configObject->readAndParseConfigFromTheFile($configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME));
-  }
-
-  /**
-   * Tests the last applied update weight getter and setter.
-   */
-  public function testGetAndSetLastAppliedUpdateWeight(): void {
-    self::assertSame(0, $this->configUpdateManager->getLastAppliedUpdateWeight());
-    $this->configUpdateManager->setLastAppliedUpdateWeight(4);
-    self::assertSame(4, $this->configUpdateManager->getLastAppliedUpdateWeight());
-
-    $json = new JsonFile($this->lockFile);
-    $lockData = $json->read();
-    self::assertSame(4, $lockData['packages'][1]['extra']['draft-environment']['last-update-weight']);
-  }
-
-  /**
-   * Tests the last available update weight getter.
-   */
-  public function testGetLastAvailableUpdateWeight(): void {
-    self::assertSame(App::LAST_AVAILABLE_UPDATE_WEIGHT, $this->configUpdateManager->getLastAvailableUpdateWeight());
+    $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+    $config = $configObject->readAndParseConfigFromTheFile($targetConfigFilepath);
+    self::assertSame(App::LAST_AVAILABLE_UPDATE, $config['draft']['last_applied_update']);
   }
 
 }

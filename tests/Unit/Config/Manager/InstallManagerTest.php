@@ -150,30 +150,22 @@ final class InstallManagerTest extends TestCase {
       self::assertFileExists($filepath);
     }
 
-    $json = new JsonFile($this->lockFile);
-    $lockData = $json->read();
-    self::assertTrue($lockData['packages'][1]['extra']['draft-environment']['already-installed']);
+    $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+    $config = $configObject->readAndParseConfigFromTheFile($targetConfigFilepath);
+    self::assertSame(App::LAST_AVAILABLE_UPDATE, $config['draft']['last_applied_update']);
 
-    // Remove target configuration and run installation for the 2nd time. It
-    // should not run (i.e. files should not be created).
+    // Remove target configuration and run installation for the 2nd time.
     $this->fs->remove($configObject->getTargetConfigFilepaths());
     $this->configInstallManager->install();
     foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
-      self::assertFileDoesNotExist($filepath);
+      self::assertFileExists($filepath);
     }
-  }
 
-  /**
-   * Tests ::hasBeenAlreadyInstalled() and ::setAsAlreadyInstalled().
-   */
-  public function testHasBeenAlreadyInstalledFlagGetterAndSetter(): void {
-    self::assertFalse($this->configInstallManager->hasBeenAlreadyInstalled());
-    $this->configInstallManager->setAsAlreadyInstalled();
-    self::assertTrue($this->configInstallManager->hasBeenAlreadyInstalled());
-
-    $json = new JsonFile($this->lockFile);
-    $lockData = $json->read();
-    self::assertTrue($lockData['packages'][1]['extra']['draft-environment']['already-installed']);
+    // Amend target configuration and run installation for the 2nd time. It
+    // should not run.
+    $this->fs->dumpFile($targetConfigFilepath, 'TEST: TEST');
+    $this->configInstallManager->install();
+    self::assertEquals('TEST: TEST', file_get_contents($targetConfigFilepath));
   }
 
   /**

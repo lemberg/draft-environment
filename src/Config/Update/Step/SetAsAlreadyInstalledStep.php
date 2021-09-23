@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config\Update\Step;
 
-use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
 
 /**
@@ -16,15 +15,14 @@ final class SetAsAlreadyInstalledStep extends AbstractUpdateStep implements Upda
    * {@inheritdoc}
    */
   public function getWeight(): int {
-    return 3;
+    return 12;
   }
 
   /**
    * {@inheritdoc}
    */
   public function update(array &$config): void {
-    $installManager = new InstallManager($this->composer, $this->io, $this->configUpdateManager->getConfig());
-    $installManager->setAsAlreadyInstalled();
+    $config['draft']['last_applied_update'] = $this->getWeight();
   }
 
 }

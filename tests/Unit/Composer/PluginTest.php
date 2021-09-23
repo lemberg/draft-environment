@@ -17,7 +17,6 @@ use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryManager;
 use Composer\Repository\WritableRepositoryInterface;
-use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
 use Lemberg\Tests\Traits\Draft\Environment\ComposerPackageEventFactoryTrait;
@@ -74,7 +73,6 @@ final class PluginTest extends TestCase {
       PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
       PackageEvents::POST_PACKAGE_UPDATE => 'onComposerEvent',
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
-      ScriptEvents::POST_AUTOLOAD_DUMP => 'onComposerEvent',
     ];
     self::assertSame($expected, Plugin::getSubscribedEvents());
 

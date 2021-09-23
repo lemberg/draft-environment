@@ -115,7 +115,7 @@ final class SetAsAlreadyInstalledStepTest extends TestCase {
    */
   final public function testGetWeight(): void {
     $step = new SetAsAlreadyInstalledStep($this->composer, $this->io, $this->configUpdateManager);
-    self::assertSame(3, $step->getWeight());
+    self::assertSame(12, $step->getWeight());
   }
 
   /**
@@ -125,9 +125,7 @@ final class SetAsAlreadyInstalledStepTest extends TestCase {
     $step = new SetAsAlreadyInstalledStep($this->composer, $this->io, $this->configUpdateManager);
     $config = [];
     $step->update($config);
-    $json = new JsonFile($this->lockFile);
-    $lockData = $json->read();
-    self::assertTrue($lockData['packages'][1]['extra']['draft-environment']['already-installed']);
+    self::assertSame($config['draft']['last_applied_update'], $step->getWeight());
   }
 
 }

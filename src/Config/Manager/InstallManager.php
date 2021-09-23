@@ -18,28 +18,11 @@ final class InstallManager extends AbstractConfigManager implements InstallManag
    * {@inheritdoc}
    */
   public function install(): void {
-    if (!$this->hasBeenAlreadyInstalled()) {
+    $targetConfigFilepath = $this->getConfig()->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+    if (!$this->getFilesystem()->exists($targetConfigFilepath)) {
       $this->installInitPhase();
       $this->installConfigPhase();
-      $this->setAsAlreadyInstalled();
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function hasBeenAlreadyInstalled(): bool {
-    $extra = $this->getPackageExtra();
-    return $extra['draft-environment']['already-installed'] ?? FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setAsAlreadyInstalled(): void {
-    $extra = $this->getPackageExtra();
-    $extra['draft-environment']['already-installed'] = TRUE;
-    $this->setPackageExtra($extra);
   }
 
   /**
@@ -62,6 +45,7 @@ final class InstallManager extends AbstractConfigManager implements InstallManag
     $this->writeMessage('<info>Welcome to the Draft Environment interactive installer</info>');
     $this->discoverSteps(InstallInitStepInterface::class, __DIR__ . '/../Install');
     $this->sortSteps();
+
     /** @var \Lemberg\Draft\Environment\Config\Install\InstallInitStepInterface $step */
     foreach ($this->steps as $step) {
       $step->install();
@@ -73,19 +57,19 @@ final class InstallManager extends AbstractConfigManager implements InstallManag
    * Executes the configuration setup phase of the installation process.
    */
   private function installConfigPhase(): void {
+    $config = $this->readConfig();
     $this->writeMessage('<info>Please answer to a few questions:</info>');
-
-    $config = $this->getConfig()->readAndParseConfigFromTheFile($this->getConfig()->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME));
-
     $this->discoverSteps(InstallConfigStepInterface::class, __DIR__ . '/../Install');
     $this->sortSteps();
+
     /** @var \Lemberg\Draft\Environment\Config\Install\InstallConfigStepInterface $step */
     foreach ($this->steps as $step) {
       $step->install($config);
       $this->writeMessage($step->getMessages());
     }
 
-    $this->getConfig()->writeConfigToTheFile($this->getConfig()->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME), $this->getConfig()->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME), $config);
+    $this->setLastAppliedUpdateWeight($config, $this->getLastAvailableUpdateWeight());
+    $this->writeConfig($config);
 
     $message = <<<HERE
 <info>Unfortunately, the interactive installer has quite limited functionality at the moment</info>

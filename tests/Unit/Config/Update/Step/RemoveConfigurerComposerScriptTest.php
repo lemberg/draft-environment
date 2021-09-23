@@ -15,6 +15,7 @@ use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
 use Lemberg\Draft\Environment\Config\Update\Step\RemoveConfigurerComposerScript;
 use Lemberg\Draft\Environment\Utility\Filesystem;
 use org\bovigo\vfs\vfsStream;
+use phpmock\phpunit\PHPMock;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -24,6 +25,8 @@ use PHPUnit\Framework\TestCase;
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\RemoveConfigurerComposerScript
  */
 final class RemoveConfigurerComposerScriptTest extends TestCase {
+
+  use PHPMock;
 
   /**
    * @var \Composer\Composer
@@ -104,10 +107,10 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
    */
   final public function testUpdate(string $composer_before, string $composer_after): void {
 
-    // Copy test composer,json to the vritual working directory.
-    $this->fs->copy("$this->basePath/$composer_before", "$this->root/wd/composer.json", TRUE);
-
     $composer_wd = Factory::getComposerFile();
+    // Copy test composer,json to the virtual working directory.
+    $this->fs->copy("$this->basePath/$composer_before", $composer_wd, TRUE);
+
     $before_content = file_get_contents($composer_wd);
     if ($before_content === FALSE) {
       throw new \RuntimeException(sprintf('File %s could not be read', $composer_wd));
@@ -134,6 +137,26 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
 
     // Verify that composer.json has the script removed.
     self::assertFileEquals("$this->basePath/$composer_after", $composer_wd);
+  }
+
+  /**
+   * Tests that exception is thrown when composer.json file could not be read.
+   *
+   * @runInSeparateProcess
+   * @preserveGlobalState disabled
+   */
+  final public function testUpdateFileRead(): void {
+    $getcwd = $this->getFunctionMock('Lemberg\Draft\Environment\Config\Update\Step', 'file_get_contents');
+    $getcwd->expects(self::once())->willReturn(FALSE);
+
+    $composer_wd = Factory::getComposerFile();
+    $this->fs->touch($composer_wd);
+    $this->expectException(\RuntimeException::class);
+    $this->expectExceptionMessage(sprintf('File %s could not be read', $composer_wd));
+
+    $step = new RemoveConfigurerComposerScript($this->composer, $this->io, $this->configUpdateManager);
+    $config = [];
+    $step->update($config);
   }
 
   /**

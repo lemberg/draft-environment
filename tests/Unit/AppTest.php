@@ -18,8 +18,6 @@ use Composer\Package\Package;
 use Composer\Package\RootPackage;
 use Composer\Repository\CompositeRepository;
 use Composer\Repository\RepositoryManager;
-use Composer\Script\Event as ScriptEvent;
-use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
@@ -166,6 +164,50 @@ final class AppTest extends TestCase {
   }
 
   /**
+   * Tests Composer PackageEvents::POST_PACKAGE_INSTALL event handler.
+   */
+  public function testComposerPostPackageInstallEventHandlerDoesNotRunWithOtherPackages(): void {
+    // Clean up must not run when any package other than
+    // "lemberg/draft-environment" is being uninstalled.
+    $package = new Package('dummy', '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($package);
+    $event = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('install');
+    $this->app->handleEvent($event);
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_INSTALL event handler.
+   */
+  public function testComposerPostPackageInstallEventHandlerDoesNotRunWithOtherEvents(): void {
+    // Clean up must not run when other than
+    // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
+    $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($package);
+    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configInstallManager
+      ->expects(self::never())
+      ->method('install');
+    $this->app->handleEvent($event);
+  }
+
+  /**
+   * Tests Composer PackageEvents::POST_PACKAGE_INSTALL event handler.
+   */
+  public function testComposerPostPackageInstallEventHandlerDoesRun(): void {
+    // Clean up must run when "lemberg/draft-environment" is being uninstalled.
+    $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
+    $operation = new InstallOperation($package);
+    $event = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $this->configInstallManager
+      ->expects(self::once())
+      ->method('install');
+    $this->app->handleEvent($event);
+  }
+
+  /**
    * Tests Composer PackageEvents::POST_PACKAGE_UPDATE event handler.
    */
   public function testComposerPostPackageUpdateEventHandlerDoesNotRunWithOtherPackages(): void {
@@ -175,14 +217,12 @@ final class AppTest extends TestCase {
     $target = new Package('dummy', '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
     $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
       ->expects(self::never())
       ->method('update');
 
     $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
   }
 
   /**
@@ -194,14 +234,12 @@ final class AppTest extends TestCase {
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($initial);
     $packageEvent = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
       ->expects(self::never())
       ->method('update');
 
     $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
   }
 
   /**
@@ -215,14 +253,12 @@ final class AppTest extends TestCase {
     $target->setReleaseDate(new \DateTime('yesterday'));
     $operation = new UpdateOperation($initial, $target);
     $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
       ->expects(self::never())
       ->method('update');
 
     $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
   }
 
   /**
@@ -234,109 +270,12 @@ final class AppTest extends TestCase {
     $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
     $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
 
     $this->configUpdateManager
       ->expects(self::once())
       ->method('update');
 
     $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
-  }
-
-  /**
-   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
-   */
-  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithEveryEvent(): void {
-    // Install should not run on every ScriptEvents::POST_AUTOLOAD_DUMP event
-    // dispatch. Install should only run if the package itself is being
-    // installed.
-    $this->configInstallManager
-      ->expects(self::never())
-      ->method('install');
-
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
-    $this->app->handleEvent($event);
-  }
-
-  /**
-   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
-   */
-  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithOtherScriptEvents(): void {
-    // Install should not run on any other script event even if the package
-    // itself is being installed.
-    $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
-    $operation = new InstallOperation($package);
-    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_ARCHIVE_CMD, $this->composer, $this->io);
-
-    $this->configInstallManager
-      ->expects(self::never())
-      ->method('install');
-
-    $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
-  }
-
-  /**
-   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
-   */
-  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithOtherPackageEvents(): void {
-    // Install should not run on any other script event even if the package
-    // itself is being installed.
-    $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
-    $operation = new InstallOperation($package);
-    $packageEvent = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
-
-    $this->configInstallManager
-      ->expects(self::never())
-      ->method('install');
-
-    $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
-  }
-
-  /**
-   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
-   */
-  public function testComposerPostDumpAutoloadCommandEventHandlerDoesNotRunWithOtherPackages(): void {
-    // Install should not run if any other package is being installed.
-    $package = new Package('dummy', '1.0.0.0', '^1.0');
-    $operation = new InstallOperation($package);
-    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
-
-    $this->configInstallManager
-      ->expects(self::never())
-      ->method('install');
-
-    $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
-  }
-
-  /**
-   * Tests Composer ScriptEvents::POST_AUTOLOAD_DUMP event handler.
-   */
-  public function testComposerPostDumpAutoloadCommandEventHandlerDoesRun(): void {
-    $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
-    $operation = new InstallOperation($package);
-    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
-    $event = new ScriptEvent(ScriptEvents::POST_AUTOLOAD_DUMP, $this->composer, $this->io);
-
-    // Install should run.
-    $this->configInstallManager
-      ->expects(self::once())
-      ->method('install');
-
-    // Ensure that install manager has marked all available updates as already
-    // applied.
-    $this->configUpdateManager
-      ->expects(self::once())
-      ->method('setLastAppliedUpdateWeight');
-
-    $this->app->handleEvent($packageEvent);
-    $this->app->handleEvent($event);
   }
 
 }
