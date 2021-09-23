@@ -93,6 +93,23 @@ final class ExportAllAvailableConfigurationTest extends TestCase {
   }
 
   /**
+   * Tests that exception is thrown when configuration contains unsupported
+   * types data.
+   */
+  final public function testConfigMergeThrowsAnExceptionWhenUnsupportedDataTypeIsPassed(): void {
+    $step = new ExportAllAvailableConfiguration($this->composer, $this->io, $this->configUpdateManager);
+    $configObject = $this->configUpdateManager->getConfig();
+    $this->fs->dumpFile($configObject->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME), 'TEST: TEST');
+
+    $config = ['test' => new \stdClass()];
+
+    $this->expectException(\UnexpectedValueException::class);
+    $this->expectExceptionMessage(sprintf("Unexpected value type '%s' in the configuration array", gettype($config['test'])));
+
+    $step->update($config);
+  }
+
+  /**
    * Data provider for the ::testUpdate().
    *
    * @return array<int,array<int,string|array<string,mixed>>>
