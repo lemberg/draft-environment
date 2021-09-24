@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config\Manager;
 
+use Nette\IOException;
+use Nette\Utils\Finder;
 use Composer\Autoload\ClassLoader;
 use Composer\Autoload\ClassMapGenerator;
 use Composer\Composer;
 use Composer\IO\IOInterface;
+use Consolidation\Comments\Comments;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\AbstractStepInterface;
 use Lemberg\Draft\Environment\Config\Config;
@@ -50,9 +53,7 @@ abstract class AbstractConfigManager implements ManagerInterface {
 
     // This code is running in Composer context, newly added packages might
     // not be autoloaded.
-    if (!class_exists(RobotLoader::class)) {
-      $this->autoloadDependencies();
-    }
+    $this->autoloadDependencies();
   }
 
   /**
@@ -140,17 +141,39 @@ abstract class AbstractConfigManager implements ManagerInterface {
   }
 
   /**
-   * Manually autoload dependencies from Nette framework.
+   * Manually autoload new dependencies.
+   *
+   * @link https://github.com/lemberg/draft-environment/issues/232
    */
   private function autoloadDependencies(): void {
     $loader = new ClassLoader();
-
     $vendorDir = $this->composer->getConfig()->get('vendor-dir');
-    foreach (['nette/utils', 'nette/finder', 'nette/robot-loader'] as $path) {
-      $loader->addClassMap(ClassMapGenerator::createMap("$vendorDir/$path"));
+    $classes = [
+      'classmap' => [
+        RobotLoader::class => 'nette/robot-loader',
+        Finder::class => 'nette/finder',
+        IOException::class => 'nette/utils',
+      ],
+      'psr4' => [
+        Comments::class => [
+          'package' => 't2l/comments',
+          'prefix' => 'Consolidation\\Comments\\',
+          'path' => 'src',
+        ],
+      ],
+    ];
+
+    foreach ($classes['classmap'] as $class_name => $package_name) {
+      if (!class_exists($class_name)) {
+        $loader->addClassMap(ClassMapGenerator::createMap("$vendorDir/$package_name"));
+      }
     }
 
-    $loader->register();
+    foreach ($classes['psr4'] as $class_name => $autoload_data) {
+      if (!class_exists($class_name)) {
+        $loader->addPsr4($autoload_data['prefix'], $vendorDir . '/' . $autoload_data['package'] . '/' . $autoload_data['path']);
+      }
+    }
   }
 
 }
