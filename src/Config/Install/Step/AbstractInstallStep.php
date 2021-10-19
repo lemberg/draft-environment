@@ -45,11 +45,4 @@ abstract class AbstractInstallStep implements AbstractStepInterface {
     $this->setFilesystem(new Filesystem());
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function getWeight(): int {
-    return 0;
-  }
-
 }
