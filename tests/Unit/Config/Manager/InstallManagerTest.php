@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lemberg\Tests\Unit\Draft\Environment\Config\Manager;
 
+use Composer\Autoload\ClassLoader;
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\Factory;
@@ -111,8 +112,9 @@ final class InstallManagerTest extends TestCase {
     ];
     $json->write($lockData);
 
-    $config = new Config("$this->root/source", "$this->root/target");
-    $this->configInstallManager = new InstallManager($this->composer, $this->io, $config);
+    $configObject = new Config("$this->root/source", "$this->root/target");
+    $classLoader = new ClassLoader();
+    $this->configInstallManager = new InstallManager($this->composer, $this->io, $configObject, $classLoader);
   }
 
   /**

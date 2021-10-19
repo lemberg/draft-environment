@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Composer;
 
+use Composer\Autoload\ClassLoader;
 use Composer\Composer;
 use Composer\EventDispatcher\Event;
 use Composer\EventDispatcher\EventSubscriberInterface;
@@ -41,8 +42,9 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
     }
 
     $config = new Config($sourceDirectory, $targetDirectory);
-    $configInstallManager = new InstallManager($composer, $io, $config);
-    $configUpdateManager = new UpdateManager($composer, $io, $config);
+    $classLoader = new ClassLoader();
+    $configInstallManager = new InstallManager($composer, $io, $config, $classLoader);
+    $configUpdateManager = new UpdateManager($composer, $io, $config, $classLoader);
     $this->setApp(new App($composer, $io, $configInstallManager, $configUpdateManager));
   }
 

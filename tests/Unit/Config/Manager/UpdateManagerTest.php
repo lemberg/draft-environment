@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lemberg\Tests\Unit\Draft\Environment\Config\Manager;
 
+use Composer\Autoload\ClassLoader;
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\Factory;
@@ -118,7 +119,14 @@ final class UpdateManagerTest extends TestCase {
 
     $configObject = new Config("$this->root/source", "$this->root/target");
 
-    $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject);
+    // Configuration files must exists before the test execution.
+    foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
+      $this->fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
+    }
+    $this->fs->dumpFile($configObject->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME), 'phpunit: ' . __CLASS__);
+
+    $classLoader = new ClassLoader();
+    $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject, $classLoader);
   }
 
   /**
@@ -146,12 +154,6 @@ final class UpdateManagerTest extends TestCase {
   public function testUpdate(): void {
     $configObject = $this->configUpdateManager->getConfig();
 
-    // Configuration files must exists before the test execution.
-    foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
-      $this->fs->dumpFile($filepath, 'phpunit: ' . __METHOD__);
-    }
-    $this->fs->dumpFile($configObject->getSourceConfigFilepath(Config::SOURCE_CONFIG_FILENAME), 'phpunit: ' . __CLASS__);
-
     $this->configUpdateManager->update();
     foreach ($configObject->getTargetConfigFilepaths() as $filepath) {
       self::assertFileExists($filepath);
@@ -160,6 +162,67 @@ final class UpdateManagerTest extends TestCase {
     $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
     $config = $configObject->readAndParseConfigFromTheFile($targetConfigFilepath);
     self::assertSame(App::LAST_AVAILABLE_UPDATE, $config['draft']['last_applied_update']);
+  }
+
+  /**
+   * Tests autoloading missing classes during the update.
+   */
+  public function testAutoloadNewDependencies(): void {
+
+    // Classes must not be loaded if they exist.
+    $classLoader = $this->getMockBuilder(ClassLoader::class)
+      ->onlyMethods([
+        'addClassMap',
+        'addPsr4',
+        'register',
+      ])
+      ->getMock();
+    $classLoader->expects(self::never())
+      ->method('addClassMap');
+    $classLoader->expects(self::never())
+      ->method('addPsr4');
+    $classLoader->expects(self::never())
+      ->method('register');
+
+    new UpdateManager($this->composer, $this->io, $this->configUpdateManager->getConfig(), $classLoader);
+
+    // Classes must be loaded if they do not exist.
+    $classLoader = $this->getMockBuilder(ClassLoader::class)
+      ->onlyMethods([
+        'addClassMap',
+        'addPsr4',
+        'register',
+      ])
+      ->getMock();
+    $classLoader->expects(self::once())
+      ->method('addClassMap');
+    $classLoader->expects(self::once())
+      ->method('addPsr4');
+    $classLoader->expects(self::once())
+      ->method('register');
+
+    $this->fs->mkdir("$this->root/wd/vendor/nette/robot-loader");
+    $this->composer->getConfig()->merge([
+      'config' => ['vendor-dir' => "$this->root/wd/vendor"],
+    ]);
+
+    new class($this->composer, $this->io, $this->configUpdateManager->getConfig(), $classLoader) extends UpdateManager {
+
+      protected const NEWLY_INTRODUCED_CLASSES = [
+        'classmap' => [
+          'FakeRobotLoader' => 'nette/robot-loader',
+        ],
+        'psr4' => [
+          'FakeComments' => [
+            'package' => 't2l/comments',
+            'prefix' => 'Consolidation\\Comments\\',
+            'path' => 'src',
+          ],
+        ],
+      ];
+
+    };
+
   }
 
 }

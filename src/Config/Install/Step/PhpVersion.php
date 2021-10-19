@@ -21,4 +21,11 @@ final class PhpVersion extends AbstractInstallStep implements InstallConfigStepI
     $config['php_version'] = $this->io->select($question, $choices, $default, FALSE, "\nSpecified value '%s' is not a valid PHP version");
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getWeight(): int {
+    return 0;
+  }
+
 }

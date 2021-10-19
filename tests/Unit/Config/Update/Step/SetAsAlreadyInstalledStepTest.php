@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step;
 
+use Composer\Autoload\ClassLoader;
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\Factory;
@@ -107,7 +108,8 @@ final class SetAsAlreadyInstalledStepTest extends TestCase {
     $json->write($lockData);
 
     $configObject = new Config("$this->root/source", "$this->root/target");
-    $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject);
+    $classLoader = new ClassLoader();
+    $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject, $classLoader);
   }
 
   /**

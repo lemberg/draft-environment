@@ -10,7 +10,7 @@ use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
 /**
  * Draft Environment configuration update manager.
  */
-final class UpdateManager extends AbstractConfigManager implements UpdateManagerInterface {
+class UpdateManager extends AbstractConfigManager implements UpdateManagerInterface {
 
   /**
    * {@inheritdoc}

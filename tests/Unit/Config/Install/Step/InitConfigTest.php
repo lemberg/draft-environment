@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Lemberg\Tests\Unit\Draft\Environment\Config\Install\Step;
 
+use Composer\Autoload\ClassLoader;
 use Composer\Composer;
 use Composer\Config as ComposerConfig;
 use Composer\IO\IOInterface;
 use Lemberg\Draft\Environment\Config\Config;
-use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 use Lemberg\Draft\Environment\Config\Install\Step\InitConfig;
+use Lemberg\Draft\Environment\Config\Manager\InstallManager;
 use Lemberg\Draft\Environment\Utility\Filesystem;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
@@ -65,7 +66,8 @@ final class InitConfigTest extends TestCase {
     $this->fs->mkdir(["$this->root/target"]);
 
     $configObject = new Config('.', "$this->root/target");
-    $this->configInstallManager = new InstallManager($this->composer, $this->io, $configObject);
+    $classLoader = new ClassLoader();
+    $this->configInstallManager = new InstallManager($this->composer, $this->io, $configObject, $classLoader);
   }
 
   /**

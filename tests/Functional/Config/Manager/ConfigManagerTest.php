@@ -60,6 +60,7 @@ final class ConfigManagerTest extends AbstractConfigManagerTest {
     (new Process([
       'vendor/bin/composer', 'require',
       '--dev', App::PACKAGE_NAME . ':' . rtrim($working_branch) . '-dev',
+      '--update-with-all-dependencies',
       '--working-dir', $this->workingDir,
     ]))
       ->mustRun();

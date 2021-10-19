@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment\Config\Manager;
 
-use Nette\IOException;
-use Nette\Utils\Finder;
 use Composer\Autoload\ClassLoader;
 use Composer\Autoload\ClassMapGenerator;
 use Composer\Composer;
@@ -17,7 +15,9 @@ use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\ConfigAwareTrait;
 use Lemberg\Draft\Environment\Utility\Filesystem;
 use Lemberg\Draft\Environment\Utility\FilesystemAwareTrait;
+use Nette\IOException;
 use Nette\Loaders\RobotLoader;
+use Nette\Utils\Finder;
 
 /**
  * Base configuration manager class.
@@ -26,6 +26,24 @@ abstract class AbstractConfigManager implements ManagerInterface {
 
   use ConfigAwareTrait;
   use FilesystemAwareTrait;
+
+  /**
+   * Classes that may not exist during the update.
+   */
+  protected const NEWLY_INTRODUCED_CLASSES = [
+    'classmap' => [
+      RobotLoader::class => 'nette/robot-loader',
+      Finder::class => 'nette/finder',
+      IOException::class => 'nette/utils',
+    ],
+    'psr4' => [
+      Comments::class => [
+        'package' => 't2l/comments',
+        'prefix' => 'Consolidation\\Comments\\',
+        'path' => 'src',
+      ],
+    ],
+  ];
 
   /**
    * @var \Composer\Composer
@@ -38,6 +56,11 @@ abstract class AbstractConfigManager implements ManagerInterface {
   protected $io;
 
   /**
+   * @var \Composer\Autoload\ClassLoader
+   */
+  protected $classLoader;
+
+  /**
    * @var \Lemberg\Draft\Environment\Config\AbstractStepInterface[]
    */
   protected $steps = [];
@@ -45,11 +68,12 @@ abstract class AbstractConfigManager implements ManagerInterface {
   /**
    * {@inheritdoc}
    */
-  final public function __construct(Composer $composer, IOInterface $io, Config $config) {
+  final public function __construct(Composer $composer, IOInterface $io, Config $config, ClassLoader $classLoader) {
     $this->composer = $composer;
     $this->io = $io;
     $this->setConfig($config);
     $this->setFilesystem(new Filesystem());
+    $this->classLoader = $classLoader;
 
     // This code is running in Composer context, newly added packages might
     // not be autoloaded.
@@ -146,33 +170,26 @@ abstract class AbstractConfigManager implements ManagerInterface {
    * @link https://github.com/lemberg/draft-environment/issues/232
    */
   private function autoloadDependencies(): void {
-    $loader = new ClassLoader();
     $vendorDir = $this->composer->getConfig()->get('vendor-dir');
-    $classes = [
-      'classmap' => [
-        RobotLoader::class => 'nette/robot-loader',
-        Finder::class => 'nette/finder',
-        IOException::class => 'nette/utils',
-      ],
-      'psr4' => [
-        Comments::class => [
-          'package' => 't2l/comments',
-          'prefix' => 'Consolidation\\Comments\\',
-          'path' => 'src',
-        ],
-      ],
-    ];
 
-    foreach ($classes['classmap'] as $class_name => $package_name) {
+    $shouldRegister = FALSE;
+
+    foreach (static::NEWLY_INTRODUCED_CLASSES['classmap'] as $class_name => $package_name) {
       if (!class_exists($class_name)) {
-        $loader->addClassMap(ClassMapGenerator::createMap("$vendorDir/$package_name"));
+        $this->classLoader->addClassMap(ClassMapGenerator::createMap("$vendorDir/$package_name"));
+        $shouldRegister = TRUE;
       }
     }
 
-    foreach ($classes['psr4'] as $class_name => $autoload_data) {
+    foreach (static::NEWLY_INTRODUCED_CLASSES['psr4'] as $class_name => $autoload_data) {
       if (!class_exists($class_name)) {
-        $loader->addPsr4($autoload_data['prefix'], $vendorDir . '/' . $autoload_data['package'] . '/' . $autoload_data['path']);
+        $this->classLoader->addPsr4($autoload_data['prefix'], $vendorDir . '/' . $autoload_data['package'] . '/' . $autoload_data['path']);
+        $shouldRegister = TRUE;
       }
+    }
+
+    if ($shouldRegister) {
+      $this->classLoader->register();
     }
   }
 
