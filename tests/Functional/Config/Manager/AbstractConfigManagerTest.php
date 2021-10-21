@@ -25,7 +25,7 @@ abstract class AbstractConfigManagerTest extends AbstractFunctionalTest {
     $parser = new Parser();
     $config = $parser->parseFile("$this->workingDir/vm-settings.yml");
 
-    self::assertSame(App::LAST_AVAILABLE_UPDATE, $config['draft']['last_applied_update']);
+    self::assertSame(App::LAST_AVAILABLE_UPDATE_WEIGHT, $config['draft']['last_applied_update']);
   }
 
 }

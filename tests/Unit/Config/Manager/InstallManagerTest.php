@@ -154,7 +154,7 @@ final class InstallManagerTest extends TestCase {
 
     $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
     $config = $configObject->readAndParseConfigFromTheFile($targetConfigFilepath);
-    self::assertSame(App::LAST_AVAILABLE_UPDATE, $config['draft']['last_applied_update']);
+    self::assertSame(App::LAST_AVAILABLE_UPDATE_WEIGHT, $config['draft']['last_applied_update']);
 
     // Remove target configuration and run installation for the 2nd time.
     $this->fs->remove($configObject->getTargetConfigFilepaths());

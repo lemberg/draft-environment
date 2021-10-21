@@ -161,7 +161,7 @@ abstract class AbstractConfigManager implements ManagerInterface {
    * @return int
    */
   final protected function getLastAvailableUpdateWeight(): int {
-    return App::LAST_AVAILABLE_UPDATE;
+    return App::LAST_AVAILABLE_UPDATE_WEIGHT;
   }
 
   /**
