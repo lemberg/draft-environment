@@ -68,12 +68,12 @@ abstract class AbstractConfigManager implements ManagerInterface {
   /**
    * {@inheritdoc}
    */
-  final public function __construct(Composer $composer, IOInterface $io, Config $config, ClassLoader $classLoader) {
+  final public function __construct(Composer $composer, IOInterface $io, Config $config, ClassLoader $classLoader = NULL) {
     $this->composer = $composer;
     $this->io = $io;
     $this->setConfig($config);
     $this->setFilesystem(new Filesystem());
-    $this->classLoader = $classLoader;
+    $this->classLoader = $classLoader ?? new ClassLoader();
 
     // This code is running in Composer context, newly added packages might
     // not be autoloaded.
