@@ -195,6 +195,11 @@ jobs:
       - name: Set Vagrant box to use
         run: sed -i '' 's/focal64/${{ matrix.vagrant-box }}/g' default.vm-settings.yml
 
+      - name: Allow 10.0.0.0/8 192.168.0.0/16 ranges to be assigned to host-only adapters
+        run: |
+          touch /etc/vbox/networks.conf
+          echo "* 10.0.0.0/8 192.168.0.0/16" >> /etc/vbox/networks.conf
+
       - name: Provision the machine
         run: vagrant up
 
