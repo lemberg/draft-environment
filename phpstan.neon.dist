@@ -3,7 +3,7 @@ parameters:
   paths:
     - src
     - tests
-  excludes_analyse:
+  excludePaths:
     - tests/Traits/ComposerPackageEventFactoryTrait.php
   dynamicConstantNames:
     - Composer\Plugin\PluginInterface::PLUGIN_API_VERSION
@@ -20,3 +20,10 @@ parameters:
     classesNotRequiredToBeAbstractOrFinal:
       - Lemberg\Draft\Environment\Config\Manager\UpdateManager
       - Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step\Cleanup30400Test
+  ignoreErrors:
+    -
+      message: '#Constructor in Lemberg\\Draft\\Environment\\Config\\Manager\\AbstractConfigManager has parameter \$classLoader with default value.#'
+      path: src/Config/Manager/AbstractConfigManager.php
+    -
+      message: '#Method Lemberg\\Draft\\Environment\\Config\\Manager\\AbstractConfigManager::__construct\(\) has parameter \$classLoader with null as default value.#'
+      path: src/Config/Manager/AbstractConfigManager.php
