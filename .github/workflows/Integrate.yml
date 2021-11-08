@@ -197,8 +197,8 @@ jobs:
 
       - name: Allow 10.0.0.0/8 192.168.0.0/16 ranges to be assigned to host-only adapters
         run: |
-          touch /etc/vbox/networks.conf
-          echo "* 10.0.0.0/8 192.168.0.0/16" >> /etc/vbox/networks.conf
+          sudo mkdir /etc/vbox
+          echo "* 10.0.0.0/8 192.168.0.0/16" | sudo tee -a /etc/vbox/networks.conf
 
       - name: Provision the machine
         run: vagrant up
