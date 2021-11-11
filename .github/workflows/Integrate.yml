@@ -199,9 +199,10 @@ jobs:
       - name: Fix missing VagrantPlugins::HostDarwin::Cap::Version on Big Sur
         run: |
           file_to_patch="/opt/vagrant/embedded/gems/2.2.19/gems/vagrant-2.2.19/plugins/hosts/darwin/cap/path.rb"
+          download_url="https://raw.githubusercontent.com/hashicorp/vagrant/42db2569e32a69e604634462b633bb14ca20709a/plugins/hosts/darwin/cap/path.rb"
           if [ "$(vagrant --version)" = 'Vagrant 2.2.19' ]; then
             sudo rm $file_to_patch
-            sudo wget https://raw.githubusercontent.com/hashicorp/vagrant/42db2569e32a69e604634462b633bb14ca20709a/plugins/hosts/darwin/cap/path.rb -q -O $file_to_patch
+            sudo wget $download_url -q -O $file_to_patch
           fi
 
       - name: Allow 10.0.0.0/8 192.168.0.0/16 ranges to be assigned to host-only adapters
