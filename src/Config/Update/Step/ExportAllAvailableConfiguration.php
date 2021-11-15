@@ -55,7 +55,7 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
     $result = [];
 
     foreach ($config as $key => $value) {
-      if (is_scalar($value)) {
+      if (is_scalar($value) || is_null($value)) {
         $result[$key] = $value;
       }
       elseif (is_array($value) && is_int(key($value))) {
