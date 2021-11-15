@@ -11,6 +11,7 @@ use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Config;
 use Lemberg\Draft\Environment\Config\Manager\InstallManager;
@@ -72,6 +73,11 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
       PackageEvents::POST_PACKAGE_INSTALL => 'onComposerEvent',
       PackageEvents::POST_PACKAGE_UPDATE => 'onComposerEvent',
       PackageEvents::PRE_PACKAGE_UNINSTALL => 'onComposerEvent',
+      // This events is not in use since version 3.5.0.
+      //
+      // However, Composer won't run updates when updating from previos
+      // verions if it's not here.
+      ScriptEvents::POST_AUTOLOAD_DUMP => 'onComposerEvent',
     ];
   }
 
