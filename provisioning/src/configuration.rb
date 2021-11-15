@@ -73,6 +73,9 @@ class Configuration
   # Returns nothing.
   protected
   def load_settings(project_base_path, draft_base_path)
+    @project_base_path = project_base_path
+    @draft_base_path = draft_base_path
+
     default_settings = YAML::load_file("#{draft_base_path}/default.vm-settings.yml")
     if File.exist?("#{project_base_path}/vm-settings.yml")
       settings = YAML::load_file("#{project_base_path}/vm-settings.yml")
@@ -247,9 +250,9 @@ class Configuration
       return true
     end
 
-    if (ARGV.include?("up"))
-      status = `vagrant status`
-      return status.include? "not created"
+    # Pretty hacky way of checking whether machine has been provisioned or not.
+    if (ARGV.include?("up") || ARGV.include?("reload"))
+      return !File.exist?("#{@project_base_path}/.vagrant/machines/#{self.get('virtualbox.name')}/virtualbox/action_provision")
     end
 
     return false

@@ -1,5 +1,6 @@
 ## Draft Environment (Unreleased)
 
+- [GH-232](https://github.com/lemberg/draft-environment/pull/254) - Improve detection whether VM is supposed to be provisioned or not (fixes mkcert certificate not being installed on `vagrant up`)
 - [GH-232](https://github.com/lemberg/draft-environment/pull/232) - Improve new dependencies autoloading
 - [GH-220](https://github.com/lemberg/draft-environment/pull/220) - Store last applied update in the vm-settings.yml file instead of composer.lock
 - [GH-245](https://github.com/lemberg/draft-environment/pull/245) - Fix MySQL fail to install due to incorrect configuration of the SQL mode ('~' is not a valid configuration)
