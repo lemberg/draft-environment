@@ -1,4 +1,4 @@
-## Draft Environment (Unreleased)
+## Draft Environment 3.5.0 (2021-11-16)
 
 - [GH-232](https://github.com/lemberg/draft-environment/pull/254) - Improve detection whether VM is supposed to be provisioned or not (fixes mkcert certificate not being installed on `vagrant up`)
 - [GH-232](https://github.com/lemberg/draft-environment/pull/232) - Improve new dependencies autoloading
