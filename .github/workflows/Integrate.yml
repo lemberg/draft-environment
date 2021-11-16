@@ -138,16 +138,16 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('./molecule/requirements.txt') }}
 
       - name: Cache Python environment
         uses: actions/cache@v2
         with:
           path: ${{ env.pythonLocation }}
-          key: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('./molecule/requirements.txt') }}
 
       - name: Install Molecule and it's dependencies
-        run: pip install --upgrade --upgrade-strategy eager ansible==4.* ansible-lint yamllint molecule python-vagrant molecule-vagrant
+        run: pip install --upgrade --upgrade-strategy eager --requirement ./molecule/requirements.txt
 
       - name: Run Molecule tests
         run: molecule test
