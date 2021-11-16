@@ -210,8 +210,8 @@ jobs:
           sudo mkdir /etc/vbox
           echo "* 10.0.0.0/8 192.168.0.0/16" | sudo tee -a /etc/vbox/networks.conf
 
-      - name: Provision the machine
-        run: vagrant up
+      - name: Start the machine (without provisioning)
+        run: vagrant up --no-provision
 
   code-coverage:
     name: Code Coverage
