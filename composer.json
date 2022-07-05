@@ -34,6 +34,12 @@
         "thecodingmachine/phpstan-strict-rules": "^0.12.1"
     },
     "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ergebnis/composer-normalize": true,
+            "phpro/grumphp": true,
+            "phpstan/extension-installer": true
+        },
         "sort-packages": true
     },
     "extra": {
