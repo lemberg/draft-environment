@@ -9,9 +9,7 @@ use Composer\Config as ComposerConfig;
 use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\DependencyResolver\Operation\UpdateOperation;
-use Composer\DependencyResolver\PolicyInterface;
-use Composer\DependencyResolver\Pool;
-use Composer\DependencyResolver\Request;
+use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
@@ -21,7 +19,6 @@ use Composer\Repository\RepositoryManager;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
-use Lemberg\Tests\Traits\Draft\Environment\ComposerPackageEventFactoryTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,8 +27,6 @@ use PHPUnit\Framework\TestCase;
  * @covers \Lemberg\Draft\Environment\App
  */
 final class AppTest extends TestCase {
-
-  use ComposerPackageEventFactoryTrait;
 
   /**
    * @var \Composer\Composer
@@ -57,24 +52,6 @@ final class AppTest extends TestCase {
    * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface&\PHPUnit\Framework\MockObject\MockObject
    */
   private $configUpdateManager;
-
-  /**
-   *
-   * @var \Composer\DependencyResolver\PolicyInterface
-   */
-  private $policy;
-
-  /**
-   *
-   * @var \Composer\DependencyResolver\Pool
-   */
-  private $pool;
-
-  /**
-   *
-   * @var \Composer\DependencyResolver\Request
-   */
-  private $request;
 
   /**
    *
@@ -108,9 +85,6 @@ final class AppTest extends TestCase {
     $this->io = $this->createMock(IOInterface::class);
 
     // Mock required PackageEvent constructor arguments.
-    $this->policy = $this->createMock(PolicyInterface::class);
-    $this->pool = $this->createMock(Pool::class);
-    $this->request = new Request();
     $this->installedRepo = $this->createMock(CompositeRepository::class);
 
     $this->configInstallManager = $this->createMock(InstallManagerInterface::class);
@@ -127,7 +101,7 @@ final class AppTest extends TestCase {
     // "lemberg/draft-environment" is being uninstalled.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
-    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::never())
       ->method('uninstall');
@@ -142,7 +116,7 @@ final class AppTest extends TestCase {
     // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::never())
       ->method('uninstall');
@@ -156,7 +130,7 @@ final class AppTest extends TestCase {
     // Clean up must run when "lemberg/draft-environment" is being uninstalled.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new UninstallOperation($package);
-    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_UNINSTALL, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::once())
       ->method('uninstall');
@@ -171,7 +145,7 @@ final class AppTest extends TestCase {
     // "lemberg/draft-environment" is being uninstalled.
     $package = new Package('dummy', '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $event = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::never())
       ->method('install');
@@ -186,7 +160,7 @@ final class AppTest extends TestCase {
     // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $event = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::never())
       ->method('install');
@@ -200,7 +174,7 @@ final class AppTest extends TestCase {
     // Clean up must run when "lemberg/draft-environment" is being uninstalled.
     $package = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($package);
-    $event = $this->createPackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $event = new PackageEvent(PackageEvents::POST_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
     $this->configInstallManager
       ->expects(self::once())
       ->method('install');
@@ -216,7 +190,7 @@ final class AppTest extends TestCase {
     $initial = new Package('dummy', '1.0.0.0', '^1.0');
     $target = new Package('dummy', '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
-    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
 
     $this->configUpdateManager
       ->expects(self::never())
@@ -233,7 +207,7 @@ final class AppTest extends TestCase {
     // PackageEvents::PRE_PACKAGE_UNINSTALL event is dispatched.
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $operation = new InstallOperation($initial);
-    $packageEvent = $this->createPackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::PRE_PACKAGE_INSTALL, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
 
     $this->configUpdateManager
       ->expects(self::never())
@@ -252,7 +226,7 @@ final class AppTest extends TestCase {
     $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
     $target->setReleaseDate(new \DateTime('yesterday'));
     $operation = new UpdateOperation($initial, $target);
-    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
 
     $this->configUpdateManager
       ->expects(self::never())
@@ -269,7 +243,7 @@ final class AppTest extends TestCase {
     $initial = new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0');
     $target = new Package(App::PACKAGE_NAME, '1.2.0.0', '^1.0');
     $operation = new UpdateOperation($initial, $target);
-    $packageEvent = $this->createPackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->policy, $this->pool, $this->installedRepo, $this->request, [$operation], $operation);
+    $packageEvent = new PackageEvent(PackageEvents::POST_PACKAGE_UPDATE, $this->composer, $this->io, FALSE, $this->installedRepo, [$operation], $operation);
 
     $this->configUpdateManager
       ->expects(self::once())

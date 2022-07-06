@@ -3,10 +3,6 @@ parameters:
   paths:
     - src
     - tests
-  excludePaths:
-    - tests/Traits/ComposerPackageEventFactoryTrait.php
-  dynamicConstantNames:
-    - Composer\Plugin\PluginInterface::PLUGIN_API_VERSION
   ergebnis:
     classesAllowedToBeExtended:
       - Lemberg\Draft\Environment\Config\Manager\AbstractConfigManager
@@ -24,3 +20,7 @@ parameters:
     -
       message: '#Method Lemberg\\Draft\\Environment\\Config\\Manager\\AbstractConfigManager::__construct\(\) has parameter \$classLoader with a nullable type declaration.#'
       path: src/Config/Manager/AbstractConfigManager.php
+    -
+      # See https://github.com/phpstan/phpstan-phpunit/issues/57#issuecomment-575366033
+      message: '#Return type of call to method PHPUnit\\Framework\\TestCase::createMock\(\) contains unresolvable type.#'
+      path: tests/Unit/Composer/PluginTest.php

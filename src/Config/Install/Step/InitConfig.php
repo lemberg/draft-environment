@@ -45,7 +45,9 @@ final class InitConfig extends AbstractInstallStep implements InstallInitStepInt
 
     // Adjust path to the Draft Environment package if non-standard Composer
     // vendor directory is being used.
-    $vendorDir = trim($this->composer->getConfig()->get('vendor-dir', ComposerConfig::RELATIVE_PATHS), DIRECTORY_SEPARATOR);
+    /** @var string $vendorDirRaw */
+    $vendorDirRaw = $this->composer->getConfig()->get('vendor-dir', ComposerConfig::RELATIVE_PATHS);
+    $vendorDir = trim($vendorDirRaw, DIRECTORY_SEPARATOR);
     if ($vendorDir !== 'vendor') {
       $vagrantfile = $fs->loadFile('Vagrantfile', $targetVmFilepath);
       $fs->dumpFile($targetVmFilepath, str_replace('/vendor/', "/$vendorDir/", $vagrantfile));

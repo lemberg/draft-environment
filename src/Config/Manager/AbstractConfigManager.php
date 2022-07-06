@@ -192,6 +192,7 @@ abstract class AbstractConfigManager implements ManagerInterface {
    * @link https://github.com/lemberg/draft-environment/issues/232
    */
   private function autoloadDependencies(): void {
+    /** @var string $vendorDir */
     $vendorDir = $this->composer->getConfig()->get('vendor-dir');
 
     $shouldRegister = FALSE;
