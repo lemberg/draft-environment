@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "560ba72dd96887839417c023455bcd00",
+    "content-hash": "0815517e2296f26195a01a3bb1c292ab",
     "packages": [],
     "packages-dev": [
         {
@@ -35,6 +35,10 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Development environment for Draft Drupal.",
+            "support": {
+                "issues": "https://github.com/lemberg/draft-environment/issues",
+                "source": "https://github.com/lemberg/draft-environment/tree/3.0.0-beta4"
+            },
             "time": "2019-05-13T10:10:00+00:00"
         },
         {
@@ -64,12 +68,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Ctype\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Ctype\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -93,6 +97,9 @@
                 "polyfill",
                 "portable"
             ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.15.0"
+            },
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -166,6 +173,9 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/yaml/tree/3.4"
+            },
             "funding": [
                 {
                     "url": "https://symfony.com/sponsor",
@@ -191,7 +201,7 @@
     "platform": [],
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.3.0"
+        "php": "7.4.0"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.3.0"
 }
