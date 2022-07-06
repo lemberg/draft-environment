@@ -24,8 +24,21 @@ final class Xdebug2To3 extends AbstractUpdateStep implements UpdateStepInterface
    * {@inheritdoc}
    */
   public function update(array &$config): void {
+    /**
+     * @var array{
+     *   php_extensions_configuration?: array{
+     *     xdebug?: string[],
+     *   },
+     * } $config
+     */
     if (array_key_exists('php_extensions_configuration', $config)) {
       if (array_key_exists('xdebug', $config['php_extensions_configuration'])) {
+        /**
+         * @var array{
+         *   'xdebug.remote_enable'?: string,
+         *   'xdebug.discover_client_host'?: string,
+         * } $xdebug_config
+         */
         $xdebug_config = &$config['php_extensions_configuration']['xdebug'];
         if (array_key_exists('xdebug.remote_enable', $xdebug_config)) {
           $this->replaceArrayKey($xdebug_config, 'xdebug.remote_enable', 'xdebug.mode');

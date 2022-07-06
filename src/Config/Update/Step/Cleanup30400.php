@@ -23,6 +23,23 @@ final class Cleanup30400 extends AbstractUpdateStep implements UpdateStepInterfa
    */
   public function update(array &$config): void {
     // Update target Ansible version.
+
+    /**
+     * @var array{
+     *   ansible?: array{
+     *     version?: string,
+     *   },
+     *   mysql_sql_mode?: ?string,
+     *   php_extensions_configuration?: array{
+     *     xdebug?: array{
+     *       'xdebug.discover_client_host'?: bool|string,
+     *     },
+     *   },
+     *   virtualbox?: array{
+     *     disk_size?: string,
+     *   },
+     * } $config
+     */
     if (array_key_exists('ansible', $config)) {
       if (array_key_exists('version', $config['ansible'])) {
         if ($config['ansible']['version'] === '2.9.*') {

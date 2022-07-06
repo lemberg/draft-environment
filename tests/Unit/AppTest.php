@@ -116,7 +116,7 @@ final class AppTest extends TestCase {
     $this->configInstallManager = $this->createMock(InstallManagerInterface::class);
     $this->configUpdateManager = $this->createMock(UpdateManagerInterface::class);
 
-    $this->app = new App($this->composer, $this->io, $this->configInstallManager, $this->configUpdateManager);
+    $this->app = new App($this->configInstallManager, $this->configUpdateManager);
   }
 
   /**

@@ -22,8 +22,5 @@ parameters:
       - Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step\Cleanup30400Test
   ignoreErrors:
     -
-      message: '#Constructor in Lemberg\\Draft\\Environment\\Config\\Manager\\AbstractConfigManager has parameter \$classLoader with default value.#'
-      path: src/Config/Manager/AbstractConfigManager.php
-    -
-      message: '#Method Lemberg\\Draft\\Environment\\Config\\Manager\\AbstractConfigManager::__construct\(\) has parameter \$classLoader with null as default value.#'
+      message: '#Method Lemberg\\Draft\\Environment\\Config\\Manager\\AbstractConfigManager::__construct\(\) has parameter \$classLoader with a nullable type declaration.#'
       path: src/Config/Manager/AbstractConfigManager.php

@@ -138,7 +138,7 @@ final class ConfigTest extends TestCase {
    *
    * @param string $sorceYaml
    * @param string $expectedYaml
-   * @param array<int|string,array> $config
+   * @param array<int|string,mixed> $config
    *
    * @depends testReadAndParseConfigFromTheFile
    * @dataProvider writeConfigToTheFileDataProvider
@@ -155,7 +155,7 @@ final class ConfigTest extends TestCase {
   /**
    * Data provider for the ::testWriteConfigToTheFile().
    *
-   * @return array<int|string,array>
+   * @return array<int|string,mixed>
    */
   public function writeConfigToTheFileDataProvider(): array {
     return [

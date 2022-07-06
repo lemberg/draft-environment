@@ -15,8 +15,8 @@ use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Package\Package;
 use Composer\Repository\CompositeRepository;
+use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Repository\RepositoryManager;
-use Composer\Repository\WritableRepositoryInterface;
 use Composer\Script\ScriptEvents;
 use Lemberg\Draft\Environment\App;
 use Lemberg\Draft\Environment\Composer\Plugin;
@@ -141,7 +141,7 @@ final class PluginTest extends TestCase {
   private function setUpComposerMock(bool $returnPackage): void {
     $findPackageReturnValue = $returnPackage ? new Package(App::PACKAGE_NAME, '1.0.0.0', '^1.0') : NULL;
 
-    $localRepository = $this->createMock(WritableRepositoryInterface::class);
+    $localRepository = $this->createMock(InstalledRepositoryInterface::class);
     $localRepository->expects(self::any())
       ->method('findPackage')
       ->with(App::PACKAGE_NAME, '*')

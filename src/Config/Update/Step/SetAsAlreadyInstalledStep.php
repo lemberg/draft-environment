@@ -22,6 +22,11 @@ final class SetAsAlreadyInstalledStep extends AbstractUpdateStep implements Upda
    * {@inheritdoc}
    */
   public function update(array &$config): void {
+    /**
+     * @var array{
+     *   draft: array<mixed>
+     * } $config
+     */
     $config['draft']['last_applied_update'] = $this->getWeight();
   }
 

@@ -22,6 +22,13 @@ final class AddIdToSyncedFoldersOptions extends AbstractUpdateStep implements Up
    * {@inheritdoc}
    */
   public function update(array &$config): void {
+    /**
+     * @var array{
+     *   vagrant?: array{
+     *     synced_folder_options?: array<string, string>,
+     *   }
+     * } $config
+     */
     $config['vagrant']['synced_folder_options']['id'] = 'default';
   }
 

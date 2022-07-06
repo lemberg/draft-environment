@@ -68,7 +68,7 @@ abstract class AbstractConfigManager implements ManagerInterface {
   /**
    * {@inheritdoc}
    */
-  final public function __construct(Composer $composer, IOInterface $io, Config $config, ClassLoader $classLoader = NULL) {
+  final public function __construct(Composer $composer, IOInterface $io, Config $config, ?ClassLoader $classLoader) {
     $this->composer = $composer;
     $this->io = $io;
     $this->setConfig($config);
@@ -105,8 +105,15 @@ abstract class AbstractConfigManager implements ManagerInterface {
 
   /**
    * Looks for classes implementing a given interface.
+   *
+   * @throws \UnexpectedValueException
    */
   final protected function discoverSteps(string $interface, string $directory): void {
+
+    if (!is_subclass_of($interface, AbstractStepInterface::class)) {
+      throw new \UnexpectedValueException(sprintf('Step discovery is expecting interface extending %s, but %s has been passed.', AbstractStepInterface::class, $interface));
+    }
+
     $loader = new RobotLoader();
     $loader->addDirectory($directory);
     $loader->rebuild();
@@ -117,6 +124,7 @@ abstract class AbstractConfigManager implements ManagerInterface {
     foreach ($classes as $class => $filepath) {
       $reflection = new \ReflectionClass($class);
       if ($reflection->isInstantiable() && $reflection->implementsInterface($interface)) {
+        /** @var \Lemberg\Draft\Environment\Config\AbstractStepInterface $class */
         $this->steps[] = new $class($this->composer, $this->io, $this);
       }
     }
@@ -142,6 +150,13 @@ abstract class AbstractConfigManager implements ManagerInterface {
    * @return int
    */
   final protected function getLastAppliedUpdateWeight(array $config): int {
+    /**
+     * @var array{
+     *   draft: array{
+     *     last_applied_update?: int,
+     *   },
+     * } $config
+     */
     return $config['draft']['last_applied_update'] ?? 0;
   }
 
@@ -152,6 +167,13 @@ abstract class AbstractConfigManager implements ManagerInterface {
    * @param int $weight
    */
   final protected function setLastAppliedUpdateWeight(array &$config, int $weight): void {
+    /**
+     * @var array{
+     *   draft: array{
+     *     last_applied_update: int,
+     *   },
+     * } $config
+     */
     $config['draft']['last_applied_update'] = $weight;
   }
 

@@ -24,6 +24,16 @@ final class RevisePhpConfiguration extends AbstractUpdateStep implements UpdateS
    * {@inheritdoc}
    */
   public function update(array &$config): void {
+    /**
+     * @var array{
+     *   php_configuration?: array{
+     *     PHP?: string[]
+     *   },
+     *   php_cli_configuration?: array{
+     *     PHP?: string[]
+     *   },
+     * } $config
+     */
     if (array_key_exists('php_configuration', $config)) {
       $updates = [
         'max_execution_time' => 300,

@@ -4,15 +4,7 @@ declare(strict_types=1);
 
 namespace Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step;
 
-use Composer\Autoload\ClassLoader;
-use Composer\Composer;
-use Composer\Config as ComposerConfig;
-use Composer\IO\IOInterface;
-use Lemberg\Draft\Environment\Config\Config;
-use Lemberg\Draft\Environment\Config\Manager\UpdateManager;
 use Lemberg\Draft\Environment\Config\Update\Step\Cleanup30401;
-use Lemberg\Draft\Environment\Utility\Filesystem;
-use org\bovigo\vfs\vfsStream;
 
 /**
  * Tests updating PHP configuration.
@@ -21,44 +13,6 @@ use org\bovigo\vfs\vfsStream;
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\Cleanup30401
  */
 final class Cleanup30401Test extends Cleanup30400Test {
-
-  /**
-   * @var \Composer\Composer
-   */
-  private $composer;
-
-  /**
-   * @var \Composer\IO\IOInterface
-   */
-  private $io;
-
-  /**
-   * @var string
-   */
-  private $root;
-
-  /**
-   * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
-   */
-  private $configUpdateManager;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp(): void {
-    $this->composer = new Composer();
-    $this->composer->setConfig(new ComposerConfig());
-    $this->io = $this->createMock(IOInterface::class);
-
-    // Mock source and target configuration directories.
-    $this->root = vfsStream::setup()->url();
-    $fs = new Filesystem();
-    $fs->mkdir(["$this->root/source", "$this->root/target"]);
-
-    $configObject = new Config("$this->root/source", "$this->root/target");
-    $classLoader = new ClassLoader();
-    $this->configUpdateManager = new UpdateManager($this->composer, $this->io, $configObject, $classLoader);
-  }
 
   /**
    * {@inheritdoc}
