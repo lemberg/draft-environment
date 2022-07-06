@@ -46,7 +46,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
     $classLoader = new ClassLoader();
     $configInstallManager = new InstallManager($composer, $io, $config, $classLoader);
     $configUpdateManager = new UpdateManager($composer, $io, $config, $classLoader);
-    $this->setApp(new App($composer, $io, $configInstallManager, $configUpdateManager));
+    $this->setApp(new App($configInstallManager, $configUpdateManager));
   }
 
   /**

@@ -117,6 +117,7 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
     if ($before_content === FALSE) {
       throw new \RuntimeException(sprintf('File %s could not be read', $composer_wd));
     }
+    /** @var array{scripts?: array<string, array<string>>} $decoded_before_content */
     $decoded_before_content = json_decode($before_content, TRUE);
 
     /** @var \Composer\Package\RootPackage $rootPackage */
@@ -134,6 +135,7 @@ final class RemoveConfigurerComposerScriptTest extends TestCase {
     if ($after_content === FALSE) {
       throw new \RuntimeException(sprintf('File %s could not be read', "$this->basePath/$composer_after"));
     }
+    /** @var array{scripts?: array<string, array<string>>} $decoded_after_content */
     $decoded_after_content = json_decode($after_content, TRUE);
     self::assertSame($decoded_after_content['scripts'] ?? [], $this->composer->getPackage()->getScripts());
 

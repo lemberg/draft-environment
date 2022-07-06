@@ -150,12 +150,14 @@ final class Config {
    *
    * @param string $source
    *
-   * @return array<int|string, array>
+   * @return array<int|string,mixed>
    */
   public function readAndParseConfigFromTheFile(string $source): array {
     $content = $this->readConfigFromTheFile($source);
     $parser = new Parser();
-    return $parser->parse($content);
+    /** @var array<int|string,mixed> $parsed_content */
+    $parsed_content = $parser->parse($content);
+    return $parsed_content;
   }
 
   /**
@@ -164,7 +166,7 @@ final class Config {
    *
    * @param string $source
    * @param string $target
-   * @param array<int|string,array> $config
+   * @param array<int|string,mixed> $config
    */
   public function writeConfigToTheFile(string $source, string $target, array $config): void {
     $yaml = new Dumper(2);

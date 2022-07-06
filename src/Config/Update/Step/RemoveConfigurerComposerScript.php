@@ -37,9 +37,10 @@ final class RemoveConfigurerComposerScript extends AbstractUpdateStep implements
     }
 
     // Parse composer.json contents into the object in order to preserve empty
-    // object that might be there. If converted to the associative array,
+    // values that might be there. If converted to the associative array,
     // empty objects later will be exported as empty arrays producing invalid
     // composer.json file.
+    /** @var \stdClass $decoded_contents */
     $decoded_contents = json_decode($contents);
 
     if (count($scripts) > 0) {

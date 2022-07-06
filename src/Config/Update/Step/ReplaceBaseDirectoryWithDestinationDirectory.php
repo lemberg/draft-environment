@@ -22,6 +22,12 @@ final class ReplaceBaseDirectoryWithDestinationDirectory extends AbstractUpdateS
    * {@inheritdoc}
    */
   public function update(array &$config): void {
+    /**
+     * @var array{
+     *   ssh_default_directory?: string,
+     *   vagrant?: array<mixed>
+     * } $config
+     */
     $config['vagrant']['source_directory'] = '.';
     $config['vagrant']['destination_directory'] = $config['vagrant']['base_directory'] ?? '/var/www/draft';
     unset($config['vagrant']['base_directory']);

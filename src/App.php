@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Lemberg\Draft\Environment;
 
-use Composer\Composer;
 use Composer\DependencyResolver\Operation\InstallOperation;
 use Composer\DependencyResolver\Operation\UninstallOperation;
 use Composer\DependencyResolver\Operation\UpdateOperation;
 use Composer\EventDispatcher\Event;
 use Composer\Installer\PackageEvent;
 use Composer\Installer\PackageEvents;
-use Composer\IO\IOInterface;
 use Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface;
 use Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface;
 
@@ -23,16 +21,6 @@ final class App {
   public const PACKAGE_NAME = 'lemberg/draft-environment';
 
   public const LAST_AVAILABLE_UPDATE_WEIGHT = 12;
-
-  /**
-   * @var \Composer\Composer
-   */
-  private $composer;
-
-  /**
-   * @var \Composer\IO\IOInterface
-   */
-  private $io;
 
   /**
    * @var \Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface
@@ -47,14 +35,10 @@ final class App {
   /**
    * Draft Environment app constructor.
    *
-   * @param \Composer\Composer $composer
-   * @param \Composer\IO\IOInterface $io
    * @param \Lemberg\Draft\Environment\Config\Manager\InstallManagerInterface $configInstallManager
    * @param \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface $configUpdateManager
    */
-  public function __construct(Composer $composer, IOInterface $io, InstallManagerInterface $configInstallManager, UpdateManagerInterface $configUpdateManager) {
-    $this->composer = $composer;
-    $this->io = $io;
+  public function __construct(InstallManagerInterface $configInstallManager, UpdateManagerInterface $configUpdateManager) {
     $this->configInstallManager = $configInstallManager;
     $this->configUpdateManager = $configUpdateManager;
   }

@@ -24,6 +24,13 @@ final class Xenial2Focal extends AbstractUpdateStep implements UpdateStepInterfa
    * {@inheritdoc}
    */
   public function update(array &$config): void {
+    /**
+     * @var array{
+     *   vagrant?: array{
+     *     box?: string
+     *   }
+     * } $config
+     */
     if (array_key_exists('vagrant', $config)) {
       if (array_key_exists('box', $config['vagrant'])) {
         if ($config['vagrant']['box'] === 'ubuntu/xenial64') {

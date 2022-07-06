@@ -156,6 +156,7 @@ x:
   - 'y'
   # Comment Z
   - z
+aa: 34
 EOT;
 
     $configA = [
@@ -182,6 +183,7 @@ EOT;
         'y',
         'z',
       ],
+      'aa' => 34,
     ];
 
     $configB = [
@@ -203,6 +205,11 @@ EOT;
         ],
       ],
       'v' => 'w',
+      'aa' => [
+        'bb' => [
+          'cc' => 'dd',
+        ],
+      ],
       'new' => 'new',
     ];
 
@@ -241,6 +248,9 @@ x:
   - 'y'
   # Comment Z
   - z
+aa:
+  bb:
+    cc: dd
 new: new
 EOT;
 

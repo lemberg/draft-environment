@@ -160,6 +160,13 @@ final class UpdateManagerTest extends TestCase {
     }
 
     $targetConfigFilepath = $configObject->getTargetConfigFilepath(Config::TARGET_CONFIG_FILENAME);
+    /**
+     * @var array{
+     *   draft: array{
+     *     last_applied_update: int,
+     *   },
+     * } $config
+     */
     $config = $configObject->readAndParseConfigFromTheFile($targetConfigFilepath);
     self::assertSame(App::LAST_AVAILABLE_UPDATE_WEIGHT, $config['draft']['last_applied_update']);
   }

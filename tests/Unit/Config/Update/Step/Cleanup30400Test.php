@@ -26,22 +26,22 @@ class Cleanup30400Test extends TestCase {
   /**
    * @var \Composer\Composer
    */
-  private $composer;
+  protected $composer;
 
   /**
    * @var \Composer\IO\IOInterface
    */
-  private $io;
+  protected $io;
 
   /**
    * @var string
    */
-  private $root;
+  protected $root;
 
   /**
    * @var \Lemberg\Draft\Environment\Config\Manager\UpdateManagerInterface
    */
-  private $configUpdateManager;
+  protected $configUpdateManager;
 
   /**
    * {@inheritdoc}

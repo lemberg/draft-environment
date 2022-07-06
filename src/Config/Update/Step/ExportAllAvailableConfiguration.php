@@ -62,7 +62,13 @@ final class ExportAllAvailableConfiguration extends AbstractUpdateStep implement
         $result[$key] = $value;
       }
       elseif (is_array($value)) {
-        $result[$key] = $this->configMerge($defaultConfig[$key] ?? [], $config[$key]);
+
+        if (is_array($defaultConfig) && array_key_exists($key, $defaultConfig)) {
+          $result[$key] = $this->configMerge($defaultConfig[$key] ?? [], $value);
+        }
+        else {
+          $result[$key] = $value;
+        }
       }
       else {
         throw new \UnexpectedValueException(sprintf("Unexpected value type '%s' in the configuration array", gettype($value)));

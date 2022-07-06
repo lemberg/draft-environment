@@ -23,6 +23,13 @@ abstract class AbstractConfigManagerTest extends AbstractFunctionalTest {
     self::assertFileExists("$this->workingDir/vm-settings.yml");
 
     $parser = new Parser();
+    /**
+     * @var array{
+     *   draft: array{
+     *     last_applied_update: int
+     *   }
+     * } $config
+     */
     $config = $parser->parseFile("$this->workingDir/vm-settings.yml");
 
     self::assertSame(App::LAST_AVAILABLE_UPDATE_WEIGHT, $config['draft']['last_applied_update']);
