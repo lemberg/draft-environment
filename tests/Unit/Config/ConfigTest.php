@@ -161,7 +161,7 @@ final class ConfigTest extends TestCase {
     return [
       [
         "# One\none:\n  # Two\n  two: two",
-        "# One\none:\n  # Two\n  two: 2",
+        "# One\none:\n  # Two\n  two: 2\n",
         [
           'one' => [
             'two' => 2,
@@ -170,14 +170,14 @@ final class ConfigTest extends TestCase {
       ],
       [
         "# One\none:\n  # Two\n  two: two",
-        "# One\none: one",
+        "# One\none: one\n",
         [
           'one' => 'one',
         ],
       ],
       [
         "# One\none:\n  # Two\n  two: two",
-        "# One\none:\n  # Two\n  two: two\nthree: 3",
+        "# One\none:\n  # Two\n  two: two\nthree: 3\n",
         [
           'one' => [
             'two' => 'two',

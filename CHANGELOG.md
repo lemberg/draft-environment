@@ -1,3 +1,7 @@
+## Draft Environment (Unreleased)
+
+- Trigger config update after version 3.6.0
+
 ## Draft Environment 3.6.0 (2022-07-07)
 
 - [GH-259](https://github.com/lemberg/draft-environment/pull/259) - Drop PHP7.3 and Composer 1 support; add support for 8.1; default to 8.0

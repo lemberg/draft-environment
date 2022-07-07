@@ -183,7 +183,7 @@ final class Config {
     $commentManager = new Comments();
     $commentManager->collect(explode("\n", $originalContent));
     $alteredWithComments = $commentManager->inject(explode("\n", $alteredContent));
-    $this->getFilesystem()->dumpFile($target, implode("\n", $alteredWithComments));
+    $this->getFilesystem()->dumpFile($target, implode("\n", $alteredWithComments) . "\n");
   }
 
 }
