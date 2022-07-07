@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
  * @covers \Lemberg\Draft\Environment\Config\Update\Step\DefaultConfigUpdate30600
  */
-class DefaultConfigUpdate30600Test extends TestCase {
+final class DefaultConfigUpdate30600Test extends TestCase {
 
   /**
    * @var \Composer\Composer

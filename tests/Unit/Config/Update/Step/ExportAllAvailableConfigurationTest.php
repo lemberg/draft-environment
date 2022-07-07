@@ -157,6 +157,7 @@ x:
   # Comment Z
   - z
 aa: 34
+
 EOT;
 
     $configA = [
@@ -252,6 +253,7 @@ aa:
   bb:
     cc: dd
 new: new
+
 EOT;
 
     return [
