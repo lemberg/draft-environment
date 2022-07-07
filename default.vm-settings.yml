@@ -46,6 +46,8 @@ vagrant:
     id: default
     type: nfs
     create: true
+    # Disable UDP protocol for NFS, see https://discourse.ubuntu.com/t/jammy-jellyfish-release-notes/24668
+    nfs_udp: false
 
 # VirtualBox configuration.
 #
@@ -82,6 +84,8 @@ virtualbox:
   # VirtualBox disk size (added by vagrant-disksize plugin).
   # See https://github.com/sprotheroe/vagrant-disksize
   disk_size: 40GB
+  # Checking for Guest Additions.
+  check_guest_additions: false
 
 # Ansible local configuration.
 ansible:

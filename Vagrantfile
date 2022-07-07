@@ -136,8 +136,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.memory = configuration.get("virtualbox.memory")
     # Set CPU execution cap (in %).
     v.customize ["modifyvm", :id, "--cpuexecutioncap", configuration.get("virtualbox.cpuexecutioncap")]
-    # Set VirtualBox disk size (defaults to 10Gb)
+    # Set VirtualBox disk size (defaults to 40Gb)
     config.disksize.size = configuration.get("virtualbox.disk_size")
+    # Set checking for Guest Additions
+    v.check_guest_additions = configuration.get("virtualbox.check_guest_additions")
 
     # Use host's resolver mechanisms to handle DNS requests.
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
