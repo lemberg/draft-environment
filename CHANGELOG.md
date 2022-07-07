@@ -1,3 +1,16 @@
+## Draft Environment 3.6.0 (2022-07-07)
+
+- [GH-259](https://github.com/lemberg/draft-environment/pull/259) - Drop PHP7.3 and Composer 1 support; add support for 8.1; default to 8.0
+- [GH-262](https://github.com/lemberg/draft-environment/pull/262) - Vagrant plugins now configurable. Also `vagrant-vbguest` is no longer installed by default. After updating all project it can be safely removed by running
+  ```bash
+  vagrant plugin uninstall vagrant-vbguest
+  ```
+- [GH-261](https://github.com/lemberg/draft-environment/pull/261) - Updated Ansible roles:
+    * oefenweb.swapfile (v2.0.34 => v2.0.35)
+    * geerlingguy.mailhog (2.2.0 => 2.3.0)
+    * geerlingguy.mysql (3.3.2 => 3.5.0)
+    * t2l.php (1.5.0 => 1.6.1): allows to install certain php extensions (like `sodium`) and fixes issue when switching between PHP 7 & 8 required a full VM recreation
+
 ## Draft Environment 3.5.0 (2021-11-16)
 
 - [GH-232](https://github.com/lemberg/draft-environment/pull/254) - Improve detection whether VM is supposed to be provisioned or not (fixes mkcert certificate not being installed on `vagrant up`)
