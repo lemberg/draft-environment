@@ -12,6 +12,14 @@ draft:
 
 # Vagrant configuration.
 vagrant:
+  # Before we start: auto-install recommended plugins. Code borrowed here:
+  # https://github.com/hashicorp/vagrant/issues/8055#issuecomment-403171757
+  plugins:
+    - vagrant-hostmanager
+    - vagrant-disksize
+    # On Windows hosts additionally install Vagrant WinNFSd. This plugin won't
+    # be installed on non-Windows hosts.
+    - vagrant-winnfsd
   # Box to use. At the moment Debian-based distributions are supported only.
   # Do not change this value, unless absolutely necessary. Valid use case is
   # 32-bit host machine and no support for virtualization of 64-bit guest
