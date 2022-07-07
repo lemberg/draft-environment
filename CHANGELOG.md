@@ -1,4 +1,4 @@
-## Draft Environment (Unreleased)
+## Draft Environment 3.6.1 (2022-07-07)
 
 - Trigger config update after version 3.6.0
 
