@@ -46,7 +46,17 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
     $classLoader = new ClassLoader();
     $configInstallManager = new InstallManager($composer, $io, $config, $classLoader);
     $configUpdateManager = new UpdateManager($composer, $io, $config, $classLoader);
-    $this->setApp(new App($configInstallManager, $configUpdateManager));
+
+    // Avoid issues when App is already loaded with a different parameters set.
+    $constructor = new \ReflectionMethod(App::class, '__construct');
+    $parameters = $constructor->getParameters();
+    if ((string) $parameters[0]->getType() !== Composer::class) {
+      $this->setApp(new App($configInstallManager, $configUpdateManager));
+    }
+    else {
+      // @phpstan-ignore-next-line
+      $this->setApp(new App($composer, $io, $configInstallManager, $configUpdateManager));
+    }
   }
 
   /**
