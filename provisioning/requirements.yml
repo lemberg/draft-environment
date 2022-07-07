@@ -1,12 +1,12 @@
 ---
 - src: oefenweb.swapfile
-  version: v2.0.34
+  version: v2.0.35
 - src: geerlingguy.mailhog
-  version: 2.2.0
+  version: 2.3.0
 - src: geerlingguy.mysql
-  version: 3.3.2
+  version: 3.5.0
 - src: t2l.php
-  version: 1.5.0
+  version: 1.6.1
 - src: t2l.composer
   version: 2.0.5
 - src: t2l.java
