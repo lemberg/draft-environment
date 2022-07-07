@@ -1,32 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Before we start: auto-install recommended plugins. Code borrowed here:
-# https://github.com/hashicorp/vagrant/issues/8055#issuecomment-403171757
-# Installs:
-#   - vagrant-hostmanager - https://github.com/devopsgroup-io/vagrant-hostmanager
-#   - vagrant-vbguest - https://github.com/dotless-de/vagrant-vbguest
-#   - vagrant-disksize - https://github.com/sprotheroe/vagrant-disksize
-required_plugins = %w(vagrant-hostmanager vagrant-vbguest vagrant-disksize)
-
-# Additionally install Vagrant WinNFSd on Windows hosts.
-require "rbconfig"
-if (RbConfig::CONFIG["host_os"] =~ /cygwin|mswin|mingw|bccwin|wince|emx/)
-  required_plugins.push('vagrant-winnfsd')
-end
-
-return if !Vagrant.plugins_enabled?
-
-plugins_to_install = required_plugins.select { |plugin| !Vagrant.has_plugin? plugin }
-unless plugins_to_install.empty?
-  puts "Installing plugins: #{plugins_to_install.join(' ')}"
-  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
-    exit system "vagrant #{ARGV.join(' ')}"
-  else
-    abort "Installation of one or more plugins has failed. Aborting."
-  end
-end
-
 # Some features used in this configuration file require specific version of
 # Vagrant.
 Vagrant.require_version ">= 2.2.6"
@@ -57,6 +31,28 @@ require "#{VM_BASE_PATH}/provisioning/src/configuration"
 # overwrites ones from the default settings; missing values are not being touch;
 # new values will be added to the resulting settings hash.
 configuration = Configuration.new(PROJECT_BASE_PATH, DRAFT_BASE_PATH)
+
+# Before we start: auto-install recommended plugins. Code borrowed here:
+# https://github.com/hashicorp/vagrant/issues/8055#issuecomment-403171757
+required_plugins = configuration.get("vagrant.plugins")
+
+# Remove Vagrant WinNFSd on non-Windows hosts.
+require "rbconfig"
+if (RbConfig::CONFIG["host_os"] !~ /cygwin|mswin|mingw|bccwin|wince|emx/)
+  required_plugins.delete_if { |name| name == 'vagrant-winnfsd' }
+end
+
+return if !Vagrant.plugins_enabled?
+
+plugins_to_install = required_plugins.select { |plugin| !Vagrant.has_plugin? plugin }
+unless plugins_to_install.empty?
+  puts "Installing plugins: #{plugins_to_install.join(' ')}"
+  if system "vagrant plugin install #{plugins_to_install.join(' ')}"
+    exit system "vagrant #{ARGV.join(' ')}"
+  else
+    abort "Installation of one or more plugins has failed. Aborting."
+  end
+end
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
