@@ -1,4 +1,4 @@
-# Draft Environment 3.5.0
+# Draft Environment
 
 [![Latest Stable Version](https://poser.pugx.org/lemberg/draft-environment/v/stable)](https://packagist.org/packages/lemberg/draft-environment)
 ![Build Status](https://github.com/lemberg/draft-environment/workflows/Integrate/badge.svg)
