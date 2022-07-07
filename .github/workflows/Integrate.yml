@@ -79,12 +79,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    # Workaround 'XXX may have been in progress in another thread when fork()
-    # was called.'
-    # See https://github.com/ansible/ansible/issues/32499
-    env:
-      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: 'YES'
-
     strategy:
       matrix:
         composer-version:
@@ -152,6 +146,9 @@ jobs:
         run: molecule test
         env:
           MOLECULE_PLATFORM: ${{ matrix.molecule-platform }}
+          # Force color output.
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
 
   vagrant:
     name: Vagrant / ubuntu/${{ matrix.vagrant-box }}
