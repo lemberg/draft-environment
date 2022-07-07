@@ -92,10 +92,10 @@ jobs:
         php-version:
           - '7.4'
         python-version:
-          - '3.8'
+          - '3.9'
         molecule-platform:
-          - bionic64
-          - focal64
+          - 20.04
+          - 22.04
 
     steps:
       - name: Checkout
@@ -167,8 +167,8 @@ jobs:
         php-version:
           - '7.4'
         vagrant-box:
-          - bionic64
           - focal64
+          - jammy64
 
     # Workaround 'XXX may have been in progress in another thread when fork()
     # was called.'
