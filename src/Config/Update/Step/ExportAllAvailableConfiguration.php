@@ -10,7 +10,7 @@ use Lemberg\Draft\Environment\Config\Update\UpdateStepInterface;
 /**
  * Merges all available Ansible variables with existing VM configuration.
  */
-final class ExportAllAvailableConfiguration extends AbstractUpdateStep implements UpdateStepInterface {
+class ExportAllAvailableConfiguration extends AbstractUpdateStep implements UpdateStepInterface {
 
   /**
    * {@inheritdoc}

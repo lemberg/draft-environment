@@ -9,12 +9,14 @@ parameters:
       - Lemberg\Draft\Environment\Config\Manager\UpdateManager
       - Lemberg\Draft\Environment\Config\Install\Step\AbstractInstallStep
       - Lemberg\Draft\Environment\Config\Update\Step\AbstractUpdateStep
+      - Lemberg\Draft\Environment\Config\Update\Step\ExportAllAvailableConfiguration
       - Lemberg\Tests\Functional\Draft\Environment\AbstractFunctionalTest
       - Lemberg\Tests\Functional\Draft\Environment\Config\Manager\AbstractConfigManagerTest
       - Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step\Cleanup30400Test
       - Symfony\Component\Filesystem\Filesystem
     classesNotRequiredToBeAbstractOrFinal:
       - Lemberg\Draft\Environment\Config\Manager\UpdateManager
+      - Lemberg\Draft\Environment\Config\Update\Step\ExportAllAvailableConfiguration
       - Lemberg\Tests\Unit\Draft\Environment\Config\Update\Step\Cleanup30400Test
   ignoreErrors:
     -
