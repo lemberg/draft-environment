@@ -223,7 +223,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Else draft environment is not within the synced folder. In this case create
   # another NFS synced folder containing the required files.
   else
-    config.vm.synced_folder VM_BASE_PATH, "/vagrant", id: "vagrant", type: "nfs", create: true
+    config.vm.synced_folder VM_BASE_PATH, "/vagrant", id: "vagrant", type: "nfs", create: true, nfs_udp: false
     ansible_provisioning_path = "/vagrant/provisioning"
   end
 

@@ -129,6 +129,8 @@ class Configuration
     self.get_git_credentials
     # Use *.test domain (RFC 2606).
     self.set("vagrant.hostname", self.get("vagrant.hostname") + '.test');
+    # Disable UDP protocol for NFS, see https://discourse.ubuntu.com/t/jammy-jellyfish-release-notes/24668
+    self.set("vagrant.synced_folder_options.nfs_udp", false);
     # Symbolize synced folder options.
     self.symbolize_synced_folder_options
     # Set correct Ansible version to install when wildcard version constraint

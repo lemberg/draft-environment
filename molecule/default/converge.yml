@@ -13,7 +13,6 @@
         vagrant: "{{ vagrant | combine(overrides, recursive=true) }}"
         draft_features:
           - mailhog
-          - swapfile
           - git_config
           - apache2
           - mysql
@@ -26,9 +25,13 @@
           hostname: molecule
           ip_address: 10.10.10.10
 
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+
   roles:
     - ../../provisioning/roles/draft
-    - oefenweb.swapfile
     - ../../provisioning/roles/git_config
     - ../../provisioning/roles/apache2
     - geerlingguy.mysql

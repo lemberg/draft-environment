@@ -77,13 +77,7 @@ jobs:
 
     needs: php
 
-    runs-on: macos-latest
-
-    # Workaround 'XXX may have been in progress in another thread when fork()
-    # was called.'
-    # See https://github.com/ansible/ansible/issues/32499
-    env:
-      OBJC_DISABLE_INITIALIZE_FORK_SAFETY: 'YES'
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -92,10 +86,10 @@ jobs:
         php-version:
           - '7.4'
         python-version:
-          - '3.8'
+          - '3.9'
         molecule-platform:
-          - bionic64
-          - focal64
+          - 20.04
+          - 22.04
 
     steps:
       - name: Checkout
@@ -152,13 +146,16 @@ jobs:
         run: molecule test
         env:
           MOLECULE_PLATFORM: ${{ matrix.molecule-platform }}
+          # Force color output.
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
 
   vagrant:
     name: Vagrant / ubuntu/${{ matrix.vagrant-box }}
 
     needs: molecule
 
-    runs-on: macos-10.15
+    runs-on: macos-12
 
     strategy:
       matrix:
@@ -167,8 +164,8 @@ jobs:
         php-version:
           - '7.4'
         vagrant-box:
-          - bionic64
           - focal64
+          - jammy64
 
     # Workaround 'XXX may have been in progress in another thread when fork()
     # was called.'
@@ -204,6 +201,9 @@ jobs:
 
       - name: Set Vagrant box to use
         run: sed -i '' 's/focal64/${{ matrix.vagrant-box }}/g' default.vm-settings.yml
+
+      - name: Install Vagrant
+        run: brew install vagrant
 
       # See https://github.com/hashicorp/vagrant/pull/12581
       - name: Fix missing VagrantPlugins::HostDarwin::Cap::Version on Big Sur
