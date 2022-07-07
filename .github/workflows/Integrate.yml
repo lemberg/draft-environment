@@ -153,7 +153,7 @@ jobs:
   vagrant:
     name: Vagrant / ubuntu/${{ matrix.vagrant-box }}
 
-    needs: molecule
+    needs: php
 
     runs-on: macos-12
 
