@@ -2,5 +2,4 @@ ansible==4.*
 ansible-lint
 yamllint
 molecule
-python-vagrant
-molecule-vagrant
+molecule-docker

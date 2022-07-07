@@ -5,16 +5,17 @@ dependency:
     roles-path: ~/.ansible/roles
     role-file: provisioning/requirements.yml
 driver:
-  name: vagrant
+  name: docker
 lint: |
   set -e
   yamllint .
   ansible-lint .
 platforms:
   - name: draft
-    box: ubuntu/${MOLECULE_PLATFORM}
-    memory: 1024
-    cpus: 2
+    image: ubuntu:${MOLECULE_PLATFORM}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
 provisioner:
   name: ansible
   config_options:
