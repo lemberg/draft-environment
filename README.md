@@ -19,10 +19,6 @@ This is Vagrant-based development environment for Drupal projects. This project 
 
 Manages host and/or guest `hosts` files. Draft is configured to create a `hostname.test` DNS record on a host machine.
 
-#### [vagrant-vbguest](https://github.com/dotless-de/vagrant-vbguest)
-
-Automatically installs the host's VirtualBox Guest Additions on the guest system.
-
 #### [vagrant-disksize](https://github.com/sprotheroe/vagrant-disksize)
 
 A Vagrant plugin to resize disks in VirtualBox.
