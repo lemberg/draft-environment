@@ -1,3 +1,8 @@
+## Draft Environment 3.6.2 (2022-07-07)
+
+- Avoid class loading issues as signature of App class has changed
+- Trigger config update after version 3.6.0 (for real)
+
 ## Draft Environment 3.6.1 (2022-07-07)
 
 - Trigger config update after version 3.6.0
