@@ -15,8 +15,8 @@ final class PhpVersion extends AbstractInstallStep implements InstallConfigStepI
    * {@inheritdoc}
    */
   public function install(array &$config): void {
-    $choices = ['7.2' => '7.2', '7.3' => '7.3', '7.4' => '7.4'];
-    $default = '7.3';
+    $choices = ['7.4' => '7.4', '8.0' => '8.0', '8.1' => '8.1'];
+    $default = '8.0';
     $question = "\nPlease specify PHP version <question>[$default]</question>: ";
     $config['php_version'] = $this->io->select($question, $choices, $default, FALSE, "\nSpecified value '%s' is not a valid PHP version");
   }
