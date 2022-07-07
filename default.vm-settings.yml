@@ -302,7 +302,6 @@ php_cli_configuration:
 php_extensions:
   - curl
   - gd
-  - json
   - mbstring
   - mysql
   - sqlite3
