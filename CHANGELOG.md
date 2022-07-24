@@ -1,4 +1,4 @@
-## Draft Environment 3.x.x (Unreleased)
+## Draft Environment 3.6.3 (2022-07-25)
 
 - Fix PHP deprecation: Deprecation Notice: Function ReflectionType::__toString() is deprecated
 - Updated Ansible roles:
