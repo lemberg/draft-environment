@@ -6,7 +6,7 @@
 - src: geerlingguy.mysql
   version: 3.5.0
 - src: t2l.php
-  version: 1.6.1
+  version: 1.6.2
 - src: t2l.composer
   version: 2.0.5
 - src: t2l.java

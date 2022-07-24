@@ -1,6 +1,8 @@
 ## Draft Environment 3.x.x (Unreleased)
 
 - Fix PHP deprecation: Deprecation Notice: Function ReflectionType::__toString() is deprecated
+- Updated Ansible roles:
+  * t2l.php (1.6.1 => 1.6.2): fix broken PHP installation with message `The task includes an option with an undefined variable. The error was: 'php_extenstions_names' is undefined`
 
 ## Draft Environment 3.6.2 (2022-07-07)
 
