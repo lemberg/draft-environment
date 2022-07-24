@@ -1,3 +1,7 @@
+## Draft Environment 3.x.x (Unreleased)
+
+- Fix PHP deprecation: Deprecation Notice: Function ReflectionType::__toString() is deprecated
+
 ## Draft Environment 3.6.2 (2022-07-07)
 
 - Avoid class loading issues as signature of App class has changed

@@ -50,7 +50,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface {
     // Avoid issues when App is already loaded with a different parameters set.
     $constructor = new \ReflectionMethod(App::class, '__construct');
     $parameters = $constructor->getParameters();
-    if ((string) $parameters[0]->getType() !== Composer::class) {
+    if ($parameters[0]->getType() instanceof \ReflectionNamedType &&
+        $parameters[0]->getType()->getName() !== Composer::class) {
       $this->setApp(new App($configInstallManager, $configUpdateManager));
     }
     else {
