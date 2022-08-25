@@ -26,3 +26,6 @@ parameters:
       # See https://github.com/phpstan/phpstan-phpunit/issues/57#issuecomment-575366033
       message: '#Return type of call to method PHPUnit\\Framework\\TestCase::createMock\(\) contains unresolvable type.#'
       path: tests/Unit/Composer/PluginTest.php
+    -
+      message: '#Fetching class constant class of deprecated class Composer\\Autoload\\ClassMapGenerator:\nSince Composer 2\.4\.0 use the composer/class-map-generator package instead#'
+      path: src/Config/Manager/AbstractConfigManager.php

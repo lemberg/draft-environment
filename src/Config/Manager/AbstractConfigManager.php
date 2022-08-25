@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Lemberg\Draft\Environment\Config\Manager;
 
 use Composer\Autoload\ClassLoader;
-use Composer\Autoload\ClassMapGenerator;
+use Composer\Autoload\ClassMapGenerator as LegacyClassMapGenerator;
+use Composer\ClassMapGenerator\ClassMapGenerator;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Consolidation\Comments\Comments;
@@ -197,9 +198,11 @@ abstract class AbstractConfigManager implements ManagerInterface {
 
     $shouldRegister = FALSE;
 
+    $classMapGenerator = class_exists(ClassMapGenerator::class) ? ClassMapGenerator::class : LegacyClassMapGenerator::class;
+
     foreach (static::NEWLY_INTRODUCED_CLASSES['classmap'] as $class_name => $package_name) {
       if (!class_exists($class_name)) {
-        $this->classLoader->addClassMap(ClassMapGenerator::createMap("$vendorDir/$package_name"));
+        $this->classLoader->addClassMap($classMapGenerator::createMap("$vendorDir/$package_name"));
         $shouldRegister = TRUE;
       }
     }
