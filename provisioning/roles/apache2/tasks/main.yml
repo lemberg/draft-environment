@@ -120,6 +120,8 @@
   ansible.builtin.lineinfile:
     path: /etc/apache2/envvars
     line: '. /etc/environment'
+  notify:
+    - Restart Apache2 web server
 
 # Ensure that apache2 daemon starts with the system.
 - name: Ensure Apache2 is started and enabled on boot.
