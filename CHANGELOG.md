@@ -1,3 +1,10 @@
+## Draft Environment (Unreleased)
+
+Updates:
+
+- [GH-53](https://github.com/lemberg/draft-environment/issues/53) - Allow Apache to 'see' system environment (including `DRAFT_ENVIRONMENT`)
+
+
 ## Draft Environment 3.6.3 (2022-07-25)
 
 - Fix PHP deprecation: Deprecation Notice: Function ReflectionType::__toString() is deprecated
